@@ -1,0 +1,15 @@
+.BreadCrums-container {
+  display: flex;
+  align-items: center;
+  margin: 60px 0 0 280px;
+  gap: 10px;
+}
+
+.BreadCrums-container a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+/* .BreadCrums-container a:hover {
+    front
+} */
