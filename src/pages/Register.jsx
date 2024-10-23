@@ -3,7 +3,6 @@ import React, { useState, useCallback } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/Register.style.css";
-import userLogo from "../assets/images/userIcon.jpg";
 import Baselayout from "../components/layout/Baselayout";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
@@ -126,11 +125,11 @@ function HandleRegisterPage() {
             <p className="description">Điền thông tin để đăng ký tài khoản</p>
             <div className="other-login">
               <div className="login-option">
-                <img src={userLogo} alt="User" className="login-img" />
+                {/* <img src={userLogo} alt="User" className="login-img" /> */}
                 Google
               </div>
               <div className="login-option">
-                <img src={userLogo} alt="User" className="login-img" />
+                {/* <img src={userLogo} alt="User" className="login-img" /> */}
                 Facebook
               </div>
             </div>

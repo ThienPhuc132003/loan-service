@@ -26,7 +26,8 @@ const NavbarComponent = (props) => {
           <div className="brand">
             <img src={logo} alt="logo" className="logo" />
             <p className="label">
-              Loan<br/>
+              Loan
+              <br />
               system
             </p>
           </div>
@@ -58,5 +59,4 @@ export default Navbar;
 
 NavbarComponent.propTypes = {
   showLogin: Proptypes.bool,
-  showBreadCrumbs: Proptypes.bool,
 };

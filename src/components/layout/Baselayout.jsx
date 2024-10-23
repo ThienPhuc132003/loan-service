@@ -2,18 +2,18 @@ import React from "react";
 import Navbar from "../Navbar";
 import PropTypes from "prop-types";
 
-const BaseLayoutCompo = (props) => {
-  const { showLogin = false, children = null, showBreadCrumbs = true } = props;
+const BaseLayoutComponent = (props) => {
+  const { showLogin = false, children = null, } = props;
   return (
     <>
-      <Navbar showLogin={showLogin} showBreadCrumbs={showBreadCrumbs} />
+      <Navbar showLogin={showLogin}/>
       {children}
     </>
   );
 };
-const BaseLayout = React.memo(BaseLayoutCompo);
+const BaseLayout = React.memo(BaseLayoutComponent);
 export default BaseLayout;
-BaseLayoutCompo.propTypes = {
+BaseLayoutComponent.propTypes = {
   showLogin: PropTypes.bool,
   showBreadCrumbs: PropTypes.bool,
   handleLogout: PropTypes.func,

@@ -3,8 +3,7 @@ import React, { useState, useCallback } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/login.style.css";
-import userLogo from "../assets/images/userIcon.jpg";
-import Baselayout from "../components/layout/Baselayout";
+import LoginLayout from "../components/layout/LoginLayout";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
 import Api from "../network/Api";
@@ -132,18 +131,18 @@ function HandleLoginPage() {
   };
   return (
     <>
-      <Baselayout showLogin={false} showBreadCrumbs={false}>
+      <LoginLayout showLogin={false} showBreadCrumbs={false}>
         <div className="loginFormBox">
           <div id="loginForm" className="loginForm">
             <h1>Login form</h1>
             <p className="description">Điền thông tin để đăng nhập</p>
             <div className="other-login">
               <div className="login-option">
-                <img src={userLogo} alt="User" className="login-img" />
+                {/* <img src={userLogo} alt="User" className="login-img" /> */}
                 Google
               </div>
               <div className="login-option">
-                <img src={userLogo} alt="User" className="login-img" />
+                {/* <img src={userLogo} alt="User" className="login-img" /> */}
                 Facebook
               </div>
             </div>
@@ -212,7 +211,7 @@ function HandleLoginPage() {
             </p>
           </div>
         </div>
-      </Baselayout>
+      </LoginLayout>
     </>
   );
 }
