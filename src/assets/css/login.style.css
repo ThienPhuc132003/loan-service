@@ -12,94 +12,45 @@
   display: none;
 }
 
-.navigation {
-  display: flex;
-  overflow: hidden;
-  background-color: #ff9933;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 290px;
-}
-
-.nav-box {
-  display: flex;
-}
-
-.btn-box {
-  display: flex;
-  list-style: none;
-  justify-content: center;
-  align-items: center;
-}
-
-.nav-btn {
-  display: flex;
-  color: white;
-  padding: 14px 0;
-  text-decoration: none;
-  justify-content: center;
-  width: 100px;
-}
-
-.nav-btn:hover:not(.active) {
-  background-color: #bd6712;
-}
-
-.active {
-  background-color: #e67300;
-}
-.brand {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 0;
-}
-
-.label {
-  position: static;
-  font-size: 15px;
-  padding: 0 10px;
-}
-.logo {
-  width: 60px;
-  padding: 0 10px;
-}
-@media (max-width: 740px) {
-  .navigation {
-    padding: 0;
-    justify-content: center;
-  }
-}
-
-@media (min-width: 740px) and (max-width: 1024px) {
-  .navigation {
-    padding: 0 120px;
-  }
-}
-
-@media (min-width: 1024px) and (max-width: 1920px) {
-}
-h1 {
-  position: relative;
-  text-align: center;
-  padding-top: 20px;
+.logoAlpha {
+  position: fixed;
+  height: 100vh;
+  width: 60vw;
+  z-index: 1;
 }
 
 .loginFormBox {
   display: flex;
   justify-content: center;
+
+  width: 50vw;
+  height: 100vh;
+  margin-left: auto;
+  z-index: 2;
+  position: relative;
+  background-color: white;
+  border-radius: 50px;
 }
 
 .loginForm {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  width: 600px;
-  margin-top: 10px;
-  border: 2px solid black;
-  border-radius: 20px;
-  padding: 20px 10px;
-  gap: 7px;
+  height: 100vh;
+  width: 90%;
+  height: 90%;
+  padding: 30px;
+  background-color: transparent;
+  gap: 15px;
+}
+.FormName {
+  display: flex;
+  justify-content: center;
+}
+.description {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
 }
 .description {
   display: flex;
@@ -110,7 +61,6 @@ h1 {
   display: flex;
   justify-content: center;
   text-align: center;
-  margin: 20px 0;
   gap: 40px;
 }
 .login-option {
@@ -118,55 +68,85 @@ h1 {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius: 20px;
-  padding: 5px 10px;
+  padding: 10px 20px;
   font-weight: bold;
+  gap: 20px;
 }
 .login-img {
-  width: 50px;
-  border: 3px solid black;
-  border-radius: 100%;
+  width: 40px;
 }
 
 label {
   font-weight: bold;
-  margin-bottom: 5px;
 }
 
 .correct-border {
-  padding: 10px;
+  height: 60px;
+  padding-left: 10px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 20px;
 }
 .error-border {
-  padding: 10px;
+  padding: 24px 10px 24px;
   border: 1px solid red;
-  border-radius: 5px;
+  border-radius: 20px;
 }
-.capcha-input {
+.error-border::placeholder {
+  color: red;
+}
+.captcha-input {
   display: flex;
   padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 20px;
   width: 150px;
 }
-button.submit {
-  background-color: #ff9933;
+.submit-cancel {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+.submit {
+  background-color: #272e4f;
+  width: 350px;
+  height: 60px;
   color: white;
   padding: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   margin-top: 10px;
+  font-weight: bold;
 }
-
 button.submit:hover {
-  background-color: #fa9128;
+  background-color: #ffffff;
+  color: #272e4f;
+  border: 1px solid black;
+  transition: 0.3s;
 }
-
+.cancel {
+  background-color: #ffffff;
+  width: 150px;
+  height: 60px;
+  color: #272e4f;
+  padding: 10px;
+  border: none;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.cancel:hover {
+  background-color: black;
+  color: white;
+  transition: 0.3s;
+}
 .error {
   color: red;
+  padding-bottom: 20px;
 }
 
 .forgot-password {
@@ -188,21 +168,31 @@ button.submit:hover {
   font-weight: bold;
   cursor: pointer;
 }
-.capcha-box {
+.captcha-title {
+  position: relative;
+  top: -30px;
+  left: 80px;
+}
+.captcha-box {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   gap: 20px;
   padding-left: 0;
 }
-.capcha-regenerate {
+.captcha-input {
+  width: 200px;
+  border-radius: 20px;
+}
+.captcha-regenerate {
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #ccc;
   padding: 10px;
   background-color: #f9f9f9;
-  border-radius: 5px;
-  width: 150px;
+  border-radius: 20px;
+  width: 200px;
   height: 50px;
   text-align: center;
   font-size: 14px;
@@ -211,7 +201,7 @@ button.submit:hover {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 10px 0 20px 0;
+  margin: 5px 0;
 }
 
 .divider::before,

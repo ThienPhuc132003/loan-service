@@ -4,7 +4,6 @@ const axiosClient = axios.create({
   baseURL: "",
   headers: {
     "Content-Type": "application/json",
-    "X-API-Key": "1df9f9e0",
   },
 });
 // Add a request interceptor

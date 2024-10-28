@@ -8,7 +8,8 @@ import Button from "../components/Button";
 import InputField from "../components/InputField";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
-// import axiosClient from "../network/axiosClient";
+import logoFb from "../assets/images/logoFb.png";
+import logoGoogle from "../assets/images/logoGoogle.png";
 
 function HandleLoginPage() {
   const [username, setUsername] = useState("");
@@ -33,21 +34,20 @@ function HandleLoginPage() {
     if (Object.keys(errors).length > 0) {
       return;
     }
-
     try {
       const response = await Api({
-        endpoint: "https://667943a618a459f6394ee5b4.mockapi.io/login",
+        endpoint: "http://152.42.232.101:7000/borrower/login",
         method: METHOD_TYPE.POST,
         data: {
-          username: username,
+          emailOrPhoneNumber: username,
           password: password,
         },
       });
-      const { token } = response;
-      console.log(response.username);
+      const token = response.data.token;
+      console.log(response.data.token);
       if (token) {
         Cookies.set("token", token);
-        navigate("/");
+        navigate("/main-page");
       }
     } catch (error) {
       setErrorMessages({ login: "Invalid username or password" });
@@ -100,7 +100,7 @@ function HandleLoginPage() {
     if (username === "") {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
-        username: "Username cannot be empty",
+        username: "Tài khoản không được để trống",
       }));
     }
   };
@@ -109,7 +109,7 @@ function HandleLoginPage() {
     if (password === "") {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
-        password: "Password cannot be empty",
+        password: "Mật khẩu không được để trống",
       }));
     }
   };
@@ -134,29 +134,28 @@ function HandleLoginPage() {
       <LoginLayout showLogin={false} showBreadCrumbs={false}>
         <div className="loginFormBox">
           <div id="loginForm" className="loginForm">
-            <h1>Login form</h1>
-            <p className="description">Điền thông tin để đăng nhập</p>
+            <h1 className="FormName">Đăng nhập</h1>
+            <p className="description">Nhập thông tin để đăng nhập</p>
             <div className="other-login">
               <div className="login-option">
-                {/* <img src={userLogo} alt="User" className="login-img" /> */}
+                <img src={logoGoogle} alt="User" className="login-img" />
                 Google
               </div>
               <div className="login-option">
-                {/* <img src={userLogo} alt="User" className="login-img" /> */}
+                <img src={logoFb} alt="User" className="login-img" />
                 Facebook
               </div>
             </div>
             <div className="divider">
               <span>or</span>
             </div>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Email hoặc số điện thoại</label>
             <InputField
               type="text"
               id="username"
-              name="username"
-              placeholder="Username"
+              name="Username"
               value={username}
-              erromessages={errorMessages}
+              errorMessage={errorMessages.username || errorMessages.login}
               onBlur={handleUsernameBlur}
               onFocus={handleUsernameFocus}
               onChange={handleUsernameChange}
@@ -167,15 +166,13 @@ function HandleLoginPage() {
               }
               onKeyPress={(e) => handleOnkeydown(e, "password")}
             />
-            <p className="error">{errorMessages.username}</p>
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Mật khẩu</label>
             <InputField
               type="password"
               id="password"
-              name="password"
-              placeholder="Password"
+              name="Password"
               value={password}
-              errormessages={errorMessages}
+              errorMessage={errorMessages.password || errorMessages.login}
               onBlur={handlePasswordBlur}
               onFocus={handlePasswordFocus}
               onChange={handlePasswordChange}
@@ -184,25 +181,30 @@ function HandleLoginPage() {
                   ? "error-border"
                   : "correct-border"
               }
-              onKeyPress={(e) => handleOnkeydown(e)}
+              onKeyPress={(e) => handleOnkeydown(e, "captcha")}
             />
-            <p className="error">{errorMessages.password}</p>
             <p className="error">{errorMessages.login}</p>
-            <div className="capcha-box">
+            <div className="captcha-box">
+              <label htmlFor="captcha" className="captcha-title">
+                Captcha
+              </label>
               <InputField
-                type="capcha"
-                id="capcha"
-                name="capcha"
-                placeholder="Capcha"
+                type="captcha"
+                id="captcha"
+                name="captcha"
+                placeholder="captcha"
                 errormessages={errorMessages}
-                className={"capcha-input"}
+                className={"captcha-input"}
               ></InputField>
-              <Button className="capcha-regenerate">Capcha here</Button>
+              <Button className="captcha-regenerate">captcha here</Button>
             </div>
-            <Button className="submit" onClick={handleLogin}>
-              Đăng nhập
-            </Button>
-            <p className="forgot-password">Quên mật khẩu ?</p>
+            <div className="submit-cancel">
+              <Button className="submit" onClick={handleLogin}>
+                Đăng nhập
+              </Button>
+              <Button className="cancel">Hủy</Button>
+            </div>
+            <span className="forgot-password">Quên mật khẩu ?</span>
             <p className="register">
               Chưa có tài khoản ?&nbsp;
               <span className="register-link" onClick={handleRegister}>
