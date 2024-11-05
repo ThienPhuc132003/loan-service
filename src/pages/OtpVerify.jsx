@@ -36,6 +36,7 @@ function OtpVerifyPage() {
         method: METHOD_TYPE.POST,
         data: { otp: otp, email: emailOrPhone },
       });
+      console.log("otp",response);
       if (response.success === true) {
         localStorage.setItem("otpVerified", "true");
         navigate("/change-password", { state: { emailOrPhone, otp } });

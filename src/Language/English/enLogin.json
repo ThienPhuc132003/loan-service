@@ -69,6 +69,7 @@
     "addressPlaceholder": "Enter address",
     "emptyOtp": "Otp cannot be empty",
     "errorOtp": "Incorrect otp",
-    "alertCheckMail": "Please check your email to verify in {{emailOrPhone}}"
+    "alertCheckMail": "Please check your email to verify in {{emailOrPhone}}",
+    "captchaNotVerified": "Captcha not verified"
   }
 }

@@ -69,6 +69,7 @@
     "addressPlaceholder": "Nhập địa chỉ",
     "emptyOtp": "Mã OTP không được để trống",
     "errorOtp": "Mã OTP không đúng",
-    "alertCheckMail": "Vui lòng kiểm tra email của bạn để xác minh trong mail {{emailOrPhone}}"
+    "alertCheckMail": "Vui lòng kiểm tra email của bạn để xác minh trong mail {{emailOrPhone}}",
+    "captchaNotVerified": "Captcha chưa được xác nhận"
   }
 }
