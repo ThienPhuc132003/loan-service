@@ -2,7 +2,7 @@ import React from "react";
 // import BaseLayout from "../components/layout/Baselayout";
 
 // import Item from "../components/Item";
-function HandleLoanMain() {
+function LoanMainPage() {
   return (
     <>
       {/* <BaseLayout showLogin> */}
@@ -14,5 +14,5 @@ function HandleLoanMain() {
   );
 }
 
-const LoanMain = React.memo(HandleLoanMain);
+const LoanMain = React.memo(LoanMainPage);
 export default LoanMain;

@@ -4,7 +4,9 @@
   font-family: "Montserrat", sans-serif;
   box-sizing: border-box;
 }
-
+.page-box {
+  display: flex;
+}
 .show {
   display: block;
 }
@@ -12,51 +14,6 @@
   display: none;
 }
 
-.logoAlpha {
-  position: fixed;
-  height: 100vh;
-  width: 60vw;
-  z-index: 1;
-}
-
-.loginFormBox {
-  display: flex;
-  justify-content: center;
-
-  width: 50vw;
-  height: 100vh;
-  margin-left: auto;
-  z-index: 2;
-  position: relative;
-  background-color: white;
-  border-radius: 50px;
-}
-
-.loginForm {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  height: 100vh;
-  width: 90%;
-  height: 90%;
-  padding: 30px;
-  background-color: transparent;
-  gap: 15px;
-}
-.FormName {
-  display: flex;
-  justify-content: center;
-}
-.description {
-  display: flex;
-  justify-content: center;
-  font-weight: bold;
-}
-.description {
-  display: flex;
-  justify-content: center;
-  font-weight: bold;
-}
 .other-login {
   display: flex;
   justify-content: center;
@@ -81,72 +38,10 @@
 label {
   font-weight: bold;
 }
-
-.correct-border {
-  height: 60px;
-  padding-left: 10px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-}
-.error-border {
-  padding: 24px 10px 24px;
-  border: 1px solid red;
-  border-radius: 20px;
-}
-.error-border::placeholder {
-  color: red;
-}
-.captcha-input {
+.field {
   display: flex;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  width: 150px;
-}
-.submit-cancel {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-}
-.submit {
-  background-color: #272e4f;
-  width: 350px;
-  height: 60px;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  margin-top: 10px;
-  font-weight: bold;
-}
-button.submit:hover {
-  background-color: #ffffff;
-  color: #272e4f;
-  border: 1px solid black;
-  transition: 0.3s;
-}
-.cancel {
-  background-color: #ffffff;
-  width: 150px;
-  height: 60px;
-  color: #272e4f;
-  padding: 10px;
-  border: none;
-  border: 1px solid black;
-  border-radius: 20px;
-  cursor: pointer;
-  margin-top: 10px;
-  font-weight: bold;
-}
-.cancel:hover {
-  background-color: black;
-  color: white;
-  transition: 0.3s;
-}
-.error {
-  color: red;
-  padding-bottom: 20px;
+  flex-direction: column;
+  width: 100%;
 }
 
 .forgot-password {
@@ -155,6 +50,7 @@ button.submit:hover {
   justify-content: center;
   margin-top: 10px;
   margin-left: auto;
+  cursor: pointer;
 }
 .register {
   display: flex;
@@ -163,39 +59,20 @@ button.submit:hover {
   justify-content: center;
   margin-top: 20px;
 }
+
 .register-link {
   color: #ff9933;
   font-weight: bold;
   cursor: pointer;
 }
+
 .captcha-title {
   position: relative;
-  top: -30px;
-  left: 80px;
+  top: -5px;
 }
-.captcha-box {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 20px;
-  padding-left: 0;
-}
-.captcha-input {
-  width: 200px;
-  border-radius: 20px;
-}
-.captcha-regenerate {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #ccc;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 20px;
-  width: 200px;
-  height: 50px;
-  text-align: center;
-  font-size: 14px;
+
+label {
+  margin-bottom: 5px;
 }
 .divider {
   display: flex;

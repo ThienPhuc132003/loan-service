@@ -1,7 +1,6 @@
-// src/pages/LoginPage.js
 import React, { useState, useCallback } from "react";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "../assets/css/Register.style.css";
 import LoginLayout from "../components/layout/LoginLayout";
 import Button from "../components/Button";
@@ -11,8 +10,9 @@ import { METHOD_TYPE } from "../network/methodType";
 import logoFb from "../assets/images/logoFb.png";
 import logoGoogle from "../assets/images/logoGoogle.png";
 import RadioGroup from "../components/Radio";
-// import axiosClient from "../network/axiosClient";
-
+import Cookies from "js-cookie";
+import LanguageSelector from "../components/LanguageSelector";
+import ReCAPTCHA from "react-google-recaptcha";
 function HandleRegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,33 +21,36 @@ function HandleRegisterPage() {
   const [birthday, setBirthday] = useState("");
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
-  const [gender, setGender] = useState(""); // State for gender
+  const [gender, setGender] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
+  const [captchaValue, setCaptchaValue] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const validateFields = useCallback(() => {
     const errors = {};
-
     if (password === "") {
-      errors.password = "Password cannot be empty";
+      errors.password = t("signup.emptyPassword");
     }
     if (confirmPassword !== password) {
-      errors.confirmPassword = "Passwords do not match";
+      errors.confirmPassword = t("signup.passwordNotMatch");
     }
     if (phoneNumber === "") {
-      errors.phoneNumber = "Phone number cannot be empty";
+      errors.phoneNumber = t("signup.emptyPhoneNumber");
     }
     if (email === "") {
-      errors.email = "Email cannot be empty";
+      errors.email = t("signup.emptyEmail");
     }
     if (birthday === "") {
-      errors.birthday = "Birthday cannot be empty";
+      errors.birthday = t("signup.emptyBirthday");
     }
     if (fullName === "") {
-      errors.fullName = "Full name cannot be empty";
+      errors.fullName = t("signup.emptyFullName");
     }
     if (address === "") {
-      errors.homeAddress = "Home address cannot be empty";
+      errors.homeAddress = t("signup.emptyAddress");
     }
+    if (!captchaValue) errors.captcha = t("signup.captchaNotVerified");
     return errors;
   }, [
     password,
@@ -57,14 +60,16 @@ function HandleRegisterPage() {
     birthday,
     fullName,
     address,
+    t,
+    captchaValue,
   ]);
+
   const handleRegister = useCallback(async () => {
     const errors = validateFields();
     setErrorMessages(errors);
     if (Object.keys(errors).length > 0) {
       return;
     }
-
     try {
       const response = await Api({
         endpoint: "https://667943a618a459f6394ee5b4.mockapi.io/login",
@@ -87,7 +92,7 @@ function HandleRegisterPage() {
         navigate("/");
       }
     } catch (error) {
-      setErrorMessages({ login: "Invalid username or password" });
+      setErrorMessages({ login: t("signup.error") });
     }
   }, [
     password,
@@ -100,12 +105,12 @@ function HandleRegisterPage() {
     gender,
     validateFields,
     navigate,
+    t,
   ]);
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
-
     if (errorMessages.password || errorMessages.login) {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
@@ -127,10 +132,11 @@ function HandleRegisterPage() {
     if (password === "") {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
-        password: "Password cannot be empty",
+        password: t("signup.emptyPassword"),
       }));
     }
   };
+
   const handleOnkeydown = useCallback(
     (event, passwordFieldId) => {
       if (event.key === "Enter") {
@@ -144,19 +150,30 @@ function HandleRegisterPage() {
     },
     [handleRegister]
   );
+
   const handleGenderChange = (selectedGender) => {
     setGender(selectedGender);
   };
+
   const handleLogin = () => {
     navigate("/login");
   };
+
+  const handleBackPage = () => {
+    navigate("/login");
+  };
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
   return (
-    <>
+    <> <div className="page-box">
       <LoginLayout showLogin={false} showBreadCrumbs={false}>
         <div className="loginFormBox">
           <div id="loginForm" className="loginForm">
-            <h1 className="FormName"> Đăng ký</h1>
-            <p className="description">Điền thông tin để đăng ký tài khoản</p>
+            <LanguageSelector />
+            <h1 className="FormName">{t("signup.title")}</h1>
+            <p className="description">{t("signup.subtitle")}</p>
             <div className="other-login">
               <div className="login-option">
                 <img src={logoGoogle} alt="User" className="login-img" />
@@ -168,16 +185,19 @@ function HandleRegisterPage() {
               </div>
             </div>
             <div className="divider">
-              <span>or</span>
+              <span>{t("signup.or")}</span>
             </div>
             <div className="name-birth">
               <div className="field">
-                <label htmlFor="fullName">Họ tên</label>
+                <label htmlFor="fullName">
+                  {t("signup.fullName")}{" "}
+                  <span style={{ color: "red" }}> *</span>
+                </label>
                 <InputField
                   type="text"
                   id="fullName"
-                  name="fullName"
-                  placeholder="Nhập họ tên"
+
+                  placeholder={t("signup.fullNamePlaceholder")}
                   value={fullName}
                   errorMessage={errorMessages.fullName}
                   onChange={(e) => setFullName(e.target.value)}
@@ -189,12 +209,14 @@ function HandleRegisterPage() {
                 />
               </div>
               <div className="field">
-                <label htmlFor="birthday">Ngày sinh</label>
+                <label htmlFor="birthday">
+                  {t("signup.birthday")}{" "}
+                  <span style={{ color: "red" }}> *</span>
+                </label>
                 <InputField
                   type="date"
                   id="birthday"
-                  name="birthday"
-                  placeholder="Nhập ngày sinh"
+                  placeholder={t("signup.birthdayPlaceholder")}
                   value={birthday}
                   errorMessage={errorMessages.birthday}
                   onChange={(e) => setBirthday(e.target.value)}
@@ -208,12 +230,13 @@ function HandleRegisterPage() {
             </div>
             <div className="email-phone">
               <div className="field">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">
+                  {t("signup.email")} <span style={{ color: "red" }}> *</span>
+                </label>
                 <InputField
                   type="email"
                   id="email"
-                  name="email"
-                  placeholder="Nhập email"
+                  placeholder={t("signup.emailPlaceholder")}
                   value={email}
                   errorMessage={errorMessages.email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -225,12 +248,14 @@ function HandleRegisterPage() {
                 />
               </div>
               <div className="field">
-                <label htmlFor="phoneNumber">Số điện thoại</label>
+                <label htmlFor="phoneNumber">
+                  {t("signup.phoneNumber")}{" "}
+                  <span style={{ color: "red" }}> *</span>
+                </label>
                 <InputField
                   type="tel"
                   id="phoneNumber"
-                  name="phoneNumber"
-                  placeholder="Nhập số điện thoại"
+                  placeholder={t("signup.phoneNumberPlaceholder")}
                   value={phoneNumber}
                   errorMessage={errorMessages.phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
@@ -244,12 +269,12 @@ function HandleRegisterPage() {
             </div>
             <div className="address-gender">
               <div className="field">
-                <label htmlFor="adress">Địa chỉ</label>
+                <label htmlFor="address">{t("signup.address")}</label>
                 <InputField
                   type="text"
-                  id="adress"
-                  name="adress"
+                  id="address"
                   value={address}
+                  placeholder={t("signup.addressPlaceholder")}
                   errorMessage={errorMessages.address}
                   onChange={(e) => setAddress(e.target.value)}
                   className={`size-border + ${
@@ -261,37 +286,39 @@ function HandleRegisterPage() {
                 />
               </div>
               <div className="field">
-                <label htmlFor="adress">Địa chỉ</label>
+                <label htmlFor="gender">{t("signup.gender")}</label>
                 <RadioGroup
-                  options={["Nam", "Nữ"]}
+                  options={[t("signup.male"), t("signup.female")]}
                   name="gender"
                   onChange={handleGenderChange}
                 />
               </div>
             </div>
-            <label htmlFor="password">Mật khẩu</label>
-            <InputField
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Nhập mật khẩu ( ít nhất 6 chữ số, tối thiểu 1 chữ số viết hoa, 1 ký tự đặc biệt, 1 số"
-              value={password}
-              errorMessage={errorMessages.password || errorMessages.login}
-              onBlur={handlePasswordBlur}
-              onFocus={handlePasswordFocus}
-              onChange={handlePasswordChange}
-              className={`size-border + ${
-                errorMessages.password || errorMessages.login
-                  ? "error-border"
-                  : "correct-border"
-              }`}
-              onKeyPress={(e) => handleOnkeydown(e, "captcha")}
-            />
+            <div className="field">
+              <label htmlFor="password">
+                {t("signup.password")} <span style={{ color: "red" }}> *</span>
+              </label>
+              <InputField
+                type="password"
+                id="password"
+                placeholder={t("signup.passwordPlaceholder")}
+                value={password}
+                errorMessage={errorMessages.password || errorMessages.login}
+                onBlur={handlePasswordBlur}
+                onFocus={handlePasswordFocus}
+                onChange={handlePasswordChange}
+                className={`size-border + ${
+                  errorMessages.password || errorMessages.login
+                    ? "error-border"
+                    : "correct-border"
+                }`}
+                onKeyPress={(e) => handleOnkeydown(e, "captcha")}
+              />
+            </div>
             <InputField
               type="password"
               id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Nhập lại mật khẩu"
+              placeholder={t("signup.confirmPasswordPlaceholder")}
               value={confirmPassword}
               errorMessage={errorMessages.confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -304,33 +331,31 @@ function HandleRegisterPage() {
             <p className="error">{errorMessages.login}</p>
             <div className="captcha-box">
               <label htmlFor="captcha" className="captcha-title">
-                Captcha
+                Captcha <span style={{ color: "red" }}> *</span>
               </label>
-              <InputField
-                type="captcha"
-                id="captcha"
-                name="captcha"
-                placeholder="captcha"
-                errormessages={errorMessages}
-                className={"captcha-input"}
-              ></InputField>
-              <Button className="captcha-regenerate">captcha here</Button>
+              <ReCAPTCHA
+                sitekey="6Ldws3QqAAAAAMX5jNVnZPksWQRvMrp06k7uSbqz"
+                onChange={handleCaptchaChange}
+              />
             </div>
             <div className="submit-cancel">
               <Button className="submit" onClick={handleRegister}>
-                Đăng ký
+                {t("signup.button")}
               </Button>
-              <Button className="cancel">Hủy</Button>
+              <Button className="cancel" onClick={handleBackPage}>
+                {t("signup.cancel")}
+              </Button>
             </div>
             <p className="register">
-              Đã có tài khoản ?&nbsp;
+              {t("signup.alreadyHaveAccount")}&nbsp;
               <span className="register-link" onClick={handleLogin}>
-                Đăng nhập
+                {t("signup.login")}
               </span>
             </p>
           </div>
         </div>
       </LoginLayout>
+      </div>
     </>
   );
 }
