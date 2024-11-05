@@ -1,7 +1,7 @@
-// src/pages/LoginPage.js
 import React, { useState, useCallback } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "../assets/css/login.style.css";
 import LoginLayout from "../components/layout/LoginLayout";
 import Button from "../components/Button";
@@ -10,24 +10,29 @@ import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import logoFb from "../assets/images/logoFb.png";
 import logoGoogle from "../assets/images/logoGoogle.png";
+import LanguageSelector from "../components/LanguageSelector";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function HandleLoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
+  const [captchaValue, setCaptchaValue] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const validateFields = useCallback(() => {
     const errors = {};
-
     if (username === "") {
-      errors.username = "Username cannot be empty";
+      errors.username = t("login.emptyEmail");
     }
     if (password === "") {
-      errors.password = "Password cannot be empty";
+      errors.password = t("login.emptyPassword");
     }
-
+    if (!captchaValue) errors.captcha = t("signup.captchaNotVerified"); 
     return errors;
-  }, [username, password]);
+  }, [username, password, captchaValue, t]);
+
   const handleLogin = useCallback(async () => {
     const errors = validateFields();
     setErrorMessages(errors);
@@ -44,20 +49,26 @@ function HandleLoginPage() {
         },
       });
       const token = response.data.token;
-      console.log(response.data.token);
       if (token) {
         Cookies.set("token", token);
         navigate("/main-page");
       }
     } catch (error) {
-      setErrorMessages({ login: "Invalid username or password" });
+      setErrorMessages({ login: t("login.error") });
     }
-  }, [navigate, username, password, validateFields]);
+  }, [navigate, username, password, validateFields, t]);
+
+  const handleForgotPassword = () => {
+    navigate("/forgot-password");
+  };
+
+  const handleRegister = () => {
+    navigate("/register");
+  };
 
   const handleUsernameChange = (e) => {
     const value = e.target.value;
     setUsername(value);
-
     if (errorMessages.username || errorMessages.login) {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
@@ -70,7 +81,6 @@ function HandleLoginPage() {
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
-
     if (errorMessages.password || errorMessages.login) {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
@@ -80,62 +90,19 @@ function HandleLoginPage() {
     }
   };
 
-  const handleUsernameBlur = () => {
-    const errors = validateFields();
-    setErrorMessages((prevErrors) => ({
-      ...prevErrors,
-      username: errors.username || "",
-    }));
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value); 
   };
 
-  const handlePasswordBlur = () => {
-    const errors = validateFields();
-    setErrorMessages((prevErrors) => ({
-      ...prevErrors,
-      password: errors.password || "",
-    }));
-  };
-
-  const handleUsernameFocus = () => {
-    if (username === "") {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        username: "Tài khoản không được để trống",
-      }));
-    }
-  };
-
-  const handlePasswordFocus = () => {
-    if (password === "") {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        password: "Mật khẩu không được để trống",
-      }));
-    }
-  };
-  const handleOnkeydown = useCallback(
-    (event, passwordFieldId) => {
-      if (event.key === "Enter") {
-        const passwordField = document.getElementById(passwordFieldId);
-        if (passwordField) {
-          passwordField.focus();
-        } else {
-          handleLogin();
-        }
-      }
-    },
-    [handleLogin]
-  );
-  const handleRegister = () => {
-    navigate("/register");
-  };
   return (
     <>
-      <LoginLayout showLogin={false} showBreadCrumbs={false}>
+    <div className="page-box">
+      <LoginLayout>
         <div className="loginFormBox">
           <div id="loginForm" className="loginForm">
-            <h1 className="FormName">Đăng nhập</h1>
-            <p className="description">Nhập thông tin để đăng nhập</p>
+            <LanguageSelector />
+            <h1 className="FormName">{t("login.title")}</h1>
+            <p className="description">{t("login.subtitle")}</p>
             <div className="other-login">
               <div className="login-option">
                 <img src={logoGoogle} alt="User" className="login-img" />
@@ -147,73 +114,76 @@ function HandleLoginPage() {
               </div>
             </div>
             <div className="divider">
-              <span>or</span>
+              <span>{t("login.or")}</span>
             </div>
-            <label htmlFor="username">Email hoặc số điện thoại</label>
-            <InputField
-              type="text"
-              id="username"
-              name="Username"
-              value={username}
-              errorMessage={errorMessages.username || errorMessages.login}
-              onBlur={handleUsernameBlur}
-              onFocus={handleUsernameFocus}
-              onChange={handleUsernameChange}
-              className={
-                errorMessages.username || errorMessages.login
-                  ? "error-border"
-                  : "correct-border"
-              }
-              onKeyPress={(e) => handleOnkeydown(e, "password")}
-            />
-            <label htmlFor="password">Mật khẩu</label>
-            <InputField
-              type="password"
-              id="password"
-              name="Password"
-              value={password}
-              errorMessage={errorMessages.password || errorMessages.login}
-              onBlur={handlePasswordBlur}
-              onFocus={handlePasswordFocus}
-              onChange={handlePasswordChange}
-              className={
-                errorMessages.password || errorMessages.login
-                  ? "error-border"
-                  : "correct-border"
-              }
-              onKeyPress={(e) => handleOnkeydown(e, "captcha")}
-            />
-            <p className="error">{errorMessages.login}</p>
-            <div className="captcha-box">
-              <label htmlFor="captcha" className="captcha-title">
-                Captcha
+            <div className="field">
+              <label htmlFor="username">
+                {t("login.emailOrPhone")}
+                <span style={{ color: "red" }}> *</span>
               </label>
               <InputField
-                type="captcha"
-                id="captcha"
-                name="captcha"
-                placeholder="captcha"
-                errormessages={errorMessages}
-                className={"captcha-input"}
-              ></InputField>
-              <Button className="captcha-regenerate">captcha here</Button>
+                type="text"
+                id="username"
+                value={username}
+                placeholder={t("login.emailOrPhonePlaceholder")}
+                errorMessage={errorMessages.username || errorMessages.login}
+                onChange={handleUsernameChange}
+                className={
+                  errorMessages.username || errorMessages.login
+                    ? "error-border"
+                    : "correct-border"
+                }
+              />
             </div>
+            <div className="field">
+              <label htmlFor="password">
+                {t("login.password")}
+                <span style={{ color: "red" }}> *</span>
+              </label>
+              <InputField
+                type="password"
+                id="password"
+                value={password}
+                placeholder={t("login.passwordPlaceholder")}
+                errorMessage={errorMessages.password || errorMessages.login}
+                onChange={handlePasswordChange}
+                className={
+                  errorMessages.password || errorMessages.login
+                    ? "error-border"
+                    : "correct-border"
+                }
+              />
+            </div>
+            <div className="captcha-box">
+              <label htmlFor="captcha" className="captcha-title">
+                Captcha<span style={{ color: "red" }}> *</span>
+              </label>
+              <ReCAPTCHA
+                sitekey="6Ldws3QqAAAAAMX5jNVnZPksWQRvMrp06k7uSbqz"
+                onChange={handleCaptchaChange}
+              />
+              <p className="error">{errorMessages.captcha}</p>
+            </div>
+            <p className="error">{errorMessages.login}</p>
             <div className="submit-cancel">
               <Button className="submit" onClick={handleLogin}>
-                Đăng nhập
+                {t("login.button")}
               </Button>
-              <Button className="cancel">Hủy</Button>
+              <Button className="cancel">{t("login.cancel")}</Button>
             </div>
-            <span className="forgot-password">Quên mật khẩu ?</span>
+            <span className="forgot-password" onClick={handleForgotPassword}>
+              {t("login.forgotPassword")}
+            </span>
             <p className="register">
-              Chưa có tài khoản ?&nbsp;
+              {t("login.noAccount")}&nbsp;
               <span className="register-link" onClick={handleRegister}>
-                Đăng ký
+                {t("login.signup")}
               </span>
             </p>
           </div>
         </div>
       </LoginLayout>
+      </div>
     </>
   );
 }
