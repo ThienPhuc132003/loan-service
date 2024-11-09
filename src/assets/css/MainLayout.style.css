@@ -1,0 +1,83 @@
+.main-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 10px 0;
+  padding: 20px;
+}
+
+nav ul li.active {
+  background-color: #272e4f; /* Highlight color for active link */
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+nav ul li.active a {
+  color: #ffffff; /* Highlight color for active link */
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 20px 0;
+}
+
+.content-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f4f4f4;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.middle-content {
+  flex: 2;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.right-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+.current-page{
+  display: flex;
+  margin-left: 20px;
+}
+.user-account-toolbar {
+  display: flex;
+  justify-content: space-between;
+}

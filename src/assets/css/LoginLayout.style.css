@@ -1,0 +1,161 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+  box-sizing: border-box;
+}
+
+.logoAlpha {
+  position: absolute;
+  height: 100vh;
+  width: 60vw;
+  z-index: 1;
+}
+.loginFormBox {
+  display: flex;
+  position: absolute;
+  right: 0;
+  justify-content: center;
+  width: 50vw;
+  height: 100vh;
+  margin-left: auto;
+  z-index: 2;
+  background-color: white;
+  border-radius: 50px;
+}
+
+.loginForm {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 90%;
+  height: 90%;
+  padding: 30px;
+  background-color: transparent;
+  gap: 15px;
+  margin-top: 40px;
+}
+.FormName {
+  display: flex;
+  justify-content: center;
+}
+.description {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+.correct-border {
+  padding: 18px 10px 18px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+}
+.error-border {
+  padding: 18px 10px 18px;
+  border: 1px solid red;
+  border-radius: 20px;
+}
+.error-border::placeholder {
+  color: red;
+}
+.submit-cancel {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+.submit {
+  background-color: #272e4f;
+  width: 75%;
+  height: 60px;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
+button.submit:hover {
+  background-color: #ffffff;
+  color: #272e4f;
+  border: 1px solid black;
+  transition: 0.3s;
+}
+.cancel {
+  background-color: #ffffff;
+  width: 25%;
+  height: 60px;
+  color: #272e4f;
+  padding: 10px;
+  border: none;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.cancel:hover {
+  background-color: black;
+  color: white;
+  transition: 0.3s;
+}
+.error {
+  color: red;
+}
+
+/* Media query for tablets (768px to 1024px) */
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 30px;
+  }
+  .logoAlpha {
+    position: fixed;
+    width: 60vw;
+    z-index: 1;
+  }
+  .loginFormBox {
+    height: auto;
+  }
+  .loginForm {
+    height: 120vh;
+    margin-top: none;
+  }
+  .name-birth {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .email-phone {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .address-gender {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+}
+
+/* Media query for phones (up to 768px) */
+@media (max-width: 767px) {
+  .logoAlpha {
+    position: absolute;
+    height: 35vh;
+    width: 100vw;
+    z-index: 1;
+  }
+  .loginForm {
+    height: auto;
+  }
+  .loginFormBox {
+    width: 100vw;
+    border-radius: 20px 20px 0 0;
+    top: 30vh;
+    position: absolute;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    z-index: 2;
+    background-color: white;
+  }
+}
