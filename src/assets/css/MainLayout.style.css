@@ -51,9 +51,13 @@ nav ul li.active a {
 
 .header {
   display: flex;
+
+  align-items: center;
   justify-content: space-between;
   background-color: #f4f4f4;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px 0;
+
 }
 
 .main-content {
@@ -80,4 +84,10 @@ nav ul li.active a {
 .user-account-toolbar {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
+}
+.language-box-main{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

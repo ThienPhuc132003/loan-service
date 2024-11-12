@@ -135,7 +135,10 @@ function HandleLoginPage() {
         <LoginLayout>
           <div className="loginFormBox">
             <div id="loginForm" className="loginForm">
-              <LanguageSelector />
+
+              <div className="language-box">
+                <LanguageSelector />
+              </div>
               <h1 className="FormName">{t("login.title")}</h1>
               <p className="description">{t("login.subtitle")}</p>
               <div className="other-login">

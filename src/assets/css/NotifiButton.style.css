@@ -1,0 +1,157 @@
+/* Notification button container */
+.notifi-button-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notifi-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 320px;
+  overflow: hidden;
+  margin-top: 10px;
+  z-index: 1;
+}
+
+/* Header with mark as read/unread buttons */
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.mark-buttons button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.mark-buttons button:hover {
+  text-decoration: underline;
+}
+
+/* Filter buttons */
+.filter-buttons {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  gap: 10px; /* Add spacing between buttons */
+}
+
+.filter-button {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 14px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  margin: 0 5px; /* Adds spacing on left and right of each button */
+}
+
+.filter-button.active {
+  background-color: #1a2e4f; /* Dark blue background for active button */
+  color: #ffffff;
+  border-color: #1a2e4f; /* Border color matching the background */
+}
+
+.filter-button:not(.active) {
+  background-color: #e0e3eb; /* Light gray for inactive button */
+  color: #333; /* Darker color for text */
+  border-color: #a0a4b0; /* Border color for inactive button */
+}
+
+.filter-button:hover {
+  background-color: #1a2e4f;
+  color: #ffffff;
+}
+
+/* Dropdown item styling */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Read and unread styles */
+.dropdown-item.read {
+  background-color: #f8f8f8;
+  font-weight: normal;
+}
+
+.dropdown-item.unread {
+  background-color: #e9f0fc;
+  font-weight: bold;
+}
+
+/* Notification icon styling */
+.notification-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.notification-content {
+  flex-grow: 1;
+}
+
+.notification-title {
+  margin: 0;
+}
+
+.notification-details {
+  color: #555;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.notification-time {
+  color: #888;
+  font-size: 12px;
+}
+
+.unread-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  margin-left: 10px;
+}

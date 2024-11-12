@@ -34,7 +34,9 @@ const UserComponent = ({
   return (
     <div className="user-dropdown" onClick={toggleDropdown} onDoubleClick={handleDoubleClick}>
       <div className="user-info-dropdown">
-        <img src={avatarUrl} alt="User Avatar" className="user-avatar-circle" />
+
+        <img src={avatarUrl} alt="User Avatar" className="user-avatar-square" />
+
         <div className="user-details">
           <span className="user-name">{userName}Thien Phuc</span>
           <span className="user-role">{userRole}khach hang</span>

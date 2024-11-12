@@ -2,10 +2,9 @@
 .user-dropdown {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 30px;
   cursor: pointer;
   position: relative;
-  margin-right: 20px;
 }
 
 .user-info-dropdown {
@@ -14,17 +13,17 @@
   gap: 10px;
   margin-right: 20px;
 }
-
-.user-avatar-circle {
+.user-avatar-square {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 20%;
   border: 2px solid #272e4f;
   object-fit: cover;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.user-avatar-circle:hover {
+
+.user-avatar-square:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

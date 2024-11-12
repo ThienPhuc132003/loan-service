@@ -101,7 +101,11 @@ button.submit:hover {
 .error {
   color: red;
 }
-
+.language-box{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 /* Media query for tablets (768px to 1024px) */
 @media (max-width: 1024px) {
   h1 {
