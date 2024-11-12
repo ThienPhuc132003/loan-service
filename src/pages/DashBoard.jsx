@@ -3,11 +3,7 @@ import React from "react";
 import MainLayout from "../components/layout/MainLayout";
 
 const DashBoardPage = () => {
-
   const currentPath = "/main-page";
-
-
-
 
   return (
     <>
@@ -15,9 +11,6 @@ const DashBoardPage = () => {
         currentPath={currentPath}
         currentPage={currentPath === "/main-page" ? "Dashboard" : "Page"}
       ></MainLayout>
-
-
-
     </>
   );
 };
