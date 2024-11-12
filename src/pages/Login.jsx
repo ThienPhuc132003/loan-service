@@ -135,6 +135,7 @@ function HandleLoginPage() {
         <LoginLayout>
           <div className="loginFormBox">
             <div id="loginForm" className="loginForm">
+
               <div className="language-box">
                 <LanguageSelector />
               </div>

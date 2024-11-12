@@ -13,7 +13,6 @@
   gap: 10px;
   margin-right: 20px;
 }
-
 .user-avatar-square {
   width: 40px;
   height: 40px;
@@ -22,6 +21,7 @@
   object-fit: cover;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 
 .user-avatar-square:hover {
   transform: scale(1.1);
