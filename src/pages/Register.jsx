@@ -167,194 +167,193 @@ function HandleRegisterPage() {
   };
 
   return (
-    <> <div className="page-box">
-      <LoginLayout showLogin={false} showBreadCrumbs={false}>
-        <div className="loginFormBox">
-          <div id="loginForm" className="loginForm">
-            <LanguageSelector />
-            <h1 className="FormName">{t("signup.title")}</h1>
-            <p className="description">{t("signup.subtitle")}</p>
-            <div className="other-login">
-              <div className="login-option">
-                <img src={logoGoogle} alt="User" className="login-img" />
-                Google
+    <>
+      <div className="page-box">
+        <LoginLayout showLogin={false} showBreadCrumbs={false}>
+          <div className="loginFormBox">
+            <div id="loginForm" className="loginForm">
+              <LanguageSelector />
+              <h1 className="FormName">{t("signup.title")}</h1>
+              <p className="description">{t("signup.subtitle")}</p>
+              <div className="other-login">
+                <div className="login-option">
+                  <img src={logoGoogle} alt="User" className="login-img" />
+                  Google
+                </div>
+                <div className="login-option">
+                  <img src={logoFb} alt="User" className="login-img" />
+                  Facebook
+                </div>
               </div>
-              <div className="login-option">
-                <img src={logoFb} alt="User" className="login-img" />
-                Facebook
+              <div className="divider">
+                <span>{t("signup.or")}</span>
               </div>
-            </div>
-            <div className="divider">
-              <span>{t("signup.or")}</span>
-            </div>
-            <div className="name-birth">
+              <div className="name-birth">
+                <div className="field">
+                  <label htmlFor="fullName">
+                    {t("signup.fullName")}{" "}
+                    <span style={{ color: "red" }}> *</span>
+                  </label>
+                  <InputField
+                    type="text"
+                    id="fullName"
+                    value={fullName}
+                    placeholder={t("signup.fullNamePlaceholder")}
+                    errorMessage={errorMessages.fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className={`size-border + ${
+                      errorMessages.fullName || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="birthday">
+                    {t("signup.birthday")}{" "}
+                    <span style={{ color: "red" }}> *</span>
+                  </label>
+                  <InputField
+                    type="date"
+                    id="birthday"
+                    value={birthday}
+                    placeholder={t("signup.birthdayPlaceholder")}
+                    errorMessage={errorMessages.birthday}
+                    onChange={(e) => setBirthday(e.target.value)}
+                    className={`size-border+ ${
+                      errorMessages.birthday || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                  />
+                </div>
+              </div>
+              <div className="email-phone">
+                <div className="field">
+                  <label htmlFor="email">
+                    {t("signup.email")} <span style={{ color: "red" }}> *</span>
+                  </label>
+                  <InputField
+                    type="email"
+                    id="email"
+                    value={email}
+                    placeholder={t("signup.emailPlaceholder")}
+                    errorMessage={errorMessages.email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={`size-border + ${
+                      errorMessages.email || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="phoneNumber">
+                    {t("signup.phoneNumber")}{" "}
+                    <span style={{ color: "red" }}> *</span>
+                  </label>
+                  <InputField
+                    type="tel"
+                    id="phoneNumber"
+                    value={phoneNumber}
+                    placeholder={t("signup.phoneNumberPlaceholder")}
+                    errorMessage={errorMessages.phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className={`size-border + ${
+                      errorMessages.phoneNumber || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                  />
+                </div>
+              </div>
+              <div className="address-gender">
+                <div className="field">
+                  <label htmlFor="address">{t("signup.address")}</label>
+                  <InputField
+                    type="text"
+                    id="address"
+                    value={address}
+                    placeholder={t("signup.addressPlaceholder")}
+                    errorMessage={errorMessages.address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className={`size-border + ${
+                      errorMessages.address || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                    onKeyPress={(e) => handleOnkeydown(e, "password")}
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="gender">{t("signup.gender")}</label>
+                  <RadioGroup
+                    options={[t("signup.male"), t("signup.female")]}
+                    name="gender"
+                    onChange={handleGenderChange}
+                  />
+                </div>
+              </div>
               <div className="field">
-                <label htmlFor="fullName">
-                  {t("signup.fullName")}{" "}
-                  <span style={{ color: "red" }}> *</span>
+                <label htmlFor="password">
+                  {t("signup.password")} <span style={{ color: "red" }}> *</span>
                 </label>
                 <InputField
-                  type="text"
-                  id="fullName"
-
-                  placeholder={t("signup.fullNamePlaceholder")}
-                  value={fullName}
-                  errorMessage={errorMessages.fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  type="password"
+                  id="password"
+                  value={password}
+                  placeholder={t("signup.passwordPlaceholder")}
+                  errorMessage={errorMessages.password || errorMessages.login}
+                  onBlur={handlePasswordBlur}
+                  onFocus={handlePasswordFocus}
+                  onChange={handlePasswordChange}
                   className={`size-border + ${
-                    errorMessages.fullName || errorMessages.login
+                    errorMessages.password || errorMessages.login
                       ? "error-border"
                       : "correct-border"
                   }`}
+                  onKeyPress={(e) => handleOnkeydown(e, "captcha")}
                 />
               </div>
-              <div className="field">
-                <label htmlFor="birthday">
-                  {t("signup.birthday")}{" "}
-                  <span style={{ color: "red" }}> *</span>
-                </label>
-                <InputField
-                  type="date"
-                  id="birthday"
-                  placeholder={t("signup.birthdayPlaceholder")}
-                  value={birthday}
-                  errorMessage={errorMessages.birthday}
-                  onChange={(e) => setBirthday(e.target.value)}
-                  className={`size-border+ ${
-                    errorMessages.birthday || errorMessages.login
-                      ? "error-border"
-                      : "correct-border"
-                  }`}
-                />
-              </div>
-            </div>
-            <div className="email-phone">
-              <div className="field">
-                <label htmlFor="email">
-                  {t("signup.email")} <span style={{ color: "red" }}> *</span>
-                </label>
-                <InputField
-                  type="email"
-                  id="email"
-                  placeholder={t("signup.emailPlaceholder")}
-                  value={email}
-                  errorMessage={errorMessages.email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={`size-border + ${
-                    errorMessages.email || errorMessages.login
-                      ? "error-border"
-                      : "correct-border"
-                  }`}
-                />
-              </div>
-              <div className="field">
-                <label htmlFor="phoneNumber">
-                  {t("signup.phoneNumber")}{" "}
-                  <span style={{ color: "red" }}> *</span>
-                </label>
-                <InputField
-                  type="tel"
-                  id="phoneNumber"
-                  placeholder={t("signup.phoneNumberPlaceholder")}
-                  value={phoneNumber}
-                  errorMessage={errorMessages.phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className={`size-border + ${
-                    errorMessages.phoneNumber || errorMessages.login
-                      ? "error-border"
-                      : "correct-border"
-                  }`}
-                />
-              </div>
-            </div>
-            <div className="address-gender">
-              <div className="field">
-                <label htmlFor="address">{t("signup.address")}</label>
-                <InputField
-                  type="text"
-                  id="address"
-                  value={address}
-                  placeholder={t("signup.addressPlaceholder")}
-                  errorMessage={errorMessages.address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className={`size-border + ${
-                    errorMessages.address || errorMessages.login
-                      ? "error-border"
-                      : "correct-border"
-                  }`}
-                  onKeyPress={(e) => handleOnkeydown(e, "password")}
-                />
-              </div>
-              <div className="field">
-                <label htmlFor="gender">{t("signup.gender")}</label>
-                <RadioGroup
-                  options={[t("signup.male"), t("signup.female")]}
-                  name="gender"
-                  onChange={handleGenderChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label htmlFor="password">
-                {t("signup.password")} <span style={{ color: "red" }}> *</span>
-              </label>
               <InputField
                 type="password"
-                id="password"
-                placeholder={t("signup.passwordPlaceholder")}
-                value={password}
-                errorMessage={errorMessages.password || errorMessages.login}
-                onBlur={handlePasswordBlur}
-                onFocus={handlePasswordFocus}
-                onChange={handlePasswordChange}
+                id="confirmPassword"
+                value={confirmPassword}
+                placeholder={t("signup.confirmPasswordPlaceholder")}
+                errorMessage={errorMessages.confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className={`size-border + ${
-                  errorMessages.password || errorMessages.login
+                  errorMessages.confirmPassword || errorMessages.login
                     ? "error-border"
                     : "correct-border"
                 }`}
-                onKeyPress={(e) => handleOnkeydown(e, "captcha")}
               />
+              <div className="captcha-box">
+                <label htmlFor="captcha" className="captcha-title">
+                  Captcha <span style={{ color: "red" }}> *</span>
+                </label>
+                <ReCAPTCHA
+                  sitekey="6Ldws3QqAAAAAMX5jNVnZPksWQRvMrp06k7uSbqz"
+                  onChange={handleCaptchaChange}
+                />
+              </div>
+              <div className="submit-cancel">
+                <Button className="submit" onClick={handleRegister}>
+                  {t("signup.button")}
+                </Button>
+                <Button className="cancel" onClick={handleBackPage}>
+                  {t("signup.cancel")}
+                </Button>
+              </div>
+              <p className="register">
+                {t("signup.alreadyHaveAccount")}&nbsp;
+                <span className="register-link" onClick={handleLogin}>
+                  {t("signup.login")}
+                </span>
+              </p>
             </div>
-            <InputField
-              type="password"
-              id="confirmPassword"
-              placeholder={t("signup.confirmPasswordPlaceholder")}
-              value={confirmPassword}
-              errorMessage={errorMessages.confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`size-border + ${
-                errorMessages.confirmPassword || errorMessages.login
-                  ? "error-border"
-                  : "correct-border"
-              }`}
-            />
-            <p className="error">{errorMessages.login}</p>
-            <div className="captcha-box">
-              <label htmlFor="captcha" className="captcha-title">
-                Captcha <span style={{ color: "red" }}> *</span>
-              </label>
-              <ReCAPTCHA
-                sitekey="6Ldws3QqAAAAAMX5jNVnZPksWQRvMrp06k7uSbqz"
-                onChange={handleCaptchaChange}
-              />
-            </div>
-            <div className="submit-cancel">
-              <Button className="submit" onClick={handleRegister}>
-                {t("signup.button")}
-              </Button>
-              <Button className="cancel" onClick={handleBackPage}>
-                {t("signup.cancel")}
-              </Button>
-            </div>
-            <p className="register">
-              {t("signup.alreadyHaveAccount")}&nbsp;
-              <span className="register-link" onClick={handleLogin}>
-                {t("signup.login")}
-              </span>
-            </p>
           </div>
-        </div>
-      </LoginLayout>
+        </LoginLayout>
       </div>
     </>
   );

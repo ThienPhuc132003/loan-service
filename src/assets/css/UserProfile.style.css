@@ -1,0 +1,108 @@
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Avatar Container with buttons */
+.profile-avatar-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Avatar Section on the Left */
+.profile-avatar-section {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #272e4f;
+}
+
+/* Buttons aligned vertically */
+.profile-avatar-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.avatar-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-avatar-button {
+  background-color: #272E4F;
+  color: #fff;
+  padding: 10px 40px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.change-avatar-button {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 10px 40px;
+  border-radius: 20px;
+  font-weight: bold;
+  border: 2px solid #272E4F;
+}
+
+/* Profile Information Sections */
+.profile-info-section {
+  border-radius: 20px;
+  padding: 16px;
+}
+
+/* Section Title */
+.profile-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #272e4f;
+  margin-bottom: 12px;
+}
+
+/* Profile Info Row for Grid Layout */
+.profile-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns per row */
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+/* Full-width row for single-field sections like Address */
+.profile-info-field-full {
+  grid-column: span 2; /* Make this field span across two columns */
+}
+
+/* Individual Field Styling */
+.profile-info-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-info-field label {
+  font-size: 17px;
+  font-weight: bold; 
+  color: #333;
+  margin-bottom: 7px;
+
+}
+
+/* Input Field Styling */
+.profile-info-field input {
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+}

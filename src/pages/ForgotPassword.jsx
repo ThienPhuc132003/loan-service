@@ -60,40 +60,42 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <> <div className="page-box">
-      <LoginLayout>
-        <div className="loginFormBox">
-          <div id="loginForm" className="loginForm">
-            <LanguageSelector />
-            <h1 className="FormName">{t("signup.forgotPassword")}</h1>
-            <p className="description">{t("signup.emailOrPhonenumberTitle")}</p>
-            <InputField
-              type="email"
-              id="email"
-              name={t("signup.emailOrPhoneNumber")}
-              value={emailOrPhone}
-              errorMessage={errorMessages.email}
-              onChange={handleEmailChange}
-              className={
-                errorMessages.email ? "error-border" : "correct-border"
-              }
-            />
-            <p className="error">{errorMessages.email}</p>
-            <div className="submit-cancel">
-              <Button className="submit" onClick={handleForgotPassword}>
-                {t("signup.confirm")}
-              </Button>
-              <Button className="cancel" onClick={handleBackPage}>
-                {t("signup.cancel")}
-              </Button>
+    <>
+      <div className="page-box">
+        <LoginLayout>
+          <div className="loginFormBox">
+            <div id="loginForm" className="loginForm">
+              <LanguageSelector />
+              <h1 className="FormName">{t("signup.forgotPassword")}</h1>
+              <p className="description">{t("signup.emailOrPhonenumberTitle")}</p>
+              <InputField
+                type="email"
+                id="email"
+                value={emailOrPhone}
+                placeholder={t("signup.emailOrPhoneNumber")}
+                errorMessage={errorMessages.email}
+                onChange={handleEmailChange}
+                className={
+                  errorMessages.email ? "error-border" : "correct-border"
+                }
+              />
+              <p className="error">{errorMessages.email}</p>
+              <div className="submit-cancel">
+                <Button className="submit" onClick={handleForgotPassword}>
+                  {t("signup.confirm")}
+                </Button>
+                <Button className="cancel" onClick={handleBackPage}>
+                  {t("signup.cancel")}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </LoginLayout>
+        </LoginLayout>
       </div>
     </>
   );
 }
+
 
 const ForgotPassword = React.memo(ForgotPasswordPage);
 export default ForgotPassword;

@@ -1,25 +1,34 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import "../assets/css/LanguageSelector.style.css";
+import Select from "react-select";
+import { US, VN } from 'country-flag-icons/react/3x2';
+
 const LanguageSelectorComponent = () => {
   const { i18n } = useTranslation();
 
-  const handleLanguageChange = (event) => {
-    i18n.changeLanguage(event.target.value);
+  const languageOptions = [
+    {
+      value: "en",
+      label: <US title="United States" style={{ width: '20px', height: '15px' }} />,
+    },
+    {
+      value: "vi",
+      label: <VN title="Vietnam" style={{ width: '20px', height: '15px' }} />,
+    },
+  ];
+
+  const handleLanguageChange = (selectedOption) => {
+    i18n.changeLanguage(selectedOption.value);
   };
 
   return (
-    <div className="language-selector">
-      <label htmlFor="language">Language: </label>
-      <select
-        id="language"
-        onChange={handleLanguageChange}
-        value={i18n.language}
-      >
-        <option value="en">English</option>
-        <option value="vi">Vietnamese</option>
-      </select>
-    </div>
+    <Select
+      options={languageOptions}
+      onChange={handleLanguageChange}
+      value={languageOptions.find(option => option.value === i18n.language)}
+      className="language-selector"
+      isSearchable={false} 
+    />
   );
 };
 const LanguageSelector = React.memo(LanguageSelectorComponent);

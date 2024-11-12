@@ -8,11 +8,13 @@ import {
 import PrivateRoutes from "./route/PrivateRoutes";
 import OtpProtectedRoute from "./route/OtpProtectedRoute";
 const Login = lazy(() => import("./pages/Login"));
-const LoanMain = lazy(() => import("./pages/LoanMain"));
+const DashBoard = lazy(() => import("./pages/DashBoard"));
 const Register = lazy(() => import("./pages/Register"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const OtpVerify = lazy(() => import("./pages/OtpVerify"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
+const UserProfile = lazy(() => import("./pages/UserProfile"));
+
 function App() {
   return (
     <Router>
@@ -27,7 +29,8 @@ function App() {
           </Route>
           <Route path="/" element={<PrivateRoutes />}>
             <Route index element={<Navigate to="/main-page" />} />
-            <Route path="main-page" element={<LoanMain />} />
+            <Route path="main-page" element={<DashBoard />} />
+            <Route path="user-profile" element={<UserProfile />} />
           </Route>
         </Routes>
       </Suspense>

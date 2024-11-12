@@ -78,50 +78,50 @@ function ChangePasswordPage() {
   };
   return (
     <>
-    <div className="page-box">
-      <LoginLayout>
-        <div className="loginFormBox">
-          <div id="loginForm" className="loginForm">
-            <LanguageSelector />
-            <h1 className="FormName">{t("signup.changePassword")}</h1>
-            <p className="description">{t("signup.enterNewPassword")}</p>
-            <InputField
-              type="password"
-              id="password"
-              name={t("signup.newPassword")}
-              value={password}
-              errorMessage={errorMessages.password}
-              onChange={handlePasswordChange}
-              className={
-                errorMessages.password ? "error-border" : "correct-border"
-              }
-            />
-            <InputField
-              type="password"
-              id="confirmPassword"
-              name={t("signup.confirmPassword")}
-              value={confirmPassword}
-              errorMessage={errorMessages.confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              className={
-                errorMessages.confirmPassword
-                  ? "error-border"
-                  : "correct-border"
-              }
-            />
-            <p className="error">{errorMessages.password}</p>
-            <p className="error">{errorMessages.confirmPassword}</p>
-            <div className="submit-cancel">
-              <Button className="submit" onClick={handleChangePassword}>
-                {t("signup.confirm")}
-              </Button>
-              <Button className="cancel" onClick={handleBackPage}>
-                {t("signup.cancel")}
-              </Button>
+      <div className="page-box">
+        <LoginLayout>
+          <div className="loginFormBox">
+            <div id="loginForm" className="loginForm">
+              <LanguageSelector />
+              <h1 className="FormName">{t("signup.changePassword")}</h1>
+              <p className="description">{t("signup.enterNewPassword")}</p>
+              <InputField
+                type="password"
+                id="password"
+                value={password}
+                placeholder={t("signup.newPassword")}
+                errorMessage={errorMessages.password}
+                onChange={handlePasswordChange}
+                className={
+                  errorMessages.password ? "error-border" : "correct-border"
+                }
+              />
+              <InputField
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                placeholder={t("signup.confirmPasswordPlaceholder")}
+                errorMessage={errorMessages.confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                className={
+                  errorMessages.confirmPassword
+                    ? "error-border"
+                    : "correct-border"
+                }
+              />
+              <p className="error">{errorMessages.password}</p>
+              <p className="error">{errorMessages.confirmPassword}</p>
+              <div className="submit-cancel">
+                <Button className="submit" onClick={handleChangePassword}>
+                  {t("signup.confirm")}
+                </Button>
+                <Button className="cancel" onClick={handleBackPage}>
+                  {t("signup.cancel")}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </LoginLayout>
+        </LoginLayout>
       </div>
     </>
   );

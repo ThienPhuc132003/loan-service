@@ -36,6 +36,7 @@ function OtpVerifyPage() {
         method: METHOD_TYPE.POST,
         data: { otp: otp, email: emailOrPhone },
       });
+      console.log("otp", response);
       if (response.success === true) {
         localStorage.setItem("otpVerified", "true");
         navigate("/change-password", { state: { emailOrPhone, otp } });
@@ -64,36 +65,37 @@ function OtpVerifyPage() {
 
   return (
     <>
-  <div className="page-box">
-    <LoginLayout>
-      <div className="loginFormBox">
-        <div id="loginForm" className="loginForm">
-        <LanguageSelector />
-          <h1 className="FormName">{t("signup.verifyOtp")}</h1>
-          <p className="description">{t("signup.enterOtpToVerify")}</p>
-          <p className="description">{t("signup.alertCheckMail",{emailOrPhone})}</p>
-          <InputField
-            type="text"
-            id="otp"
-            name="Otp"
-            value={otp}
-            errorMessage={errorMessages.otp}
-            onChange={handleOtpChange}
-            className={errorMessages.otp ? "error-border" : "correct-border"}
-          />
-          <p className="error">{errorMessages.otp}</p>
-          <div className="submit-cancel">
-            <Button className="submit" onClick={handleOtpVerification}>
-              {t("signup.confirm")}
-            </Button>
-            <Button className="cancel" onClick={handleBackPage}>
-              {t("signup.cancel")}
-            </Button>
+      <div className="page-box">
+        <LoginLayout>
+          <div className="loginFormBox">
+            <div id="loginForm" className="loginForm">
+              <LanguageSelector />
+              <h1 className="FormName">{t("signup.verifyOtp")}</h1>
+              <p className="description">{t("signup.enterOtpToVerify")}</p>
+              <InputField
+                type="text"
+                id="otp"
+                value={otp}
+                placeholder="Otp"
+                errorMessage={errorMessages.otp}
+                onChange={handleOtpChange}
+                className={
+                  errorMessages.otp ? "error-border" : "correct-border"
+                }
+              />
+              <p className="error">{errorMessages.otp}</p>
+              <div className="submit-cancel">
+                <Button className="submit" onClick={handleOtpVerification}>
+                  {t("signup.confirm")}
+                </Button>
+                <Button className="cancel" onClick={handleBackPage}>
+                  {t("signup.cancel")}
+                </Button>
+              </div>
+            </div>
           </div>
-        </div>
+        </LoginLayout>
       </div>
-    </LoginLayout>
-    </div>
     </>
   );
 }

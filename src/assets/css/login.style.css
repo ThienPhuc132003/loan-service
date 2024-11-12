@@ -100,3 +100,31 @@ label {
   font-size: 16px;
   color: #333;
 }
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.remember-me div {
+  font-weight: bold;
+}
+.remember-me input {
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #272e4f;
+}
+
+.remember-me input:checked {
+  background-color: #272e4f;
+  border: 2px solid #272e4f;
+}
+
+.remember-me input:focus {
+  outline: none;
+}
+
+.remember-me label {
+  cursor: pointer;
+}
