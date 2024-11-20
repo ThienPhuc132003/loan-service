@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import User from "../User";
-
 import LanguageSelector from "../LanguageSelector";
 import SettingButton from "../SettingButton";
 import NotifiButton from "../NotifiButton";
@@ -19,7 +18,6 @@ const UserAccountToolbarComponent = ({ onEditProfile, onLogout }) => {
         </div>
       </div>
     </>
-
   );
 };
 
@@ -33,6 +31,4 @@ UserAccountToolbarComponent.propTypes = {
 };
 
 const UserAccountToolbar = React.memo(UserAccountToolbarComponent);
-
 export default UserAccountToolbar;
-

@@ -19,7 +19,7 @@ function OtpVerifyPage() {
   const validateFields = useCallback(() => {
     const errors = {};
     if (otp === "") {
-      errors.otp = t("signup.emptyOtp");
+      errors.otp = t("login.emptyOtp");
     }
     return errors;
   }, [otp, t]);
@@ -36,19 +36,18 @@ function OtpVerifyPage() {
         method: METHOD_TYPE.POST,
         data: { otp: otp, email: emailOrPhone },
       });
-      console.log("otp", response);
       if (response.success === true) {
         localStorage.setItem("otpVerified", "true");
         navigate("/change-password", { state: { emailOrPhone, otp } });
       } else {
-        setErrorMessages({ otp: t("signup.invalidOtp") });
+        setErrorMessages({ otp: t("login.invalidOtp") });
       }
     } catch (error) {
-      setErrorMessages({ otp: t("signup.errorOtp") });
+      setErrorMessages({ otp: t("login.error") });
     }
   }, [otp, emailOrPhone, validateFields, navigate, t]);
 
-  const handleOtpChange = (e) => {
+  const handleOtpChange = useCallback((e) => {
     const value = e.target.value;
     setOtp(value);
     if (errorMessages.otp) {
@@ -57,46 +56,46 @@ function OtpVerifyPage() {
         otp: "",
       }));
     }
-  };
+  }, [errorMessages.otp]);
 
-  const handleBackPage = () => {
+  const handleBackPage = useCallback(() => {
     navigate("/forgot-password");
-  };
+  }, [navigate]);
 
   return (
-    <>
-      <div className="page-box">
-        <LoginLayout>
-          <div className="loginFormBox">
-            <div id="loginForm" className="loginForm">
+    <div className="page-box">
+      <LoginLayout>
+        <div className="loginFormBox">
+          <div id="loginForm" className="loginForm">
+            <div className="language-box">
               <LanguageSelector />
-              <h1 className="FormName">{t("signup.verifyOtp")}</h1>
-              <p className="description">{t("signup.enterOtpToVerify")}</p>
-              <InputField
-                type="text"
-                id="otp"
-                value={otp}
-                placeholder="Otp"
-                errorMessage={errorMessages.otp}
-                onChange={handleOtpChange}
-                className={
-                  errorMessages.otp ? "error-border" : "correct-border"
-                }
-              />
-              <p className="error">{errorMessages.otp}</p>
-              <div className="submit-cancel">
-                <Button className="submit" onClick={handleOtpVerification}>
-                  {t("signup.confirm")}
-                </Button>
-                <Button className="cancel" onClick={handleBackPage}>
-                  {t("signup.cancel")}
-                </Button>
-              </div>
+            </div>
+            <h1 className="FormName">{t("login.otpVerifyTitle")}</h1>
+            <p className="description">{t("login.otpVerifySubtitle")}</p>
+            <InputField
+              type="text"
+              id="otp"
+              value={otp}
+              placeholder={t("login.otpPlaceholder")}
+              errorMessage={errorMessages.otp}
+              onChange={handleOtpChange}
+              className={
+                errorMessages.otp ? "error-border" : "correct-border"
+              }
+            />
+            <p className="error">{errorMessages.otp}</p>
+            <div className="submit-cancel">
+              <Button className="submit" onClick={handleOtpVerification}>
+                {t("common.confirm")}
+              </Button>
+              <Button className="cancel" onClick={handleBackPage}>
+                {t("common.cancel")}
+              </Button>
             </div>
           </div>
-        </LoginLayout>
-      </div>
-    </>
+        </div>
+      </LoginLayout>
+    </div>
   );
 }
 

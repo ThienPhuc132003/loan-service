@@ -17,7 +17,7 @@ function ForgotPasswordPage() {
   const validateFields = useCallback(() => {
     const errors = {};
     if (emailOrPhone === "") {
-      errors.email = t("signup.emptyEmail");
+      errors.email = t("login.emptyEmail");
     }
     return errors;
   }, [emailOrPhone, t]);
@@ -37,10 +37,10 @@ function ForgotPasswordPage() {
       if (response.success === true) {
         navigate("/otp-verify", { state: { emailOrPhone } });
       } else {
-        setErrorMessages({ email: t("signup.emailNotFound") });
+        setErrorMessages({ email: t("login.emailNotFound") });
       }
     } catch (error) {
-      setErrorMessages({ email: t("signup.error") });
+      setErrorMessages({ email: t("login.error") });
     }
   }, [emailOrPhone, validateFields, navigate, t]);
 
@@ -60,42 +60,41 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <>
-      <div className="page-box">
-        <LoginLayout>
-          <div className="loginFormBox">
-            <div id="loginForm" className="loginForm">
+    <div className="page-box">
+      <LoginLayout>
+        <div className="loginFormBox">
+          <div id="loginForm" className="loginForm">
+            <div className="language-box">
               <LanguageSelector />
-              <h1 className="FormName">{t("signup.forgotPassword")}</h1>
-              <p className="description">{t("signup.emailOrPhonenumberTitle")}</p>
-              <InputField
-                type="email"
-                id="email"
-                value={emailOrPhone}
-                placeholder={t("signup.emailOrPhoneNumber")}
-                errorMessage={errorMessages.email}
-                onChange={handleEmailChange}
-                className={
-                  errorMessages.email ? "error-border" : "correct-border"
-                }
-              />
-              <p className="error">{errorMessages.email}</p>
-              <div className="submit-cancel">
-                <Button className="submit" onClick={handleForgotPassword}>
-                  {t("signup.confirm")}
-                </Button>
-                <Button className="cancel" onClick={handleBackPage}>
-                  {t("signup.cancel")}
-                </Button>
-              </div>
+            </div>
+            <h1 className="FormName">{t("login.forgotPasswordTitle")}</h1>
+            <p className="description">{t("login.forgotPasswordSubtitle")}</p>
+            <InputField
+              type="email"
+              id="email"
+              value={emailOrPhone}
+              placeholder={t("login.emailOrPhonePlaceholder")}
+              errorMessage={errorMessages.email}
+              onChange={handleEmailChange}
+              className={
+                errorMessages.email ? "error-border" : "correct-border"
+              }
+            />
+            <p className="error">{errorMessages.email}</p>
+            <div className="submit-cancel">
+              <Button className="submit" onClick={handleForgotPassword}>
+                {t("login.button")}
+              </Button>
+              <Button className="cancel" onClick={handleBackPage}>
+                {t("common.cancel")}
+              </Button>
             </div>
           </div>
-        </LoginLayout>
-      </div>
-    </>
+        </div>
+      </LoginLayout>
+    </div>
   );
 }
-
 
 const ForgotPassword = React.memo(ForgotPasswordPage);
 export default ForgotPassword;

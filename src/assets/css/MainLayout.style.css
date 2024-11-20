@@ -1,13 +1,28 @@
 .main-layout {
   display: flex;
   height: 100vh;
+  margin-left: 250px; /* Thêm khoảng trống tương ứng với chiều rộng của sidebar */
 }
 
 .sidebar {
   width: 250px;
+  height: 100vh; /* Đặt chiều cao thành 100% chiều cao của viewport */
+  position: fixed; /* Đặt sidebar ở vị trí cố định */
+  top: 0;
+  left: 0;
   background-color: #f4f4f4;
-  padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* Thêm thanh cuộn dọc nếu nội dung vượt quá chiều cao */
+}
+
+.main-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 50px 10px 0px;
+  font-family: "Jacques Francois";
+  font-size: 3em;
+  color: #ff5e3a;
 }
 
 nav ul {
@@ -16,12 +31,14 @@ nav ul {
 }
 
 nav ul li {
-  margin: 10px 0;
-  padding: 20px;
+  padding:  15px 20px;
 }
 
 nav ul li.active {
-  background-color: #272e4f; /* Highlight color for active link */
+  background-color: #272e4f; 
+}
+nav ul li:not(.active):hover {
+  background-color: #272e4fe6 ; 
 }
 
 nav ul li a {
@@ -34,7 +51,10 @@ nav ul li a {
 }
 
 nav ul li.active a {
-  color: #ffffff; /* Highlight color for active link */
+  color: #ffffff; 
+}
+nav ul li:hover a{
+  color: #ffffff;
 }
 
 .divider {
@@ -51,13 +71,11 @@ nav ul li.active a {
 
 .header {
   display: flex;
-
   align-items: center;
   justify-content: space-between;
   background-color: #f4f4f4;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 20px 0;
-
 }
 
 .main-content {
@@ -77,17 +95,18 @@ nav ul li.active a {
   flex-direction: column;
   padding: 20px;
 }
-.current-page{
+.current-page {
   display: flex;
-  margin-left: 20px;
+  margin-left: 50px;
 }
 .user-account-toolbar {
   display: flex;
   justify-content: space-between;
   gap: 10px;
 }
-.language-box-main{
+.language-box-main {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+

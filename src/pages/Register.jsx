@@ -172,7 +172,9 @@ function HandleRegisterPage() {
         <LoginLayout showLogin={false} showBreadCrumbs={false}>
           <div className="loginFormBox">
             <div id="loginForm" className="loginForm">
-              <LanguageSelector />
+            <div className="language-box">
+                <LanguageSelector />
+              </div>
               <h1 className="FormName">{t("signup.title")}</h1>
               <p className="description">{t("signup.subtitle")}</p>
               <div className="other-login">
@@ -342,7 +344,7 @@ function HandleRegisterPage() {
                   {t("signup.button")}
                 </Button>
                 <Button className="cancel" onClick={handleBackPage}>
-                  {t("signup.cancel")}
+                  {t("common.cancel")}
                 </Button>
               </div>
               <p className="register">

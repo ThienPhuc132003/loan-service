@@ -57,30 +57,30 @@ const NotifiButtonComponent = () => {
         <i className="fa-regular fa-bell fa-2xl"></i>
       </button>
       {isDropdownOpen && (
-        <div className="dropdown-menu">
-          <div className="dropdown-header">
+        <div className="notifi-dropdown-menu">
+          <div className="notifi-dropdown-header">
             <h3>Thông báo</h3>
-            <div className="mark-buttons">
-              <button className="mark-read" onClick={markAllAsRead}>
+            <div className="notifi-mark-buttons">
+              <button className="notifi-mark-read" onClick={markAllAsRead}>
                 Đánh dấu đã đọc tất cả
               </button>
             </div>
           </div>
-          <div className="filter-buttons">
+          <div className="notifi-filter-buttons">
             <button
-              className={`filter-button ${filter === "all" ? "active" : ""}`}
+              className={`notifi-filter-button ${filter === "all" ? "active" : ""}`}
               onClick={() => setFilter("all")}
             >
               Tất cả
             </button>
             <button
-              className={`filter-button ${filter === "unread" ? "active" : ""}`}
+              className={`notifi-filter-button ${filter === "unread" ? "active" : ""}`}
               onClick={() => setFilter("unread")}
             >
               Chưa đọc
             </button>
             <button
-              className={`filter-button ${filter === "read" ? "active" : ""}`}
+              className={`notifi-filter-button ${filter === "read" ? "active" : ""}`}
               onClick={() => setFilter("read")}
             >
               Đã đọc
@@ -90,24 +90,24 @@ const NotifiButtonComponent = () => {
             filteredNotifications.map((notification) => (
               <div
                 key={notification.notificationId}
-                className={`dropdown-item ${notification.seen ? "read" : "unread"}`}
+                className={`notifi-dropdown-item ${notification.seen ? "read" : "unread"}`}
                 onClick={() => toggleReadStatus(notification.notificationId)}
               >
-                <div className="notification-icon">
+                <div className="notifi-notification-icon">
                   <img src="logo-placeholder.png" alt="icon" />
                 </div>
-                <div className="notification-content">
-                  <p className="notification-title">{notification.titleName}</p>
-                  <p className="notification-details">{notification.content}</p>
-                  <p className="notification-time">
+                <div className="notifi-notification-content">
+                  <p className="notifi-notification-title">{notification.titleName}</p>
+                  <p className="notifi-notification-details">{notification.content}</p>
+                  <p className="notifi-notification-time">
                     {new Date(notification.createAt).toLocaleString()}
                   </p>
                 </div>
-                {!notification.seen && <span className="unread-indicator"></span>}
+                {!notification.seen && <span className="notifi-unread-indicator"></span>}
               </div>
             ))
           ) : (
-            <div className="dropdown-item">No notifications</div>
+            <div className="notifi-dropdown-item">No notifications</div>
           )}
         </div>
       )}

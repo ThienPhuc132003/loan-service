@@ -3,23 +3,20 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/User.style.css";
 import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
 
-const UserComponent = ({
-  onEditProfile,
-  userName,
-  userRole,
-  avatarUrl,
-}) => {
+const UserComponent = ({  userRole, avatarUrl }) => {
+  const userInfo = useSelector((state) => state.user.userProfile);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
-
+  console.log(userInfo);
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleOptionClick = (option) => {
     if (option === "editProfile") {
-      onEditProfile();
+      navigate("/update-user-profile");
     } else if (option === "logout") {
       navigate("/login");
       Cookies.remove("user");
@@ -32,17 +29,23 @@ const UserComponent = ({
   };
 
   return (
-    <div className="user-dropdown" onClick={toggleDropdown} onDoubleClick={handleDoubleClick}>
+    <div className="user-dropdown">
       <div className="user-info-dropdown">
-
-        <img src={avatarUrl} alt="User Avatar" className="user-avatar-square" />
-
-        <div className="user-details">
-          <span className="user-name">{userName}Thien Phuc</span>
+        <img
+          src={avatarUrl}
+          alt="User Avatar"
+          className="user-avatar-square"
+          onDoubleClick={handleDoubleClick}
+        />
+        <div className="user-details" onClick={toggleDropdown}>
+          <span className="user-name">{userInfo.fullname}</span>
           <span className="user-role">{userRole}khach hang</span>
         </div>
       </div>
-      <div className={`dropdown-arrow ${isDropdownOpen ? "open" : ""}`} />
+      <div
+        className={`dropdown-arrow ${isDropdownOpen ? "open" : ""}`}
+        onClick={toggleDropdown}
+      />
 
       {isDropdownOpen && (
         <div className="dropdown-menu">
@@ -50,13 +53,13 @@ const UserComponent = ({
             className="dropdown-item"
             onClick={() => handleOptionClick("editProfile")}
           >
-            Edit Profile
+            <i className="fa-regular fa-pen-to-square"></i>Edit Profile
           </div>
           <div
             className="dropdown-item"
             onClick={() => handleOptionClick("logout")}
           >
-            Logout
+            <i className="fa-solid fa-arrow-right-from-bracket"></i>Logout
           </div>
         </div>
       )}
@@ -66,7 +69,6 @@ const UserComponent = ({
 
 UserComponent.propTypes = {
   onEditProfile: PropTypes.func,
-  userName: PropTypes.string,
   userRole: PropTypes.string,
   avatarUrl: PropTypes.string,
 };

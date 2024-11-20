@@ -14,7 +14,7 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const OtpVerify = lazy(() => import("./pages/OtpVerify"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
-
+const UpdateUserProfile = lazy(() => import("./pages/UpdateUserProfile"));
 function App() {
   return (
     <Router>
@@ -31,6 +31,7 @@ function App() {
             <Route index element={<Navigate to="/main-page" />} />
             <Route path="main-page" element={<DashBoard />} />
             <Route path="user-profile" element={<UserProfile />} />
+            <Route path="update-user-profile" element={<UpdateUserProfile />} />
           </Route>
         </Routes>
       </Suspense>

@@ -31,5 +31,6 @@ const LanguageSelectorComponent = () => {
     />
   );
 };
+
 const LanguageSelector = React.memo(LanguageSelectorComponent);
 export default LanguageSelector;

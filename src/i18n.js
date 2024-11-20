@@ -1,22 +1,37 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import enTranslation from "./Language/English/enLogin.json";
-import viTranslation from "./Language/Vietnamese/viLogin.json";
+import enLogin from "./Language/English/enLogin.json";
+import viLogin from "./Language/Vietnamese/viLogin.json";
+import enSignup from "./Language/English/enSignup.json";
+import viSignup from "./Language/Vietnamese/viSignup.json";
+import enCommon from "./Language/English/enCommon.json";
+import viCommon from "./Language/Vietnamese/viCommon.json";
+
+const enTranslate = {
+  ...enLogin,
+  ...enSignup,
+  ...enCommon,
+};
+
+const viTranslate = {
+  ...viLogin,
+  ...viSignup,
+  ...viCommon,
+};
 
 i18n.use(initReactI18next).init({
   resources: {
     en: {
-      translation: enTranslation,
+      translate: enTranslate,
     },
     vi: {
-      translation: viTranslation,
+      translate: viTranslate,
     },
   },
   lng: "en",
   fallbackLng: "en",
+  ns: ["translate"],
   interpolation: {
     escapeValue: false,
   },
 });
-
-export default i18n;

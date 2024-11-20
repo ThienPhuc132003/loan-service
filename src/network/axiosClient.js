@@ -1,11 +1,13 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+
 const axiosClient = axios.create({
   baseURL: "",
   headers: {
     "Content-Type": "application/json",
   },
 });
+
 // Add a request interceptor
 axiosClient.interceptors.request.use(
   function (config) {
@@ -29,7 +31,7 @@ axiosClient.interceptors.response.use(
     return response.data;
   },
   function (error) {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       Cookies.remove("token");
       window.location.href = "/login";
     }
