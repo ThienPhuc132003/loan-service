@@ -15,17 +15,12 @@
 }
 
 .loan-card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  text-align: left;
 }
 
 .loan-card-title {
-  display: flex;
   font-size: 16px;
   margin: 0;
-  gap: 10px;
-  font-weight: 300;
 }
 
 .loan-card-amount {

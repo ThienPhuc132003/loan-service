@@ -166,28 +166,10 @@ button[disabled] {
   font-size: 14px;
   margin-top: 8px;
 }
-.update-profile-button{
-  display: flex;
-    background-color: #272e4f;
-    color: #fff;
-    padding: 15px 40px;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-left: auto;
-}
-.radio-group {
-  display: flex;
-  padding-top: 10px;
-  gap: 40px;
-}
-.radio-option{
-  display: flex;
-  gap: 10px;
-}
+
 /* Read-only Styling */
-.read-only {
+/* .read-only {
   background-color: #f0f0f0;
   color: #888;
   cursor: not-allowed;
-}
+} */

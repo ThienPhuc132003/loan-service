@@ -9,35 +9,38 @@ import Cropper from "react-easy-crop";
 import getCroppedImg from "../utils/cropImage";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
-import {useDispatch} from "react-redux";
-import { setUserProfile } from "../redux/userSlice";
+
 const UserProfilePage = () => {
   const userInfo = useSelector((state) => state.user.userProfile);
-  const [avatar, setAvatar] = useState(userInfo?.avatar || "default-avatar.png");
-  const dispatch = useDispatch();
+  const [avatar, setAvatar] = useState(
+    userInfo?.avatar?.mediaUrl || "default-avatar.png"
+  );
   const [showCropper, setShowCropper] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const navigate = useNavigate();
-
+  console.log("userInfo", userInfo);
+  // Hàm xử lý khi crop xong
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
+  // Hàm xử lý khi chọn file mới
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImageSrc(reader.result);
-        setShowCropper(true);
+        setImageSrc(reader.result); // Lưu base64 của ảnh
+        setShowCropper(true); // Hiển thị Cropper
       };
       reader.readAsDataURL(file);
     }
   };
 
+  // Hàm xử lý crop ảnh
   const handleCrop = async () => {
     try {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
@@ -49,52 +52,53 @@ const UserProfilePage = () => {
     }
   };
 
+  // Hàm xử lý upload ảnh lên server
   const handleUploadSuccess = useCallback(async (croppedFile) => {
     try {
-      if (!(croppedFile instanceof Blob)) {
-        throw new Error("Invalid file format. Must be an image file.");
-      }
-
+      // Lấy tên file từ server (nếu cần)
       const avatarResponse = await Api({
-        endpoint: "media-service/media/media-url?mediaCategory=borrower_avatar",
+        endpoint:
+          "http://152.42.232.101:9005/api/v1/media-service/media/media-url?mediaCategory=borrower_avatar",
         method: METHOD_TYPE.GET,
       });
 
       if (avatarResponse.code === 200) {
         const fileName = avatarResponse.data.fileName;
+
+        // Tạo FormData và đính kèm file đã crop
         const formData = new FormData();
         formData.append("file", croppedFile);
 
-        const upLoadResponse = await Api({
-          endpoint: `media-service/media/upload-media?mediaCategory=borrower_avatar&fileName=${fileName}`,
+        // Gửi request POST với FormData
+        const response = await Api({
+          endpoint: `http://152.42.232.101:9005/api/v1/media-service/media/upload-media?mediaCategory=borrower_avatar&fileName=${fileName}`,
           method: METHOD_TYPE.POST,
           data: formData,
-          isFormData: true,
+          headers: { "Content-Type": "multipart/form-data" },
         });
 
-        if (upLoadResponse.success === true) {
-          const pushAvatarToServer = await Api({
-            endpoint: `loan-service/borrower/update-profile`,
-            method: METHOD_TYPE.PUT,
-            data: { avatar: upLoadResponse.data.mediaUrl },
-          });
-          dispatch(setUserProfile(pushAvatarToServer.data));
-          setAvatar(pushAvatarToServer.data.avatar);
+        console.log("Upload response:", response);
+
+        if (response.success === true) {
+          setAvatar(response.data.mediaUrl); // Cập nhật ảnh đại diện
+          console.log("Upload success:", response.data.mediaUrl);
         } else {
-          console.error("Upload failed:", upLoadResponse);
+          console.error("Upload failed:", response);
         }
       }
     } catch (error) {
-      console.error("Error uploading image:", error.message);
+      console.error("Failed to upload avatar:", error);
     } finally {
-      setShowCropper(false);
+      setShowCropper(false); // Đóng cropper
     }
-  }, [dispatch]);
+  }, []);
 
+  // Hàm điều hướng tới trang cập nhật thông tin
   const handleUpdateProfile = useCallback(() => {
     navigate("/update-user-profile");
   }, [navigate]);
 
+  // Xử lý trường hợp chưa tải được user info
   if (!userInfo) {
     return <div>Loading...</div>;
   }
@@ -182,13 +186,12 @@ const UserProfilePage = () => {
                 readOnly
               />
             </div>
-
             <div className="profile-info-field">
-              <label>Ngày cấp</label>
+              <label>Giới tính</label>
               <InputField
                 type="text"
                 className="profile-input"
-                value={userInfo.identifyCardIssuedDate || "N/A"}
+                value={userInfo.gender === "MALE" ? "Nam" : "Nữ"}
                 readOnly
               />
             </div>
@@ -204,11 +207,11 @@ const UserProfilePage = () => {
               />
             </div>
             <div className="profile-info-field">
-              <label>Giới tính</label>
+              <label>Ngày cấp</label>
               <InputField
                 type="text"
                 className="profile-input"
-                value={userInfo.gender === "MALE" ? "Nam" : "Nữ"}
+                value={userInfo.identifyCardIssuedDate || "N/A"}
                 readOnly
               />
             </div>
@@ -285,5 +288,5 @@ const UserProfilePage = () => {
     </MainLayout>
   );
 };
-const UserProfile = React.memo(UserProfilePage);
-export default UserProfile;
+
+export default React.memo(UserProfilePage);

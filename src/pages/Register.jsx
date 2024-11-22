@@ -72,7 +72,7 @@ function HandleRegisterPage() {
     }
     try {
       const response = await Api({
-        endpoint: "loan-service/borrower/register",
+        endpoint: "https://667943a618a459f6394ee5b4.mockapi.io/login",
         method: METHOD_TYPE.POST,
         data: {
           fullname: fullName,
