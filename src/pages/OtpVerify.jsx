@@ -32,7 +32,7 @@ function OtpVerifyPage() {
     }
     try {
       const response = await Api({
-        endpoint: "http://152.42.232.101:7000/borrower/verify-otp",
+        endpoint: "loan-service/borrower/verify-otp",
         method: METHOD_TYPE.POST,
         data: { otp: otp, email: emailOrPhone },
       });

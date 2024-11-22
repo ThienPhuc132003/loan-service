@@ -12,7 +12,7 @@ const NotifiButtonComponent = () => {
     const fetchNotifications = async () => {
       try {
         const response = await Api({
-          endpoint: "http://152.42.232.101:7000/notification/me",
+          endpoint: "loan-service/notification/me",
           method: METHOD_TYPE.GET,
         });
         setNotifications(response.data);
