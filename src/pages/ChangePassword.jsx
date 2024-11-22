@@ -39,7 +39,7 @@ function ChangePasswordPage() {
     }
     try {
       const response = await Api({
-        endpoint: "loan-service/borrower/reset-password",
+        endpoint: "http://152.42.232.101:7000/borrower/reset-password",
         method: METHOD_TYPE.POST,
         data: {
           email: emailOrPhone,

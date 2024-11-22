@@ -22,7 +22,7 @@ const MainLayoutComponent = (props) => {
     const fetchMenuData = async () => {
       try {
         const response = await Api({
-          endpoint: "loan-service/menu/me",
+          endpoint: "http://152.42.232.101:7000/menu/me",
           method: METHOD_TYPE.GET,
         });
         console.log(response);
