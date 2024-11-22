@@ -1,0 +1,54 @@
+    /* File: src/components/News.css */
+.news-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .news-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .news-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding-bottom: 15px;
+  }
+  
+  .news-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .news-content {
+    flex: 1;
+  }
+  
+  .news-item-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 10px;
+  }
+  
+  .news-date {
+    font-size: 14px;
+    color: #888;
+    margin: 0 0 10px;
+  }
+  
+  .news-description {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+  }
+  
