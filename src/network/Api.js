@@ -1,36 +1,27 @@
+// src/network/Api.js
 import { METHOD_TYPE } from "./methodType";
 import axiosClient from "./axiosClient";
 import { parseQuery } from "./queryParser";
 
 const Api = ({
-  domain = "http://152.42.232.101:9005/api/v1/",
+  domain = "",
   endpoint,
   method = METHOD_TYPE.GET,
   data,
   query,
-  isFormData = false, // Cờ để xác định FormData
 }) => {
   const url = `${domain}${endpoint}${parseQuery(query)}`;
   console.log(`API URL axi: ${url}`);
 
-  const config = {
-    headers: {},
-  };
-
-  // Nếu là FormData, không cần thêm Content-Type
-  if (isFormData) {
-    config.headers["Content-Type"] = "multipart/form-data";
-  }
-
   switch (method) {
     case METHOD_TYPE.POST:
-      return axiosClient.post(endpoint, data, config);
+      return axiosClient.post(endpoint, data);
     case METHOD_TYPE.PUT:
-      return axiosClient.put(endpoint, data, config);
+      return axiosClient.put(endpoint, data);
     case METHOD_TYPE.DELETE:
-      return axiosClient.delete(endpoint, { data, ...config });
+      return axiosClient.delete(endpoint, { data });
     default:
-      return axiosClient.get(url, config);
+      return axiosClient.get(url);
   }
 };
 

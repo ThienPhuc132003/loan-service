@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../components/layout/MainLayout";
 // import "../assets/css/UpdateUserProfile.style.css";
@@ -8,10 +8,12 @@ import Cropper from "react-easy-crop";
 import getCroppedImg from "../utils/cropImage";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
+
 import { setUserProfile } from "../redux/userSlice";
 import UserProfileForm from "../components/UserProfileForm";
 import BankAccountInfo from "../components/BankAccountInfo";
 import UserOtherInfo from "../components/UserOtherInfo";
+
 
 const UpdateUserProfilePage = () => {
   const userInfo = useSelector((state) => state.user.userProfile);
@@ -25,7 +27,6 @@ const UpdateUserProfilePage = () => {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleInputChange = useCallback((field, value) => {
     setUpdatedData((prevData) => ({
@@ -108,6 +109,46 @@ const UpdateUserProfilePage = () => {
   );
 
   const handleSubmit = useCallback(async () => {
+    const {
+      fullname,
+      avatar,
+      personalEmail,
+      phoneNumber,
+      jobTitle,
+      income,
+      identifyCardNumber,
+      identifyCardIssuedDate,
+      identifyCardIssuedPlace,
+      borrowerIncomeProofDocuments,
+      homeAddress,
+      workAddress,
+      birthday,
+      gender,
+      socialLink,
+      bankAccounts,
+      signAttachments,
+    } = updatedData;
+
+    const dataToUpdate = {
+      fullname: fullname ?? userInfo.fullname,
+      avatar: avatar ?? userInfo.avatar,
+      emails: [{ title: "Personal", content: personalEmail ?? userInfo.personalEmail }],
+      phoneNumbers: [{ title: "Mobile", content: phoneNumber ?? userInfo.phoneNumber }],
+      jobTitle: jobTitle ?? userInfo.jobTitle,
+      income: income ?? userInfo.income,
+      identifyCardNumber: identifyCardNumber ?? userInfo.identifyCardNumber,
+      identifyCardIssuedDate: identifyCardIssuedDate ?? userInfo.identifyCardIssuedDate,
+      identifyCardIssuedPlace: identifyCardIssuedPlace ?? userInfo.identifyCardIssuedPlace,
+      borrowerIncomeProofDocuments: borrowerIncomeProofDocuments ?? userInfo.borrowerIncomeProofDocuments,
+      homeAddress: homeAddress ?? userInfo.homeAddress,
+      workAddress: workAddress ?? userInfo.workAddress,
+      birthday: birthday ?? userInfo.birthday,
+      gender: gender ?? userInfo.gender,
+      socialLink: socialLink ?? userInfo.socialLink,
+      bankAccounts: bankAccounts ?? userInfo.bankAccounts,
+      signAttachments: signAttachments ?? userInfo.signAttachments,
+    };
+
     try {
       const dataToUpdate = {
         fullname: updatedData.fullname || userInfo.fullname,
@@ -137,17 +178,21 @@ const UpdateUserProfilePage = () => {
       };
 
       const response = await Api({
+
         endpoint: "loan-service/borrower/update-profile",
         method: METHOD_TYPE.PUT,
         data: dataToUpdate,
       });
       console.log("Update successful:", response);
       dispatch(setUserProfile(response.data)); // Dispatch thông tin cập nhật
+
       navigate("/user-profile");
     } catch (error) {
       console.error("Update failed:", error);
     }
+
   }, [updatedData, avatar, userInfo, navigate, dispatch]);
+
 
   if (!userInfo) {
     return <div>Loading...</div>;
@@ -187,6 +232,7 @@ const UpdateUserProfilePage = () => {
         </div>
       </div>
 
+
       {showCropper && (
         <div className="cropper-container">
           <Cropper
@@ -201,6 +247,7 @@ const UpdateUserProfilePage = () => {
           <button className="crop-image-upload-button" onClick={handleCrop}>
             Crop Image
           </button>
+
         </div>
       )}
 

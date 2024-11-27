@@ -57,7 +57,7 @@ const LoginPage = () => {
     }
     try {
       const response = await Api({
-        endpoint: "loan-service/borrower/login",
+        endpoint: "http://152.42.232.101:7000/borrower/login",
         method: METHOD_TYPE.POST,
         data: {
           emailOrPhoneNumber: username,
@@ -78,7 +78,7 @@ const LoginPage = () => {
         }
 
         const userProfileResponse = await Api({
-          endpoint: "loan-service/borrower/get-profile",
+          endpoint: "http://152.42.232.101:7000/borrower/get-profile",
           method: METHOD_TYPE.GET,
         });
 
@@ -98,35 +98,29 @@ const LoginPage = () => {
     navigate("/register");
   }, [navigate]);
 
-  const handleUsernameChange = useCallback(
-    (e) => {
-      const value = e.target.value;
-      setUsername(value);
-      if (errorMessages.username || errorMessages.login) {
-        setErrorMessages((prevErrors) => ({
-          ...prevErrors,
-          username: "",
-          login: prevErrors.login ? "" : prevErrors.login,
-        }));
-      }
-    },
-    [errorMessages.username, errorMessages.login]
-  );
+  const handleUsernameChange = useCallback((e) => {
+    const value = e.target.value;
+    setUsername(value);
+    if (errorMessages.username || errorMessages.login) {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        username: "",
+        login: prevErrors.login ? "" : prevErrors.login,
+      }));
+    }
+  }, [errorMessages.username, errorMessages.login]);
 
-  const handlePasswordChange = useCallback(
-    (e) => {
-      const value = e.target.value;
-      setPassword(value);
-      if (errorMessages.password || errorMessages.login) {
-        setErrorMessages((prevErrors) => ({
-          ...prevErrors,
-          password: "",
-          login: prevErrors.login ? "" : prevErrors.login,
-        }));
-      }
-    },
-    [errorMessages.password, errorMessages.login]
-  );
+  const handlePasswordChange = useCallback((e) => {
+    const value = e.target.value;
+    setPassword(value);
+    if (errorMessages.password || errorMessages.login) {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        password: "",
+        login: prevErrors.login ? "" : prevErrors.login,
+      }));
+    }
+  }, [errorMessages.password, errorMessages.login]);
 
   const handleCaptchaChange = useCallback((value) => {
     setCaptchaValue(value);
@@ -239,4 +233,6 @@ const LoginPage = () => {
   );
 };
 
+
 export default React.memo(LoginPage);
+

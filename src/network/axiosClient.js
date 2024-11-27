@@ -2,9 +2,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const axiosClient = axios.create({
-  baseURL: "http://152.42.232.101:9005/api/v1/",
+  baseURL: "",
   headers: {
-    "Content-Type": "application/json", // Mặc định cho JSON
+    "Content-Type": "application/json",
   },
 });
 
@@ -15,15 +15,10 @@ axiosClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
-    // Xử lý FormData - Xóa Content-Type để axios tự thêm multipart/form-data
-    if (config.data instanceof FormData) {
-      delete config.headers["Content-Type"];
-    }
-
     return config;
   },
   function (error) {
+    // Do something with request error
     return Promise.reject(error);
   }
 );
@@ -31,6 +26,8 @@ axiosClient.interceptors.request.use(
 // Add a response interceptor
 axiosClient.interceptors.response.use(
   function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
     return response.data;
   },
   function (error) {

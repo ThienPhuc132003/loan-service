@@ -30,7 +30,7 @@ const ForgotPasswordPage = () => {
     }
     try {
       const response = await Api({
-        endpoint: "loan-service/borrower/forgot-password",
+        endpoint: "http://152.42.232.101:7000/borrower/forgot-password",
         method: METHOD_TYPE.POST,
         data: { emailOrPhoneNumber: emailOrPhone },
       });
