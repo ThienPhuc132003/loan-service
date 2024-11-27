@@ -1,0 +1,102 @@
+.user-other-info {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    border: 1px solid #000000; 
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    min-height: 300px;
+    max-height: 400px;
+  }
+  
+  .user-other-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb; /* Subtle border */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .user-other-info-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1f2937; /* Slightly darker gray */
+  }
+  
+  .user-other-info-edit-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+
+  
+  .user-other-info-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .user-other-info-info-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .user-other-info-info-item {
+    width: 45%; 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-other-info-label {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .user-other-info-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1f2937; /* Dark gray for values */
+  }
+  
+  .user-other-info-social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .user-other-info-social-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .user-other-info-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .user-other-info-link {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+
+  .fa-facebook{
+    color: #155d93;
+  }
+  .profile-input {
+    padding: 15px 10px;
+    border: 1px solid #272e4f;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+}

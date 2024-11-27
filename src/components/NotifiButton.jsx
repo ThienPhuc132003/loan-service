@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import "../assets/css/NotifiButton.style.css";
 
 const NotifiButtonComponent = () => {
+  const userInfo = useSelector((state) => state.user.userProfile);
   const [notifications, setNotifications] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [filter, setFilter] = useState("all");
@@ -12,7 +14,7 @@ const NotifiButtonComponent = () => {
     const fetchNotifications = async () => {
       try {
         const response = await Api({
-          endpoint: "http://152.42.232.101:7000/notification/me",
+          endpoint: "loan-service/notification/me?seen=all",
           method: METHOD_TYPE.GET,
         });
         setNotifications(response.data);
@@ -68,19 +70,25 @@ const NotifiButtonComponent = () => {
           </div>
           <div className="notifi-filter-buttons">
             <button
-              className={`notifi-filter-button ${filter === "all" ? "active" : ""}`}
+              className={`notifi-filter-button ${
+                filter === "all" ? "active" : ""
+              }`}
               onClick={() => setFilter("all")}
             >
               Tất cả
             </button>
             <button
-              className={`notifi-filter-button ${filter === "unread" ? "active" : ""}`}
+              className={`notifi-filter-button ${
+                filter === "unread" ? "active" : ""
+              }`}
               onClick={() => setFilter("unread")}
             >
               Chưa đọc
             </button>
             <button
-              className={`notifi-filter-button ${filter === "read" ? "active" : ""}`}
+              className={`notifi-filter-button ${
+                filter === "read" ? "active" : ""
+              }`}
               onClick={() => setFilter("read")}
             >
               Đã đọc
@@ -90,20 +98,28 @@ const NotifiButtonComponent = () => {
             filteredNotifications.map((notification) => (
               <div
                 key={notification.notificationId}
-                className={`notifi-dropdown-item ${notification.seen ? "read" : "unread"}`}
+                className={`notifi-dropdown-item ${
+                  notification.seen ? "read" : "unread"
+                }`}
                 onClick={() => toggleReadStatus(notification.notificationId)}
               >
                 <div className="notifi-notification-icon">
-                  <img src="logo-placeholder.png" alt="icon" />
+                  <img src={userInfo.avatar} alt="icon" />
                 </div>
                 <div className="notifi-notification-content">
-                  <p className="notifi-notification-title">{notification.titleName}</p>
-                  <p className="notifi-notification-details">{notification.content}</p>
+                  <p className="notifi-notification-title">
+                    {notification.titleName}
+                  </p>
+                  <p className="notifi-notification-details">
+                    {notification.content}
+                  </p>
                   <p className="notifi-notification-time">
                     {new Date(notification.createAt).toLocaleString()}
                   </p>
                 </div>
-                {!notification.seen && <span className="notifi-unread-indicator"></span>}
+                {!notification.seen && (
+                  <span className="notifi-unread-indicator"></span>
+                )}
               </div>
             ))
           ) : (

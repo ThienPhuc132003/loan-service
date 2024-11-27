@@ -8,7 +8,7 @@ import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import LanguageSelector from "../components/LanguageSelector";
 
-function ChangePasswordPage() {
+const ChangePasswordPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
@@ -39,7 +39,7 @@ function ChangePasswordPage() {
     }
     try {
       const response = await Api({
-        endpoint: "http://152.42.232.101:7000/borrower/reset-password",
+        endpoint: "loan-service/borrower/reset-password",
         method: METHOD_TYPE.POST,
         data: {
           email: emailOrPhone,
@@ -117,7 +117,6 @@ function ChangePasswordPage() {
       </LoginLayout>
     </div>
   );
-}
+};
 
-const ChangePassword = React.memo(ChangePasswordPage);
-export default ChangePassword;
+export default React.memo(ChangePasswordPage);

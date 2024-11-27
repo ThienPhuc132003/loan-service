@@ -15,12 +15,12 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useDispatch } from "react-redux";
 import { setUserProfile } from "../redux/userSlice";
 
-const HandleLoginPage = () => {
+const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [errorMessages, setErrorMessages] = useState({});
   const [captchaValue, setCaptchaValue] = useState(null);
+  const [errorMessages, setErrorMessages] = useState({});
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const HandleLoginPage = () => {
     }
     try {
       const response = await Api({
-        endpoint: "http://152.42.232.101:7000/borrower/login",
+        endpoint: "loan-service/borrower/login",
         method: METHOD_TYPE.POST,
         data: {
           emailOrPhoneNumber: username,
@@ -78,7 +78,7 @@ const HandleLoginPage = () => {
         }
 
         const userProfileResponse = await Api({
-          endpoint: "http://152.42.232.101:7000/borrower/get-profile",
+          endpoint: "loan-service/borrower/get-profile",
           method: METHOD_TYPE.GET,
         });
 
@@ -98,29 +98,35 @@ const HandleLoginPage = () => {
     navigate("/register");
   }, [navigate]);
 
-  const handleUsernameChange = useCallback((e) => {
-    const value = e.target.value;
-    setUsername(value);
-    if (errorMessages.username || errorMessages.login) {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        username: "",
-        login: prevErrors.login ? "" : prevErrors.login,
-      }));
-    }
-  }, [errorMessages.username, errorMessages.login]);
+  const handleUsernameChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setUsername(value);
+      if (errorMessages.username || errorMessages.login) {
+        setErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          username: "",
+          login: prevErrors.login ? "" : prevErrors.login,
+        }));
+      }
+    },
+    [errorMessages.username, errorMessages.login]
+  );
 
-  const handlePasswordChange = useCallback((e) => {
-    const value = e.target.value;
-    setPassword(value);
-    if (errorMessages.password || errorMessages.login) {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        password: "",
-        login: prevErrors.login ? "" : prevErrors.login,
-      }));
-    }
-  }, [errorMessages.password, errorMessages.login]);
+  const handlePasswordChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setPassword(value);
+      if (errorMessages.password || errorMessages.login) {
+        setErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          password: "",
+          login: prevErrors.login ? "" : prevErrors.login,
+        }));
+      }
+    },
+    [errorMessages.password, errorMessages.login]
+  );
 
   const handleCaptchaChange = useCallback((value) => {
     setCaptchaValue(value);
@@ -233,5 +239,4 @@ const HandleLoginPage = () => {
   );
 };
 
-const LoginPage = React.memo(HandleLoginPage);
-export default LoginPage;
+export default React.memo(LoginPage);

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const InputFieldCompo = (props) => {
+const InputFieldComponent = (props) => {
   const { value, className, errorMessage, name, ...rest } = props;
   return (
     <input
@@ -13,10 +13,10 @@ const InputFieldCompo = (props) => {
   );
 };
 
-const InputField = React.memo(InputFieldCompo);
+const InputField = React.memo(InputFieldComponent);
 export default InputField;
 
-InputFieldCompo.propTypes = {
+InputFieldComponent.propTypes = {
   value: PropTypes.string,
   className: PropTypes.string,
   errorMessage: PropTypes.string,
