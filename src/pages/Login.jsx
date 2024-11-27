@@ -15,12 +15,12 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useDispatch } from "react-redux";
 import { setUserProfile } from "../redux/userSlice";
 
-const HandleLoginPage = () => {
+const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [errorMessages, setErrorMessages] = useState({});
   const [captchaValue, setCaptchaValue] = useState(null);
+  const [errorMessages, setErrorMessages] = useState({});
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -239,5 +239,4 @@ const HandleLoginPage = () => {
   );
 };
 
-const LoginPage = React.memo(HandleLoginPage);
-export default LoginPage;
+export default React.memo(LoginPage);

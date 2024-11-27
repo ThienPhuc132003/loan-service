@@ -1,11 +1,11 @@
 /* General Profile Info Section */
-.update-profile-info {
+.profile-info {
   display: flex;
   flex-direction: column;
 }
 
 /* Avatar Container with buttons */
-.update-profile-avatar-container {
+.profile-avatar-container {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -14,12 +14,12 @@
 }
 
 /* Avatar Section on the Left */
-.update-profile-avatar-section {
+.profile-avatar-section {
   display: flex;
   justify-content: center;
 }
 
-.update-profile-avatar {
+.profile-avatar {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -28,52 +28,43 @@
 }
 
 /* Buttons aligned vertically */
-.update-profile-avatar-buttons {
+.profile-avatar-buttons {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.update-avatar-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.update-delete-avatar-button {
-  background-color: #272E4F;
-  color: #fff;
-  padding: 10px 40px;
-  border-radius: 20px;
-  font-weight: bold;
-}
-
-.update-change-avatar-button {
+.change-avatar-button {
+  display: flex;
   background-color: #ffffff;
   color: #000000;
   padding: 10px 40px;
   border-radius: 20px;
   font-weight: bold;
-  border: 2px solid #272E4F;
+  border: 2px solid #272e4f;
+  cursor: pointer;
+}
+
+.change-avatar-button:hover {
+  background-color: #272e4f;
+  color: #ffffff;
 }
 
 /* Profile Information Sections */
-.update-profile-info-section {
+.profile-info-section {
   border-radius: 20px;
   padding: 16px 80px;
 }
 
 /* Section Title */
-.update-profile-section-title {
+.profile-section-title {
   font-weight: bold;
   color: #272e4f;
   margin-bottom: 12px;
 }
 
 /* Profile Info Row for Grid Layout */
-.update-profile-info-row {
+.profile-info-row {
   display: grid;
   grid-template-columns: 1fr 1fr; /* Two columns per row */
   gap: 16px;
@@ -81,17 +72,17 @@
 }
 
 /* Full-width row for single-field sections like Address */
-.update-profile-info-field-full {
+.profile-info-field-full {
   grid-column: span 2; /* Make this field span across two columns */
 }
 
 /* Individual Field Styling */
-.update-profile-info-field {
+.profile-info-field {
   display: flex;
   flex-direction: column;
 }
 
-.update-profile-info-field label {
+.profile-info-field label {
   font-size: 17px;
   font-weight: bold;
   color: #333;
@@ -99,38 +90,18 @@
 }
 
 /* Input Field Styling */
-.update-profile-input {
+.profile-input {
   padding: 15px 10px;
-  border: 1px solid #272E4F;
+  border: 1px solid #272e4f;
   border-radius: 20px;
   font-size: 14px;
   outline: none;
 }
 
-.update-profile-input-address {
+.profile-input-address {
   padding: 10px;
   border: 1px solid #aaa;
   border-radius: 20px;
-  font-size: 14px;
-  width: 100%;
-  outline: none;
-}
-
-/* Profile Information Columns */
-.update-profile-info-column {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 12px;
-}
-
-.update-profile-info-column label {
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.update-profile-info-column .update-profile-input {
-  margin-bottom: 8px;
 }
 
 /* Button Styling */
@@ -148,46 +119,48 @@ button:hover {
 
 button:focus {
   outline: none;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-button[disabled] {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-/* Add Button Styling */
-.update-add-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
+.update-profile-button {
+  display: flex;
+  background-color: #272e4f;
+  color: #fff;
+  padding: 15px 40px;
+  border-radius: 20px;
   font-weight: bold;
-  font-size: 14px;
-  margin-top: 8px;
+  cursor: pointer;
+  margin-left: auto;
 }
-.update-profile-button{
-  display: flex;
-    background-color: #272e4f;
-    color: #fff;
-    padding: 15px 40px;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-left: auto;
-}
-.radio-group {
-  display: flex;
-  padding-top: 10px;
-  gap: 40px;
-}
-.radio-option{
-  display: flex;
-  gap: 10px;
-}
-/* Read-only Styling */
-.read-only {
+
+/* Cropper Container */
+.cropper-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px; /* Adjust the max-width as needed */
+  height: 400px; /* Adjust the height as needed */
+  margin: 0 auto;
   background-color: #f0f0f0;
-  color: #888;
-  cursor: not-allowed;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.crop-image-upload-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #272e4f;
+  color: #fff;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.crop-image-upload-button:hover {
+  background-color: #fff;
+  color: #272e4f;
+  border: 2px solid #272e4f;
 }

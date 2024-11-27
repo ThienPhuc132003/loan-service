@@ -8,7 +8,7 @@ import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import LanguageSelector from "../components/LanguageSelector";
 
-function OtpVerifyPage() {
+const OtpVerifyPage = () => {
   const [otp, setOtp] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const navigate = useNavigate();
@@ -47,16 +47,19 @@ function OtpVerifyPage() {
     }
   }, [otp, emailOrPhone, validateFields, navigate, t]);
 
-  const handleOtpChange = useCallback((e) => {
-    const value = e.target.value;
-    setOtp(value);
-    if (errorMessages.otp) {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        otp: "",
-      }));
-    }
-  }, [errorMessages.otp]);
+  const handleOtpChange = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setOtp(value);
+      if (errorMessages.otp) {
+        setErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          otp: "",
+        }));
+      }
+    },
+    [errorMessages.otp]
+  );
 
   const handleBackPage = useCallback(() => {
     navigate("/forgot-password");
@@ -79,9 +82,7 @@ function OtpVerifyPage() {
               placeholder={t("login.otpPlaceholder")}
               errorMessage={errorMessages.otp}
               onChange={handleOtpChange}
-              className={
-                errorMessages.otp ? "error-border" : "correct-border"
-              }
+              className={errorMessages.otp ? "error-border" : "correct-border"}
             />
             <p className="error">{errorMessages.otp}</p>
             <div className="submit-cancel">
@@ -97,7 +98,6 @@ function OtpVerifyPage() {
       </LoginLayout>
     </div>
   );
-}
+};
 
-const OtpVerify = React.memo(OtpVerifyPage);
-export default OtpVerify;
+export default React.memo(OtpVerifyPage);

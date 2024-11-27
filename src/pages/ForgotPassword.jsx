@@ -8,7 +8,7 @@ import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import LanguageSelector from "../components/LanguageSelector";
 
-function ForgotPasswordPage() {
+const ForgotPasswordPage = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function ForgotPasswordPage() {
     }
   }, [emailOrPhone, validateFields, navigate, t]);
 
-  const handleEmailChange = (e) => {
+  const handleEmailChange = useCallback((e) => {
     const value = e.target.value;
     setEmailOrPhone(value);
     if (errorMessages.email) {
@@ -53,11 +53,11 @@ function ForgotPasswordPage() {
         email: "",
       }));
     }
-  };
+  }, [errorMessages.email]);
 
-  const handleBackPage = () => {
+  const handleBackPage = useCallback(() => {
     navigate("/login");
-  };
+  }, [navigate]);
 
   return (
     <div className="page-box">
@@ -83,7 +83,7 @@ function ForgotPasswordPage() {
             <p className="error">{errorMessages.email}</p>
             <div className="submit-cancel">
               <Button className="submit" onClick={handleForgotPassword}>
-                {t("login.button")}
+                {t("common.confirm")}
               </Button>
               <Button className="cancel" onClick={handleBackPage}>
                 {t("common.cancel")}
@@ -94,7 +94,6 @@ function ForgotPasswordPage() {
       </LoginLayout>
     </div>
   );
-}
+};
 
-const ForgotPassword = React.memo(ForgotPasswordPage);
-export default ForgotPassword;
+export default React.memo(ForgotPasswordPage);
