@@ -132,7 +132,6 @@ button:focus {
   margin-left: auto;
 }
 
-
 /* Cropper Container */
 .cropper-container {
   position: relative;
@@ -165,4 +164,3 @@ button:focus {
   color: #272e4f;
   border: 2px solid #272e4f;
 }
-

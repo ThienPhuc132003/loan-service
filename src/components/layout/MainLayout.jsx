@@ -22,12 +22,10 @@ const MainLayoutComponent = (props) => {
   const menuStatus = useSelector((state) => state.menu.status);
 
   useEffect(() => {
-
     if (menuStatus === "idle") {
       dispatch(fetchMenuData());
     }
   }, [menuStatus, dispatch]);
-
 
   const menuItems = fullMenuData.filter((item) => menuData.includes(item.key));
 

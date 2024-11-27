@@ -57,9 +57,7 @@ const LoginPage = () => {
     }
     try {
       const response = await Api({
-
         endpoint: "loan-service/borrower/login",
-
         method: METHOD_TYPE.POST,
         data: {
           emailOrPhoneNumber: username,

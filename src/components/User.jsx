@@ -5,7 +5,7 @@ import "../assets/css/User.style.css";
 import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
 
-const UserComponent = ({  userRole, avatarUrl }) => {
+const UserComponent = ({  userRole }) => {
   const userInfo = useSelector((state) => state.user.userProfile);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const UserComponent = ({  userRole, avatarUrl }) => {
     <div className="user-dropdown">
       <div className="user-info-dropdown">
         <img
-          src={avatarUrl}
+          src={userInfo.avatar}
           alt="User Avatar"
           className="user-avatar-square"
           onDoubleClick={handleDoubleClick}
@@ -70,7 +70,6 @@ const UserComponent = ({  userRole, avatarUrl }) => {
 UserComponent.propTypes = {
   onEditProfile: PropTypes.func,
   userRole: PropTypes.string,
-  avatarUrl: PropTypes.string,
 };
 
 const User = React.memo(UserComponent);

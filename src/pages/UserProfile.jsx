@@ -8,7 +8,6 @@ import Cropper from "react-easy-crop";
 import getCroppedImg from "../utils/cropImage";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
-
 import { setUserProfile } from "../redux/userSlice";
 import UserProfileForm from "../components/UserProfileForm";
 import BankAccountInfo from "../components/BankAccountInfo";
@@ -19,7 +18,6 @@ const UserProfilePage = () => {
     userInfo?.avatar || "default-avatar.png"
   );
   const dispatch = useDispatch();
-
   const [showCropper, setShowCropper] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -27,26 +25,23 @@ const UserProfilePage = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const currentPath = "/user-profile";
   const navigate = useNavigate();
-  console.log("userInfo", userInfo);
-  // Hàm xử lý khi crop xong
+
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  // Hàm xử lý khi chọn file mới
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImageSrc(reader.result); // Lưu base64 của ảnh
-        setShowCropper(true); // Hiển thị Cropper
+        setImageSrc(reader.result);
+        setShowCropper(true);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // Hàm xử lý crop ảnh
   const handleCrop = async () => {
     try {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
@@ -57,7 +52,6 @@ const UserProfilePage = () => {
       console.error("Failed to crop image:", error);
     }
   };
-
 
   const handleUploadSuccess = useCallback(
     async (croppedFile) => {
@@ -95,25 +89,20 @@ const UserProfilePage = () => {
           } else {
             console.error("Upload thất bại:", upLoadResponse);
           }
-
         }
       } catch (error) {
         console.error("Lỗi upload ảnh:", error.message);
       } finally {
         setShowCropper(false);
       }
-
     },
     [dispatch]
   );
 
-
-  // Hàm điều hướng tới trang cập nhật thông tin
   const handleUpdateProfile = useCallback(() => {
     navigate("/update-user-profile");
   }, [navigate]);
 
-  // Xử lý trường hợp chưa tải được user info
   if (!userInfo) {
     return <div>Loading...</div>;
   }
@@ -175,9 +164,7 @@ const UserProfilePage = () => {
           </div>
         )}
 
-
         <UserProfileForm userInfo={userInfo} />
-
       </div>
     </MainLayout>
   );
