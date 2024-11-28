@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useEffect } from "react";
-import Cookies from "js-cookie";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import "../assets/css/login.style.css";
+import "../assets/css/Register.style.css";
 import LoginLayout from "../components/layout/LoginLayout";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
@@ -10,46 +9,62 @@ import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import logoFb from "../assets/images/logoFb.png";
 import logoGoogle from "../assets/images/logoGoogle.png";
+import RadioGroup from "../components/Radio";
+import Cookies from "js-cookie";
 import LanguageSelector from "../components/LanguageSelector";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useDispatch } from "react-redux";
-import { setUserProfile } from "../redux/userSlice";
-
-const LoginPage = () => {
-  const [username, setUsername] = useState("");
+function HandleRegisterPage() {
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [captchaValue, setCaptchaValue] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [address, setAddress] = useState("");
+  const [gender, setGender] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
+  const [captchaValue, setCaptchaValue] = useState(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const savedUsername = localStorage.getItem("username");
-    const savedPassword = localStorage.getItem("password");
-    const savedRememberMe = localStorage.getItem("rememberMe") === "true";
-
-    if (savedUsername && savedPassword && savedRememberMe) {
-      setUsername(savedUsername);
-      setPassword(savedPassword);
-      setRememberMe(savedRememberMe);
-    }
-  }, []);
 
   const validateFields = useCallback(() => {
     const errors = {};
-    if (username === "") {
-      errors.username = t("login.emptyEmail");
-    }
     if (password === "") {
-      errors.password = t("login.emptyPassword");
+      errors.password = t("signup.emptyPassword");
+    }
+    if (confirmPassword !== password) {
+      errors.confirmPassword = t("signup.passwordNotMatch");
+    }
+    if (phoneNumber === "") {
+      errors.phoneNumber = t("signup.emptyPhoneNumber");
+    }
+    if (email === "") {
+      errors.email = t("signup.emptyEmail");
+    }
+    if (birthday === "") {
+      errors.birthday = t("signup.emptyBirthday");
+    }
+    if (fullName === "") {
+      errors.fullName = t("signup.emptyFullName");
+    }
+    if (address === "") {
+      errors.homeAddress = t("signup.emptyAddress");
     }
     if (!captchaValue) errors.captcha = t("signup.captchaNotVerified");
     return errors;
-  }, [username, password, captchaValue, t]);
+  }, [
+    password,
+    confirmPassword,
+    phoneNumber,
+    email,
+    birthday,
+    fullName,
+    address,
+    t,
+    captchaValue,
+  ]);
 
-  const handleLogin = useCallback(async () => {
+  const handleRegister = useCallback(async () => {
     const errors = validateFields();
     setErrorMessages(errors);
     if (Object.keys(errors).length > 0) {
@@ -57,186 +72,294 @@ const LoginPage = () => {
     }
     try {
       const response = await Api({
-        endpoint: "loan-service/borrower/login",
+        endpoint: "loan-service/borrower/register",
         method: METHOD_TYPE.POST,
         data: {
-          emailOrPhoneNumber: username,
+          fullname: fullName,
+          birthday: birthday,
+          email: email,
+          phoneNumber: phoneNumber,
+          homeAddress: address,
+          gender: gender.toUpperCase(),
           password: password,
+          confirmPassword: confirmPassword,
         },
       });
-      const token = response.data.token;
+      const token = response;
+      console.log(response.username);
       if (token) {
         Cookies.set("token", token);
-        if (rememberMe) {
-          localStorage.setItem("username", username);
-          localStorage.setItem("password", password);
-          localStorage.setItem("rememberMe", "true");
-        } else {
-          localStorage.removeItem("username");
-          localStorage.removeItem("password");
-          localStorage.removeItem("rememberMe");
-        }
-
-        const userProfileResponse = await Api({
-          endpoint: "loan-service/borrower/get-profile",
-          method: METHOD_TYPE.GET,
-        });
-
-        dispatch(setUserProfile(userProfileResponse.data));
-        navigate("/main-page");
+        navigate("/");
       }
     } catch (error) {
-      setErrorMessages({ login: t("login.error") });
+      setErrorMessages({ login: t("signup.error") });
     }
-  }, [navigate, username, password, rememberMe, validateFields, t, dispatch]);
+  }, [
+    password,
+    confirmPassword,
+    phoneNumber,
+    email,
+    birthday,
+    fullName,
+    address,
+    gender,
+    validateFields,
+    navigate,
+    t,
+  ]);
 
-  const handleForgotPassword = useCallback(() => {
-    navigate("/forgot-password");
-  }, [navigate]);
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    if (errorMessages.password || errorMessages.login) {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        password: "",
+        login: prevErrors.login ? "" : prevErrors.login,
+      }));
+    }
+  };
 
-  const handleRegister = useCallback(() => {
-    navigate("/register");
-  }, [navigate]);
+  const handlePasswordBlur = () => {
+    const errors = validateFields();
+    setErrorMessages((prevErrors) => ({
+      ...prevErrors,
+      password: errors.password || "",
+    }));
+  };
 
-  const handleUsernameChange = useCallback(
-    (e) => {
-      const value = e.target.value;
-      setUsername(value);
-      if (errorMessages.username || errorMessages.login) {
-        setErrorMessages((prevErrors) => ({
-          ...prevErrors,
-          username: "",
-          login: prevErrors.login ? "" : prevErrors.login,
-        }));
+  const handlePasswordFocus = () => {
+    if (password === "") {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        password: t("signup.emptyPassword"),
+      }));
+    }
+  };
+
+  const handleOnkeydown = useCallback(
+    (event, passwordFieldId) => {
+      if (event.key === "Enter") {
+        const passwordField = document.getElementById(passwordFieldId);
+        if (passwordField) {
+          passwordField.focus();
+        } else {
+          handleRegister();
+        }
       }
     },
-    [errorMessages.username, errorMessages.login]
+    [handleRegister]
   );
 
-  const handlePasswordChange = useCallback(
-    (e) => {
-      const value = e.target.value;
-      setPassword(value);
-      if (errorMessages.password || errorMessages.login) {
-        setErrorMessages((prevErrors) => ({
-          ...prevErrors,
-          password: "",
-          login: prevErrors.login ? "" : prevErrors.login,
-        }));
-      }
-    },
-    [errorMessages.password, errorMessages.login]
-  );
+  const handleGenderChange = (selectedGender) => {
+    setGender(selectedGender);
+  };
 
-  const handleCaptchaChange = useCallback((value) => {
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
+  const handleBackPage = () => {
+    navigate("/login");
+  };
+  const handleCaptchaChange = (value) => {
     setCaptchaValue(value);
-  }, []);
-
-  const handleRememberMeChange = useCallback((e) => {
-    setRememberMe(e.target.checked);
-  }, []);
+  };
 
   return (
-    <div className="page-box">
-      <LoginLayout>
-        <div className="loginFormBox">
-          <div id="loginForm" className="loginForm">
+    <>
+      <div className="page-box">
+        <LoginLayout showLogin={false} showBreadCrumbs={false}>
+          <div className="loginFormBox">
+            <div id="loginForm" className="loginForm">
             <div className="language-box">
               <LanguageSelector />
             </div>
-            <h1 className="FormName">{t("login.title")}</h1>
-            <p className="description">{t("login.subtitle")}</p>
-            <div className="other-login">
-              <div className="login-option">
-                <img src={logoGoogle} alt="User" className="login-img" />
-                Google
+              <h1 className="FormName">{t("signup.title")}</h1>
+              <p className="description">{t("signup.subtitle")}</p>
+              <div className="other-login">
+                <div className="login-option">
+                  <img src={logoGoogle} alt="User" className="login-img" />
+                  Google
+                </div>
+                <div className="login-option">
+                  <img src={logoFb} alt="User" className="login-img" />
+                  Facebook
+                </div>
               </div>
-              <div className="login-option">
-                <img src={logoFb} alt="User" className="login-img" />
-                Facebook
+              <div className="divider">
+                <span>{t("common.or")}</span>
               </div>
-            </div>
-            <div className="divider">
-              <span>{t("login.or")}</span>
-            </div>
-            <div className="field">
-              <label htmlFor="username">
-                {t("login.emailOrPhone")}
-                <span style={{ color: "red" }}> *</span>
-              </label>
-              <InputField
-                type="text"
-                id="username"
-                value={username}
-                placeholder={t("login.emailOrPhonePlaceholder")}
-                errorMessage={errorMessages.username || errorMessages.login}
-                onChange={handleUsernameChange}
-                className={
-                  errorMessages.username || errorMessages.login
-                    ? "error-border"
-                    : "correct-border"
-                }
-              />
-            </div>
-            <div className="field">
-              <label htmlFor="password">
-                {t("login.password")}
-                <span style={{ color: "red" }}> *</span>
-              </label>
+              <div className="name-birth">
+                <div className="field">
+                  <label htmlFor="fullName">
+                    {t("signup.fullName")}{" "}
+                    <span style={{ color: "red" }}> *</span>
+                  </label>
+                  <InputField
+                    type="text"
+                    id="fullName"
+                    value={fullName}
+                    placeholder={t("signup.fullNamePlaceholder")}
+                    errorMessage={errorMessages.fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className={`size-border + ${
+                      errorMessages.fullName || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="birthday">
+                    {t("signup.birthday")}{" "}
+                    <span style={{ color: "red" }}> *</span>
+                  </label>
+                  <InputField
+                    type="date"
+                    id="birthday"
+                    value={birthday}
+                    placeholder={t("signup.birthdayPlaceholder")}
+                    errorMessage={errorMessages.birthday}
+                    onChange={(e) => setBirthday(e.target.value)}
+                    className={`size-border+ ${
+                      errorMessages.birthday || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                  />
+                </div>
+              </div>
+              <div className="email-phone">
+                <div className="field">
+                  <label htmlFor="email">
+                    {t("signup.email")} <span style={{ color: "red" }}> *</span>
+                  </label>
+                  <InputField
+                    type="email"
+                    id="email"
+                    value={email}
+                    placeholder={t("signup.emailPlaceholder")}
+                    errorMessage={errorMessages.email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={`size-border + ${
+                      errorMessages.email || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="phoneNumber">
+                    {t("signup.phoneNumber")}{" "}
+                    <span style={{ color: "red" }}> *</span>
+                  </label>
+                  <InputField
+                    type="tel"
+                    id="phoneNumber"
+                    value={phoneNumber}
+                    placeholder={t("signup.phoneNumberPlaceholder")}
+                    errorMessage={errorMessages.phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className={`size-border + ${
+                      errorMessages.phoneNumber || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                  />
+                </div>
+              </div>
+              <div className="address-gender">
+                <div className="field">
+                  <label htmlFor="address">{t("signup.address")}</label>
+                  <InputField
+                    type="text"
+                    id="address"
+                    value={address}
+                    placeholder={t("signup.addressPlaceholder")}
+                    errorMessage={errorMessages.address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className={`size-border + ${
+                      errorMessages.address || errorMessages.login
+                        ? "error-border"
+                        : "correct-border"
+                    }`}
+                    onKeyPress={(e) => handleOnkeydown(e, "password")}
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="gender">{t("signup.gender")}</label>
+                  <RadioGroup
+                    options={[t("signup.male"), t("signup.female")]}
+                    name="gender"
+                    onChange={handleGenderChange}
+                  />
+                </div>
+              </div>
+              <div className="field">
+                <label htmlFor="password">
+                  {t("signup.password")} <span style={{ color: "red" }}> *</span>
+                </label>
+                <InputField
+                  type="password"
+                  id="password"
+                  value={password}
+                  placeholder={t("signup.passwordPlaceholder")}
+                  errorMessage={errorMessages.password || errorMessages.login}
+                  onBlur={handlePasswordBlur}
+                  onFocus={handlePasswordFocus}
+                  onChange={handlePasswordChange}
+                  className={`size-border + ${
+                    errorMessages.password || errorMessages.login
+                      ? "error-border"
+                      : "correct-border"
+                  }`}
+                  onKeyPress={(e) => handleOnkeydown(e, "captcha")}
+                />
+              </div>
               <InputField
                 type="password"
-                id="password"
-                value={password}
-                placeholder={t("login.passwordPlaceholder")}
-                errorMessage={errorMessages.password || errorMessages.login}
-                onChange={handlePasswordChange}
-                className={
-                  errorMessages.password || errorMessages.login
+                id="confirmPassword"
+                value={confirmPassword}
+                placeholder={t("signup.confirmPasswordPlaceholder")}
+                errorMessage={errorMessages.confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={`size-border + ${
+                  errorMessages.confirmPassword || errorMessages.login
                     ? "error-border"
                     : "correct-border"
-                }
+                }`}
               />
+              <div className="captcha-box">
+                <label htmlFor="captcha" className="captcha-title">
+                  Captcha <span style={{ color: "red" }}> *</span>
+                </label>
+                <ReCAPTCHA
+                  sitekey="6Ldws3QqAAAAAMX5jNVnZPksWQRvMrp06k7uSbqz"
+                  onChange={handleCaptchaChange}
+                />
+              </div>
+              <div className="submit-cancel">
+                <Button className="submit" onClick={handleRegister}>
+                  {t("signup.button")}
+                </Button>
+                <Button className="cancel" onClick={handleBackPage}>
+                  {t("common.cancel")}
+                </Button>
+              </div>
+              <p className="register">
+                {t("signup.alreadyHaveAccount")}&nbsp;
+                <span className="register-link" onClick={handleLogin}>
+                  {t("signup.login")}
+                </span>
+              </p>
             </div>
-            <div className="captcha-box">
-              <label htmlFor="captcha" className="captcha-title">
-                Captcha<span style={{ color: "red" }}> *</span>
-              </label>
-              <ReCAPTCHA
-                sitekey="6Ldws3QqAAAAAMX5jNVnZPksWQRvMrp06k7uSbqz"
-                onChange={handleCaptchaChange}
-              />
-              <p className="error">{errorMessages.captcha}</p>
-            </div>
-            <div className="remember-me">
-              <input
-                type="checkbox"
-                id="rememberMe"
-                checked={rememberMe}
-                onChange={handleRememberMeChange}
-              />
-              <div htmlFor="rememberMe">{t("login.rememberMe")}</div>
-            </div>
-            <p className="error">{errorMessages.login}</p>
-            <div className="submit-cancel">
-              <Button className="submit" onClick={handleLogin}>
-                {t("login.button")}
-              </Button>
-              <Button className="cancel">{t("common:cancel")}</Button>
-            </div>
-            <span className="forgot-password" onClick={handleForgotPassword}>
-              {t("login.forgotPassword")}
-            </span>
-            <p className="register">
-              {t("login.noAccount")}&nbsp;
-              <span className="register-link" onClick={handleRegister}>
-                {t("login.signup")}
-              </span>
-            </p>
           </div>
-        </div>
-      </LoginLayout>
-    </div>
+        </LoginLayout>
+      </div>
+    </>
   );
-};
+}
 
-export default React.memo(LoginPage);
+const Register = React.memo(HandleRegisterPage);
+export default Register;
