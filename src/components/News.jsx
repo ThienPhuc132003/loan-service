@@ -1,29 +1,30 @@
 import React from "react";
 import "../assets/css/News.style.css";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const NewsComponent = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
+
   const newsList = [
     {
       id: 1,
-      title: "Tiêu đề tin tức Lorem ipsum dolor sit ame....",
+      title: t("common.newsTitle"),
       date: "23/10/2024",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dignissim elementum consectetur...",
-      image: "https://via.placeholder.com/150", // Replace with real image URL
+      description: t("common.newsDescription"),
+      image: "https://via.placeholder.com/150", 
     },
     {
       id: 2,
-      title: "Tiêu đề tin tức Lorem ipsum dolor sit ame....",
+      title: t("common.newsTitle"),
       date: "23/10/2024",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dignissim elementum consectetur...",
-      image: "https://via.placeholder.com/150", // Replace with real image URL
+      description: t("common.newsDescription"),
+      image: "https://via.placeholder.com/150", 
     },
   ];
 
   return (
     <div className="news-container">
-      <h2 className="news-title">Tin tức mới</h2>
+      <h2 className="news-title">{t("common.newsTitle")}</h2>
       <div className="news-list">
         {newsList.map((news) => (
           <div key={news.id} className="news-item">
@@ -39,5 +40,6 @@ const NewsComponent = () => {
     </div>
   );
 };
+
 const News = React.memo(NewsComponent);
 export default News;

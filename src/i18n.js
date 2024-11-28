@@ -6,17 +6,24 @@ import enSignup from "./Language/English/enSignup.json";
 import viSignup from "./Language/Vietnamese/viSignup.json";
 import enCommon from "./Language/English/enCommon.json";
 import viCommon from "./Language/Vietnamese/viCommon.json";
-
+import enUserProfile from "./Language/English/enUserProfile.json";
+import viUserProfile from "./Language/Vietnamese/viUserProfile.json";
+import enMainLayout from "./Language/English/enMainLayout.json";
+import viMainLayout from "./Language/Vietnamese/viMainLayout.json";
 const enTranslate = {
   ...enLogin,
   ...enSignup,
   ...enCommon,
+  ...enUserProfile,
+  ...enMainLayout,
 };
 
 const viTranslate = {
   ...viLogin,
   ...viSignup,
   ...viCommon,
+  ...viUserProfile,
+  ...viMainLayout,
 };
 
 i18n.use(initReactI18next).init({

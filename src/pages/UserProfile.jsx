@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MainLayout from "../components/layout/MainLayout";
-// import "../assets/css/UserProfile.style.css";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import Cropper from "react-easy-crop";
@@ -12,7 +11,11 @@ import { setUserProfile } from "../redux/userSlice";
 import UserProfileForm from "../components/UserProfileForm";
 import BankAccountInfo from "../components/BankAccountInfo";
 import UserOtherInfo from "../components/UserOtherInfo";
+import Avatar from "../components/Avatar";
+import { useTranslation } from "react-i18next";
+
 const UserProfilePage = () => {
+  const { t } = useTranslation();
   const userInfo = useSelector((state) => state.user.userProfile);
   const [avatar, setAvatar] = useState(
     userInfo?.avatar || "default-avatar.png"
@@ -87,11 +90,11 @@ const UserProfilePage = () => {
             dispatch(setUserProfile(pushAvatarToServer.data));
             setAvatar(pushAvatarToServer.data.avatar);
           } else {
-            console.error("Upload thất bại:", upLoadResponse);
+            console.error("Upload failed:", upLoadResponse);
           }
         }
       } catch (error) {
-        console.error("Lỗi upload ảnh:", error.message);
+        console.error("Error uploading image:", error.message);
       } finally {
         setShowCropper(false);
       }
@@ -104,7 +107,7 @@ const UserProfilePage = () => {
   }, [navigate]);
 
   if (!userInfo) {
-    return <div>Loading...</div>;
+    return <div>{t("common.loading")}</div>;
   }
 
   const rightContent = (
@@ -113,23 +116,24 @@ const UserProfilePage = () => {
       <UserOtherInfo />
     </div>
   );
+
   return (
     <MainLayout
       currentPath={currentPath}
-      currentPage="User Profile"
+      currentPage={t("userProfile.title")}
       rightChildren={rightContent}
     >
       <div className="profile-info">
         <div className="profile-avatar-container">
           <div className="profile-avatar-section">
-            <img src={avatar} alt="User Avatar" className="profile-avatar" />
+            <Avatar src={avatar} alt="User Avatar" className="profile-avatar" />
           </div>
           <div className="profile-avatar-buttons">
             <Button
               className="avatar-button change-avatar-button"
               onClick={() => document.getElementById("fileInput").click()}
             >
-              Đổi ảnh đại diện
+              {t("userProfile.changeAvatar")}
             </Button>
             <input
               type="file"
@@ -143,7 +147,7 @@ const UserProfilePage = () => {
             className="update-profile-button"
             onClick={handleUpdateProfile}
           >
-            Cập nhật thông tin
+            {t("userProfile.updateProfile")}
           </Button>
         </div>
 
@@ -159,7 +163,7 @@ const UserProfilePage = () => {
               onCropComplete={onCropComplete}
             />
             <button className="crop-image-upload-button" onClick={handleCrop}>
-              Crop Image
+              {t("userProfile.cropImage")}
             </button>
           </div>
         )}

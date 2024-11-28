@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../components/layout/MainLayout";
-// import "../assets/css/UpdateUserProfile.style.css";
 import Button from "../components/Button";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../utils/cropImage";
@@ -12,8 +11,11 @@ import { setUserProfile } from "../redux/userSlice";
 import UserProfileForm from "../components/UserProfileForm";
 import BankAccountInfo from "../components/BankAccountInfo";
 import UserOtherInfo from "../components/UserOtherInfo";
+import { useTranslation } from "react-i18next";
+import "../assets/css/UpdateUserProfile.style.css";
 
 const UpdateUserProfilePage = () => {
+  const { t } = useTranslation();
   const userInfo = useSelector((state) => state.user.userProfile);
   const [updatedData, setUpdatedData] = useState({});
   const [avatar, setAvatar] = useState(
@@ -95,11 +97,11 @@ const UpdateUserProfilePage = () => {
             dispatch(setUserProfile(pushAvatarToServer.data));
             setAvatar(pushAvatarToServer.data.avatar);
           } else {
-            console.error("Upload thất bại:", upLoadResponse);
+            console.error("Upload failed:", upLoadResponse);
           }
         }
       } catch (error) {
-        console.error("Lỗi upload ảnh:", error.message);
+        console.error("Error uploading image:", error.message);
       } finally {
         setShowCropper(false);
       }
@@ -142,7 +144,7 @@ const UpdateUserProfilePage = () => {
         data: dataToUpdate,
       });
       console.log("Update successful:", response);
-      dispatch(setUserProfile(response.data)); // Dispatch thông tin cập nhật
+      dispatch(setUserProfile(response.data));
       navigate("/user-profile");
     } catch (error) {
       console.error("Update failed:", error);
@@ -150,7 +152,7 @@ const UpdateUserProfilePage = () => {
   }, [updatedData, avatar, userInfo, navigate, dispatch]);
 
   if (!userInfo) {
-    return <div>Loading...</div>;
+    return <div>{t("common.loading")}</div>;
   }
 
   const currentPath = "/update-user-profile";
@@ -160,10 +162,11 @@ const UpdateUserProfilePage = () => {
       <UserOtherInfo />
     </div>
   );
+
   return (
     <MainLayout
       currentPath={currentPath}
-      currentPage="Update Profile"
+      currentPage={t("userProfile.updateUserProfileTitle")}
       rightChildren={rightContent}
     >
       <div className="profile-avatar-container">
@@ -175,7 +178,7 @@ const UpdateUserProfilePage = () => {
             className="change-avatar-button"
             onClick={() => document.getElementById("fileInput").click()}
           >
-            Đổi ảnh đại diện
+            {t("userProfile.changeAvatar")}
           </Button>
           <input
             type="file"
@@ -199,7 +202,7 @@ const UpdateUserProfilePage = () => {
             onCropComplete={onCropComplete}
           />
           <button className="crop-image-upload-button" onClick={handleCrop}>
-            Crop Image
+            {t("userProfile.cropImage")}
           </button>
         </div>
       )}
@@ -209,9 +212,17 @@ const UpdateUserProfilePage = () => {
         isEditable={true}
         handleInputChange={handleInputChange}
       />
-      <Button className="update-profile-button" onClick={handleSubmit}>
-        Cập nhật thông tin
-      </Button>
+      <div className="update-user-profile-button-box">
+        <Button className="update-profile-button" onClick={handleSubmit}>
+          {t("common.submit")}
+        </Button>
+        <Button
+          className="user-update-profile-cancel-button"
+          onClick={() => navigate("/user-profile")}
+        >
+          {t("common.cancel")}
+        </Button>
+      </div>
     </MainLayout>
   );
 };

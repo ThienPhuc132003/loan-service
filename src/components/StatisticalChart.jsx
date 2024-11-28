@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import PropTypes from "prop-types";
 import "../assets/css/StatisticalChart.style.css";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 // Register the components
 ChartJS.register(
@@ -25,6 +26,7 @@ ChartJS.register(
 );
 
 const StatisticalChartComponent = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [filter, setFilter] = useState("week");
 
   const weeklyData = {
@@ -119,19 +121,19 @@ const StatisticalChartComponent = () => {
           className={filter === "week" ? "active" : ""}
           onClick={() => setFilter("week")}
         >
-          Week
+          {t("common.week")}
         </button>
         <button
           className={filter === "month" ? "active" : ""}
           onClick={() => setFilter("month")}
         >
-          Month
+          {t("common.month")}
         </button>
         <button
           className={filter === "year" ? "active" : ""}
           onClick={() => setFilter("year")}
         >
-          Year
+          {t("common.year")}
         </button>
       </div>
       <Bar data={chartData} options={options} />

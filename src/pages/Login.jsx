@@ -45,7 +45,7 @@ const LoginPage = () => {
     if (password === "") {
       errors.password = t("login.emptyPassword");
     }
-    if (!captchaValue) errors.captcha = t("signup.captchaNotVerified");
+    if (!captchaValue) errors.captcha = t("common.captchaNotVerified");
     return errors;
   }, [username, password, captchaValue, t]);
 
@@ -157,7 +157,7 @@ const LoginPage = () => {
               </div>
             </div>
             <div className="divider">
-              <span>{t("login.or")}</span>
+              <span>{t("common.or")}</span>
             </div>
             <div className="field">
               <label htmlFor="username">
@@ -238,5 +238,5 @@ const LoginPage = () => {
     </div>
   );
 };
-
-export default React.memo(LoginPage);
+const Login = React.memo(LoginPage)
+export default Login;
