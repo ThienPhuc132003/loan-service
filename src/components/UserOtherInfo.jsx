@@ -53,16 +53,14 @@ const UserOtherInfoComponent = ({ isEditable = false }) => {
 
 UserOtherInfoComponent.propTypes = {
   isEditable: PropTypes.bool,
-  occupation: PropTypes.string.isRequired,
-  income: PropTypes.string.isRequired,
+  income: PropTypes.string,
   socialLinks: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string,
       icon: PropTypes.string,
-      text: PropTypes.string,
       url: PropTypes.string,
+      text: PropTypes.string,
     })
-  ).isRequired,
+  ),
 };
 
 const UserOtherInfo = React.memo(UserOtherInfoComponent);

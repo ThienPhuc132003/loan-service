@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "../assets/css/User.style.css";
 import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
-
-const UserComponent = ({  userRole }) => {
+import Avatar from "./Avatar";
+const UserComponent = ({ userRole }) => {
   const userInfo = useSelector((state) => state.user.userProfile);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const UserComponent = ({  userRole }) => {
   return (
     <div className="user-dropdown">
       <div className="user-info-dropdown">
-        <img
+        <Avatar
           src={userInfo.avatar}
           alt="User Avatar"
           className="user-avatar-square"

@@ -1,17 +1,13 @@
-
-.loan-box {
+.asset-types-loan-box {
   display: flex;
+  width: 1031px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.loan-management-container {
-  padding: 20px;
-}
-
-.loan-management-content {
+.asset-types-content {
   margin-top: 20px;
   background-color: #f9f9f9;
   padding: 20px;

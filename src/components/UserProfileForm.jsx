@@ -2,19 +2,22 @@ import PropTypes from "prop-types";
 import InputField from "../components/InputField";
 import "../assets/css/UserProfileForm.style.css";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const UserProfileFormComponent = ({
   userInfo,
   isEditable = false,
   handleInputChange = () => {},
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={`profile-info ${isEditable ? "editable" : "read-only"}`}>
       <div className="profile-info-section">
-        <h2 className="profile-section-title">Thông tin cá nhân</h2>
+        <h2 className="profile-section-title">{t("userProfile.personalInfo")}</h2>
         <div className="profile-info-row">
           <div className="profile-info-field">
-            <label>Họ tên</label>
+            <label>{t("userProfile.fullName")}</label>
             <InputField
               type="text"
               className="profile-input"
@@ -24,7 +27,7 @@ const UserProfileFormComponent = ({
             />
           </div>
           <div className="profile-info-field">
-            <label>Ngày sinh</label>
+            <label>{t("userProfile.birthday")}</label>
             <InputField
               type="date"
               className="profile-input"
@@ -36,7 +39,7 @@ const UserProfileFormComponent = ({
         </div>
         <div className="profile-info-row">
           <div className="profile-info-field">
-            <label>Số CCCD</label>
+            <label>{t("userProfile.identifyCardNumber")}</label>
             <InputField
               type="text"
               className="profile-input"
@@ -46,7 +49,7 @@ const UserProfileFormComponent = ({
             />
           </div>
           <div className="profile-info-field">
-            <label>Ngày cấp</label>
+            <label>{t("userProfile.identifyCardIssuedDate")}</label>
             <InputField
               type="date"
               className="profile-input"
@@ -58,7 +61,7 @@ const UserProfileFormComponent = ({
         </div>
         <div className="profile-info-row">
           <div className="profile-info-field">
-            <label>Nơi cấp</label>
+            <label>{t("userProfile.identifyCardIssuedPlace")}</label>
             <InputField
               type="text"
               className="profile-input"
@@ -68,7 +71,7 @@ const UserProfileFormComponent = ({
             />
           </div>
           <div className="profile-info-field">
-            <label>Giới tính</label>
+            <label>{t("userProfile.gender")}</label>
             {isEditable ? (
               <div className="radio-group">
                 <label className="radio-option">
@@ -80,7 +83,7 @@ const UserProfileFormComponent = ({
                     disabled={!isEditable}
                     onChange={(e) => handleInputChange("gender", e.target.value)}
                   />
-                  Nam
+                  {t("userProfile.male")}
                 </label>
                 <label className="radio-option">
                   <input
@@ -91,21 +94,21 @@ const UserProfileFormComponent = ({
                     disabled={!isEditable}
                     onChange={(e) => handleInputChange("gender", e.target.value)}
                   />
-                  Nữ
+                  {t("userProfile.female")}
                 </label>
               </div>
             ) : (
-              <span className="gender-text profile-input">{userInfo.gender === "MALE" ? "Nam" : "Nữ"}</span>
+              <span className="gender-text profile-input">{userInfo.gender === "MALE" ? t("userProfile.male") : t("userProfile.female")}</span>
             )}
           </div>
         </div>
       </div>
 
       <div className="profile-info-section">
-        <h2 className="profile-section-title">Thông tin liên lạc</h2>
+        <h2 className="profile-section-title">{t("userProfile.contactInfo")}</h2>
         <div className="profile-info-row">
           <div className="profile-info-field">
-            <label>Email riêng</label>
+            <label>{t("userProfile.personalEmail")}</label>
             <InputField
               type="email"
               className="profile-input"
@@ -115,7 +118,7 @@ const UserProfileFormComponent = ({
             />
           </div>
           <div className="profile-info-field">
-            <label>Email làm việc</label>
+            <label>{t("userProfile.workEmail")}</label>
             <InputField
               type="email"
               className="profile-input"
@@ -127,7 +130,7 @@ const UserProfileFormComponent = ({
         </div>
         <div className="profile-info-row">
           <div className="profile-info-field">
-            <label>Số điện thoại</label>
+            <label>{t("userProfile.phoneNumbers")}</label>
             <InputField
               type="text"
               className="profile-input"
@@ -140,10 +143,10 @@ const UserProfileFormComponent = ({
       </div>
 
       <div className="profile-info-section">
-        <h2 className="profile-section-title">Địa chỉ</h2>
+        <h2 className="profile-section-title">{t("userProfile.addressInfo")}</h2>
         <div className="profile-info-row">
           <div className="profile-info-field profile-info-field-full">
-            <label>Địa chỉ nhà</label>
+            <label>{t("userProfile.homeAddress")}</label>
             <InputField
               type="text"
               className="profile-input"
@@ -155,7 +158,7 @@ const UserProfileFormComponent = ({
         </div>
         <div className="profile-info-row">
           <div className="profile-info-field profile-info-field-full">
-            <label>Địa chỉ nơi làm việc</label>
+            <label>{t("userProfile.workAddress")}</label>
             <InputField
               type="text"
               className="profile-input"
@@ -175,5 +178,6 @@ UserProfileFormComponent.propTypes = {
   isEditable: PropTypes.bool,
   handleInputChange: PropTypes.func,
 };
+
 const UserProfileForm = React.memo(UserProfileFormComponent);
 export default UserProfileForm;

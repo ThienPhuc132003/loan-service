@@ -15,7 +15,8 @@ const OtpVerify = lazy(() => import("./pages/OtpVerify"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
 const UpdateUserProfile = lazy(() => import("./pages/UpdateUserProfile"));
-const LoanManagement = lazy(() => import("./pages/LoanManagement"));
+const ListOfAssetTypes = lazy(() => import("./pages/ListOfAssetTypes"));
+const ListOfAssets = lazy(() => import("./pages/ListOfAssets"));
 
 function App() {
   return (
@@ -34,7 +35,8 @@ function App() {
             <Route path="main-page" element={<DashBoard />} />
             <Route path="user-profile" element={<UserProfile />} />
             <Route path="update-user-profile" element={<UpdateUserProfile />} />
-            <Route path="loan-management" element={<LoanManagement />} />
+            <Route path="list-of-asset-types" element={<ListOfAssetTypes />} />
+            <Route path="list-of-assets" element={<ListOfAssets />} />
           </Route>
         </Routes>
       </Suspense>

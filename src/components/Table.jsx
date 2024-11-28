@@ -2,7 +2,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../assets/css/Table.style.css";
-
+const getNestedValue = (obj, path) => {
+  return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+};
 const TableComponent = ({ columns, data, onView, onEdit, onDelete }) => {
   return (
     <div className="table-container">
@@ -26,9 +28,9 @@ const TableComponent = ({ columns, data, onView, onEdit, onDelete }) => {
             >
               {columns.map((col, colIndex) => (
                 <td key={colIndex}>
-                  {col.renderCell
-                    ? col.renderCell(row[col.dataKey], row) // Gọi hàm renderCell nếu có
-                    : row[col.dataKey]} {/* Hiển thị giá trị mặc định nếu không có renderCell */}
+                   {col.renderCell
+                    ? col.renderCell(getNestedValue(row, col.dataKey), row)
+                    : getNestedValue(row, col.dataKey)}
                 </td>
               ))}
 
@@ -67,9 +69,9 @@ const TableComponent = ({ columns, data, onView, onEdit, onDelete }) => {
 TableComponent.propTypes = {
   columns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired, // Tên cột
-      dataKey: PropTypes.string.isRequired, // Tên trường trong dữ liệu
-      renderCell: PropTypes.func, // Hàm tùy chỉnh render (nếu có)
+      title: PropTypes.string.isRequired, 
+      dataKey: PropTypes.string.isRequired, 
+      renderCell: PropTypes.func, 
     })
   ).isRequired,
   data: PropTypes.array.isRequired,

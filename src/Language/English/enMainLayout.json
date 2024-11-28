@@ -1,0 +1,22 @@
+{
+  "menu": {
+    "dashboard": "Dashboard",
+    "statistics": "Statistics",
+    "schedule": "Schedule",
+    "messages": "Messages",
+    "assetTypes": "Asset Types",
+    "assets": "Assets",
+    "quan_ly_goi_vay": "Loan Package Management",
+    "quan_ly_khach_hang_vay": "Borrower Management",
+    "quan_ly_tai_khoan": "Account Management",
+    "quan_ly_khach_hang_cho_vay": "Lender Management",
+    "kho_quy": "Treasury",
+    "phieu_chi": "Expense Voucher",
+    "phieu_thu": "Receipt Voucher",
+    "yeu_cau_vay": "Loan Request",
+    "hop_dong": "Contract",
+    "thanh_toan_no": "Debt Payment",
+    "tham_dinh": "Appraisal",
+    "bai_viet": "Article"
+  }
+}

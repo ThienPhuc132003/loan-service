@@ -1,7 +1,24 @@
 {
-    "common": {
-      "confirm": "Xác nhận",
-      "cancel": "Hủy",
-      "or": "Hoặc"
-    }
+  "common": {
+    "confirm": "Xác nhận",
+    "cancel": "Hủy",
+    "or": "Hoặc",
+    "captchaNotVerified": "Vui lòng xác minh Captcha",
+    "welcomeBack": "Chào mừng quay lại, {{name}}",
+    "loanAmountDue": "bạn có một khoản vay",
+    "dueDate": "cần thanh toán vào ngày",
+    "totalAmountBorrowed": "Tổng số tiền đã vay",
+    "monthlyPayment": "Tổng thanh toán theo tháng",
+    "totalLoans": "Tổng khoản vay",
+    "loanStatistics": "Thống kê khoản vay",
+    "amountBorrowed": "số tiền đã vay",
+    "totalAmountBorrowedInMonth": "Tổng số tiền đã vay trong tháng",
+    "newsTitle": "Tin tức mới",
+    "newsDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dignissim elementum consectetur...",
+    "week": "Tuần",
+    "month": "Tháng",
+    "year": "Năm",
+    "loading": "Đang tải...",
+    "submit": "Gửi"
   }
+}

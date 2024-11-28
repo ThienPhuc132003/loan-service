@@ -63,7 +63,7 @@ nav ul li:hover a{
   color: #ffffff;
 }
 
-.divider {
+.main-layout-divider {
   border: none;
   border-top: 1px solid #ddd;
   margin: 20px 0;
@@ -114,6 +114,7 @@ nav ul li:hover a{
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 20px;
 }
 
 .total-amount-borrowed1 {

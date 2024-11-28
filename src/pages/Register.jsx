@@ -13,6 +13,7 @@ import RadioGroup from "../components/Radio";
 import Cookies from "js-cookie";
 import LanguageSelector from "../components/LanguageSelector";
 import ReCAPTCHA from "react-google-recaptcha";
+import { format } from "date-fns";
 function HandleRegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -71,19 +72,31 @@ function HandleRegisterPage() {
       return;
     }
     try {
+      const formattedBirthday = format(new Date(birthday), "yyyy-MM-dd");
+      const requestData = {
+        fullname: fullName,
+        birthday: formattedBirthday,
+        email: email,
+        phoneNumber: phoneNumber,
+        homeAddress: address,
+        gender: gender.toUpperCase(),
+        password: password,
+        confirmPassword: confirmPassword,
+      };
+      console.log("Request Data:", requestData);
       const response = await Api({
         endpoint: "loan-service/borrower/register",
         method: METHOD_TYPE.POST,
         data: {
           fullname: fullName,
-          birthday: birthday,
+          birthday: formattedBirthday,
           email: email,
           phoneNumber: phoneNumber,
           homeAddress: address,
           gender: gender.toUpperCase(),
           password: password,
           confirmPassword: confirmPassword,
-        },
+        }, 
       });
       const token = response;
       console.log(response.username);

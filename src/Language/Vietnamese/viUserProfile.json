@@ -1,0 +1,25 @@
+{
+  "userProfile": {
+    "title": "Hồ sơ người dùng",
+    "updateUserProfileTitle": "Cập nhật hồ sơ người dùng",
+    "changeAvatar": "Đổi ảnh đại diện",
+    "updateProfile": "Cập nhật thông tin",
+    "cropImage": "Cắt ảnh",
+    "personalInfo": "Thông tin cá nhân",
+    "fullName": "Họ tên",
+    "birthday": "Ngày sinh",
+    "identifyCardNumber": "Số CCCD",
+    "identifyCardIssuedDate": "Ngày cấp",
+    "identifyCardIssuedPlace": "Nơi cấp",
+    "gender": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
+    "contactInfo": "Thông tin liên lạc",
+    "personalEmail": "Email riêng",
+    "workEmail": "Email làm việc",
+    "phoneNumbers": "Số điện thoại",
+    "addressInfo": "Địa chỉ",
+    "homeAddress": "Địa chỉ nhà",
+    "workAddress": "Địa chỉ nơi làm việc"
+  }
+}

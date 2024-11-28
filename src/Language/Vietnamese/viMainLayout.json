@@ -1,0 +1,22 @@
+{
+    "menu": {
+      "dashboard": "Bảng điều khiển",
+      "statistics": "Thống kê",
+      "schedule": "Lịch",
+      "messages": "Tin nhắn",
+      "assetTypes": "Loại tài sản",
+      "assets": "Tài sản",
+      "quan_ly_goi_vay": "Quản lý gói vay",
+      "quan_ly_khach_hang_vay": "Quản lý khách hàng vay",
+      "quan_ly_tai_khoan": "Quản lý tài khoản",
+      "quan_ly_khach_hang_cho_vay": "Quản lý khách hàng cho vay",
+      "kho_quy": "Kho quỹ",
+      "phieu_chi": "Phiếu chi",
+      "phieu_thu": "Phiếu thu",
+      "yeu_cau_vay": "Yêu cầu vay",
+      "hop_dong": "Hợp đồng",
+      "thanh_toan_no": "Thanh toán nợ",
+      "tham_dinh": "Thẩm định",
+      "bai_viet": "Bài viết"
+    }
+  }

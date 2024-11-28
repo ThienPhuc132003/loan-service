@@ -1,0 +1,25 @@
+{
+  "userProfile": {
+    "title": "User Profile",
+    "updateUserProfileTitle": "Update User Profile",
+    "changeAvatar": "Change Avatar",
+    "updateProfile": "Update Profile",
+    "cropImage": "Crop Image",
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "birthday": "Birthday",
+    "identifyCardNumber": "Identify Card Number",
+    "identifyCardIssuedDate": "Issued Date",
+    "identifyCardIssuedPlace": "Issued Place",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "contactInfo": "Contact Information",
+    "personalEmail": "Personal Email",
+    "workEmail": "Work Email",
+    "phoneNumbers": "Phone Numbers",
+    "addressInfo": "Address Information",
+    "homeAddress": "Home Address",
+    "workAddress": "Work Address"
+  }
+}
