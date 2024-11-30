@@ -1,3 +1,4 @@
+// File: MainLayoutComponent.jsx
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -8,7 +9,7 @@ import RealTime from "../RealTime";
 import { fetchMenuData } from "../../redux/menuSlice";
 import { fullMenuData } from "../../assets/data/FullMenuData";
 import { useTranslation } from "react-i18next";
-
+import {toggleSidebar} from "../../redux/uiSlice";
 const MainLayoutComponent = (props) => {
   const {
     children = null,
@@ -22,6 +23,7 @@ const MainLayoutComponent = (props) => {
   const dispatch = useDispatch();
   const menuData = useSelector((state) => state.menu.data);
   const menuStatus = useSelector((state) => state.menu.status);
+  const isSidebarVisible = useSelector((state) => state.ui.isSidebarVisible);
 
   useEffect(() => {
     if (menuStatus === "idle") {
@@ -32,7 +34,8 @@ const MainLayoutComponent = (props) => {
   const menuItems = fullMenuData.filter((item) => menuData.includes(item.key));
 
   return (
-    <div className="main-layout">
+    <div className={`main-layout ${isSidebarVisible ? "" : "sidebar-hidden"}`}>
+      {/* Sidebar */}
       <div className="sidebar">
         <h1 className="main-logo">Alpha</h1>
         <nav className="primary-navigation">
@@ -44,7 +47,8 @@ const MainLayoutComponent = (props) => {
             </li>
             <li className={currentPath === "/about" ? "active" : ""}>
               <Link to="/about">
-                <i className="fa-solid fa-chart-simple"></i> {t("menu.statistics")}
+                <i className="fa-solid fa-chart-simple"></i>{" "}
+                {t("menu.statistics")}
               </Link>
             </li>
             <li className={currentPath === "/services" ? "active" : ""}>
@@ -65,25 +69,24 @@ const MainLayoutComponent = (props) => {
             {menuItems.map((item) => (
               <li key={item.key} className="menu-item">
                 <Link to={`/${item.key.toLowerCase()}`}>
-                  <i className={`fa ${item.icon}`}></i> {t(`menu.${item.key.toLowerCase()}`)}
+                  <i className={`fa ${item.icon}`}></i>{" "}
+                  {t(`menu.${item.key.toLowerCase()}`)}
                 </Link>
               </li>
             ))}
-            <li className={currentPath === "/list-of-asset-types" ? "active" : ""}>
-              <Link to="/list-of-asset-types">
-                <i className="fa-solid fa-coins"></i> {t("menu.assetTypes")}
-              </Link>
-            </li>
-            <li className={currentPath === "/list-of-assets" ? "active" : ""}>
-              <Link to="/list-of-assets">
-                <i className="fa-solid fa-coins"></i> {t("menu.assets")}
-              </Link>
-            </li>
           </ul>
         </nav>
         <RealTime />
       </div>
+
+      {/* Content Area */}
       <div className="content-area">
+        <button
+          className="toggle-sidebar-btn"
+          onClick={() => dispatch(toggleSidebar())}
+        >
+          {isSidebarVisible ? "⟨" : "⟩"}
+        </button>
         <div className="main-layout-header">
           <h1 className="current-page">{currentPage}</h1>
           <UserAccountToolbar currentPath={currentPath} onLogout={onLogout} />

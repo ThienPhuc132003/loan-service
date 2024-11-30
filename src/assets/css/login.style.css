@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+    box-sizing: border-box;
+  }
+  .page-box {
+    display: flex;
+  }
+  .show {
+    display: block;
+  }
+  .hide {
+    display: none;
+  }
+  
+  .other-login {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    gap: 40px;
+  }
+  .login-option {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: bold;
+    gap: 20px;
+  }
+  .login-img {
+    width: 40px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .forgot-password {
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    margin-top: 10px;
+    margin-left: auto;
+    cursor: pointer;
+  }
+  .register {
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .register-link {
+    color: #ff9933;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .captcha-title {
+    position: relative;
+    top: -5px;
+  }
+  
+  label {
+    margin-bottom: 5px;
+  }
+  .divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 5px 0;
+  }
+  
+  .divider::before,
+  .divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #000;
+  }
+  
+  .divider:not(:empty)::before {
+    margin-right: 10px;
+  }
+  
+  .divider:not(:empty)::after {
+    margin-left: 10px;
+  }
+  
+  .divider span {
+    font-size: 16px;
+    color: #333;
+  }
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .remember-me div {
+    font-weight: bold;
+  }
+  .remember-me input {
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #272e4f;
+  }
+  
+  .remember-me input:checked {
+    background-color: #272e4f;
+    border: 2px solid #272e4f;
+  }
+  
+  .remember-me input:focus {
+    outline: none;
+  }
+  
+  .remember-me label {
+    cursor: pointer;
+  }
+  

@@ -2,8 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "./userSlice";
-import menuReducer from "./menuSlice"; // Import menuReducer
-
+import menuReducer from "./menuSlice";
+import uiReducer from "./uiSlice";
 const persistConfig = {
   key: "user",
   storage,
@@ -15,6 +15,7 @@ const store = configureStore({
   reducer: {
     user: persistedUserReducer,
     menu: menuReducer,
+    ui: uiReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
