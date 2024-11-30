@@ -8,14 +8,14 @@ import enCommon from "./Language/English/enCommon.json";
 import viCommon from "./Language/Vietnamese/viCommon.json";
 import enUserProfile from "./Language/English/enUserProfile.json";
 import viUserProfile from "./Language/Vietnamese/viUserProfile.json";
-import enMainLayout from "./Language/English/enMainLayout.json";
-import viMainLayout from "./Language/Vietnamese/viMainLayout.json";
+import enMenu from "./Language/English/enMenu.json";
+import viMenu from "./Language/Vietnamese/viMenu.json";
 const enTranslate = {
   ...enLogin,
   ...enSignup,
   ...enCommon,
   ...enUserProfile,
-  ...enMainLayout,
+  ...enMenu,
 };
 
 const viTranslate = {
@@ -23,7 +23,7 @@ const viTranslate = {
   ...viSignup,
   ...viCommon,
   ...viUserProfile,
-  ...viMainLayout,
+  ...viMenu,
 };
 
 i18n.use(initReactI18next).init({
