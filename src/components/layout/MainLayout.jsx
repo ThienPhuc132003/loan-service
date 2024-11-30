@@ -9,7 +9,7 @@ import RealTime from "../RealTime";
 import { fetchMenuData } from "../../redux/menuSlice";
 import { fullMenuData } from "../../assets/data/FullMenuData";
 import { useTranslation } from "react-i18next";
-import {toggleSidebar} from "../../redux/uiSlice";
+import { toggleSidebar } from "../../redux/uiSlice";
 const MainLayoutComponent = (props) => {
   const {
     children = null,
@@ -74,6 +74,20 @@ const MainLayoutComponent = (props) => {
                 </Link>
               </li>
             ))}
+            <li
+              className={currentPath === "/list-of-asset-types" ? "active" : ""}
+            >
+              <Link to="/list-of-asset-types">
+                <i className="fa-solid fa-coins"></i> {t("menu.assetTypes")}
+              </Link>
+            </li>
+            <li
+              className={currentPath === "/list-of-assets" ? "active" : ""}
+            >
+              <Link to="/list-of-assets">
+                <i className="fa-solid fa-coins"></i> {t("menu.assets")}
+              </Link>
+            </li>
           </ul>
         </nav>
         <RealTime />

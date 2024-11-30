@@ -89,18 +89,14 @@ function HandleRegisterPage() {
         method: METHOD_TYPE.POST,
         data: {
           fullname: fullName,
-
           birthday: formattedBirthday,
-
           email: email,
           phoneNumber: phoneNumber,
           homeAddress: address,
           gender: gender.toUpperCase(),
           password: password,
           confirmPassword: confirmPassword,
-
         }, 
-
       });
       const token = response;
       console.log(response.username);
