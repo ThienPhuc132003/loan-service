@@ -1,7 +1,7 @@
 // File: MainLayoutComponent.jsx
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "../../assets/css/MainLayout.style.css";
 import UserAccountToolbar from "./UserAccountToolbar";
@@ -9,10 +9,11 @@ import RealTime from "../RealTime";
 import { fetchMenuData } from "../../redux/menuSlice";
 import { fullMenuData } from "../../assets/data/FullMenuData";
 import { useTranslation } from "react-i18next";
-import { toggleSidebar } from "../../redux/uiSlice";
+import { setSidebarVisibility, toggleSidebar } from "../../redux/uiSlice";
 const MainLayoutComponent = (props) => {
   const {
     children = null,
+    childrenMiddleContentLower = null,
     rightChildren = null,
     currentPath,
     onLogout,
@@ -24,7 +25,27 @@ const MainLayoutComponent = (props) => {
   const menuData = useSelector((state) => state.menu.data);
   const menuStatus = useSelector((state) => state.menu.status);
   const isSidebarVisible = useSelector((state) => state.ui.isSidebarVisible);
+  const location = useLocation();
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1024) {
+        dispatch(setSidebarVisibility(false));
+      } else {
+        dispatch(setSidebarVisibility(true));
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [dispatch]);
 
+  useEffect(() => {
+    if (window.innerWidth <= 1024) {
+      dispatch(setSidebarVisibility(false));
+    }
+  }, [location.pathname, dispatch]);
   useEffect(() => {
     if (menuStatus === "idle") {
       dispatch(fetchMenuData());
@@ -33,6 +54,7 @@ const MainLayoutComponent = (props) => {
 
   const menuItems = fullMenuData.filter((item) => menuData.includes(item.key));
 
+  
   return (
     <div className={`main-layout ${isSidebarVisible ? "" : "sidebar-hidden"}`}>
       {/* Sidebar */}
@@ -78,14 +100,22 @@ const MainLayoutComponent = (props) => {
               className={currentPath === "/list-of-asset-types" ? "active" : ""}
             >
               <Link to="/list-of-asset-types">
-                <i className="fa-solid fa-coins"></i> {t("menu.assetTypes")}
+                <i className="fa-solid fa-coins"></i> {t("menu.assetTypes")+"(test)"}
               </Link>
             </li>
-            <li
-              className={currentPath === "/list-of-assets" ? "active" : ""}
-            >
+            <li className={currentPath === "/list-of-assets" ? "active" : ""}>
               <Link to="/list-of-assets">
-                <i className="fa-solid fa-coins"></i> {t("menu.assets")}
+                <i className="fa-solid fa-coins"></i> {t("menu.assets")+"(test)"}
+              </Link>
+            </li>
+            <li className={currentPath === "/list-of-employees" ? "active" : ""}>
+              <Link to="/list-of-employees">
+                <i className="fa-solid fa-users"></i> {t("menu.employees") +"(test)"}
+              </Link>
+            </li>
+            <li className={currentPath === "/list-of-customers" ? "active" : ""}>
+              <Link to="/list-of-customers">
+                <i className="fa-solid fa-users"></i> {t("menu.customers")+"(test)"}
               </Link>
             </li>
           </ul>
@@ -94,6 +124,7 @@ const MainLayoutComponent = (props) => {
       </div>
 
       {/* Content Area */}
+
       <div className="content-area">
         <button
           className="toggle-sidebar-btn"
@@ -106,7 +137,12 @@ const MainLayoutComponent = (props) => {
           <UserAccountToolbar currentPath={currentPath} onLogout={onLogout} />
         </div>
         <div className="main-content">
-          <div className="middle-content">{children}</div>
+          <div className="middle-content">
+            <div className="middle-content-upper">{children}</div>
+            <div className="middle-content-lower">
+              {childrenMiddleContentLower}
+            </div>
+          </div>
           {rightChildren && (
             <div className="right-content">{rightChildren}</div>
           )}
@@ -118,6 +154,7 @@ const MainLayoutComponent = (props) => {
 
 MainLayoutComponent.propTypes = {
   children: PropTypes.node,
+  childrenMiddleContentLower: PropTypes.node,
   rightChildren: PropTypes.node,
   currentPath: PropTypes.string.isRequired,
   onLogout: PropTypes.func,

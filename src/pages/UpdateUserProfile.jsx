@@ -109,33 +109,16 @@ const UpdateUserProfilePage = () => {
     [dispatch]
   );
 
+  const handleCancelCrop = () => {
+    setShowCropper(false);
+    setImageSrc(null);
+  };
+
   const handleSubmit = useCallback(async () => {
     try {
       const dataToUpdate = {
-        fullname: updatedData.fullname || userInfo.fullname,
-        avatar: avatar,
-        emails: updatedData.emails || userInfo.emails,
-        phoneNumbers: updatedData.phoneNumbers || userInfo.phoneNumbers,
-        jobTitle: updatedData.jobTitle || userInfo.jobTitle,
-        income: updatedData.income || userInfo.income,
-        identifyCardNumber:
-          updatedData.identifyCardNumber || userInfo.identifyCardNumber,
-        identifyCardIssuedDate:
-          updatedData.identifyCardIssuedDate || userInfo.identifyCardIssuedDate,
-        identifyCardIssuedPlace:
-          updatedData.identifyCardIssuedPlace ||
-          userInfo.identifyCardIssuedPlace,
-        borrowerIncomeProofDocuments:
-          updatedData.borrowerIncomeProofDocuments ||
-          userInfo.borrowerIncomeProofDocuments,
-        homeAddress: updatedData.homeAddress || userInfo.homeAddress,
-        workAddress: updatedData.workAddress || userInfo.workAddress,
-        birthday: updatedData.birthday || userInfo.birthday,
-        gender: updatedData.gender || userInfo.gender,
-        socialLink: updatedData.socialLink || userInfo.socialLink,
-        bankAccounts: updatedData.bankAccounts || userInfo.bankAccounts,
-        signAttachments:
-          updatedData.signAttachments || userInfo.signAttachments,
+        ...updatedData,
+        avatar,
       };
 
       const response = await Api({
@@ -149,13 +132,12 @@ const UpdateUserProfilePage = () => {
     } catch (error) {
       console.error("Update failed:", error);
     }
-  }, [updatedData, avatar, userInfo, navigate, dispatch]);
+  }, [updatedData, avatar, navigate, dispatch]);
 
   if (!userInfo) {
     return <div>{t("common.loading")}</div>;
   }
 
-  const currentPath = "/update-user-profile";
   const rightContent = (
     <div>
       <BankAccountInfo />
@@ -165,7 +147,7 @@ const UpdateUserProfilePage = () => {
 
   return (
     <MainLayout
-      currentPath={currentPath}
+      currentPath="/update-user-profile"
       currentPage={t("userProfile.updateUserProfileTitle")}
       rightChildren={rightContent}
     >
@@ -201,9 +183,14 @@ const UpdateUserProfilePage = () => {
             onZoomChange={setZoom}
             onCropComplete={onCropComplete}
           />
-          <button className="crop-image-upload-button" onClick={handleCrop}>
-            {t("userProfile.cropImage")}
-          </button>
+          <div className="cropper-buttons">
+            <Button className="crop-image-upload-button" onClick={handleCrop}>
+              {t("userProfile.cropImage")}
+            </Button>
+            <Button className="cancel-crop-button" onClick={handleCancelCrop}>
+              {t("common.cancel")}
+            </Button>
+          </div>
         </div>
       )}
 

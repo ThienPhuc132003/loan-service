@@ -20,7 +20,7 @@
   }
   
   .user-other-info-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #1f2937; /* Slightly darker gray */
   }
@@ -28,7 +28,7 @@
   .user-other-info-edit-button {
     background: none;
     border: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
     text-decoration: underline;
@@ -54,15 +54,9 @@
   }
   
   .user-other-info-label {
-    font-size: 17px;
+    font-size: 14px;
     font-weight: bold;
     margin-bottom: 10px;
-  }
-  
-  .user-other-info-value {
-    font-size: 16px;
-    font-weight: bold;
-    color: #1f2937; /* Dark gray for values */
   }
   
   .user-other-info-social-links {
@@ -84,7 +78,7 @@
   
   .user-other-info-link {
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
   }
@@ -97,6 +91,6 @@
     padding: 15px 10px;
     border: 1px solid #272e4f;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 12px;
     outline: none;
 }

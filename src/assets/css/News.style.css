@@ -1,54 +1,89 @@
-    /* File: src/components/News.css */
+/* Container Styles */
 .news-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* Đảm bảo các tin không vượt khỏi khung */
+  position: relative;
+}
+
+.news-title {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* News List Styles */
+.news-list {
+  position: relative;
+  height: 300px; /* Đặt chiều cao phù hợp với số lượng tin */
+  overflow: hidden;
+}
+
+/* News Item Styles */
+.news-item {
+  display: flex;
+  flex-direction: row; /* Hiển thị nội dung tin tức theo dòng */
+  align-items: center;
+  position: absolute; /* Đặt từng tin tức trong vùng riêng */
+  left: 0;
+  width: 100%;
+  height: 50%; /* Chiều cao của từng tin, chia theo số lượng tin */
+  opacity: 0; /* Ẩn tin tức mặc định */
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.news-item.visible {
+  opacity: 1; /* Hiển thị tin khi active */
+  transform: translateY(0); /* Không di chuyển */
+  z-index: 2;
+}
+
+.news-item.hidden {
+  opacity: 0; /* Ẩn khi không active */
+  transform: translateY(100%); /* Đưa về dưới khung */
+  z-index: 1;
+}
+
+/* Content Inside Each News Item */
+.news-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.news-content {
+  margin-left: 20px;
+}
+
+.news-item-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 0 10px;
+}
+
+.news-date {
+  font-size: 12px;
+  color: #888;
+  margin: 0 0 10px;
+}
+
+.news-description {
+  font-size: 12px;
+  color: #555;
+  margin: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .news-container {
+    height: auto;
   }
-  
-  .news-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
+
   .news-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    height: 120px; 
   }
-  
+
   .news-item {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    padding-bottom: 15px;
+    height: 100%; 
   }
-  
-  .news-image {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .news-content {
-    flex: 1;
-  }
-  
-  .news-item-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0 0 10px;
-  }
-  
-  .news-date {
-    font-size: 14px;
-    color: #888;
-    margin: 0 0 10px;
-  }
-  
-  .news-description {
-    font-size: 14px;
-    color: #555;
-    margin: 0;
-  }
-  
+}

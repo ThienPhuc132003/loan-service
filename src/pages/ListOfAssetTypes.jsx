@@ -11,7 +11,7 @@ const ListOfAssetTypesPage = () => {
   const userInfo = useSelector((state) => state.user.userProfile);
   const [data, setData] = useState([]);
 
-  const currentPath = "loan-management";
+  const currentPath = "/list-of-asset-types";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,14 +46,25 @@ const ListOfAssetTypesPage = () => {
         ),
     },
   ];
-
+  const childrenMiddleContentLower = (
+    <>
+      <div className="asset-types-content">
+        <h2>Danh sách loại tài sản</h2>
+        <Table columns={columns} data={data} />
+        <p>Manage your loans here.</p>
+      </div>
+    </>
+  );
   return (
-    <MainLayout currentPath={currentPath} currentPage="Loan Management">
+    <MainLayout
+      currentPath={currentPath}
+      currentPage="Loan Management"
+      childrenMiddleContentLower={childrenMiddleContentLower}
+    >
       <h2>Chào mừng quay lại, {userInfo.fullname}</h2>
       <p>
-        bạn có một khoản vay{" "}
-        <span className="highlight">10.000.000 đồng</span> cần thanh toán vào
-        ngày <span className="highlight">dd/mm/yy</span>
+        bạn có một khoản vay <span className="highlight">10.000.000 đồng</span>{" "}
+        cần thanh toán vào ngày <span className="highlight">dd/mm/yy</span>
       </p>
       <div className="asset-types-loan-box">
         <TotalLoan
@@ -71,14 +82,6 @@ const ListOfAssetTypesPage = () => {
           title="Tổng khoản vay"
           amount="15 khoản vay"
         />
-      </div>
-      <div className="asset-types-content">
-        <h2>Danh sách loại tài sản</h2>
-        <Table
-          columns={columns}
-          data={data}
-        />
-        <p>Manage your loans here.</p>
       </div>
     </MainLayout>
   );

@@ -1,3 +1,4 @@
+// File: src/components/UserProfileForm.jsx
 import PropTypes from "prop-types";
 import InputField from "../components/InputField";
 import "../assets/css/UserProfileForm.style.css";
@@ -133,8 +134,8 @@ const UserProfileFormComponent = ({
             <label>{t("userProfile.phoneNumbers")}</label>
             <InputField
               type="text"
-              className="profile-input"
-              value={userInfo.phoneNumbers ? userInfo.phoneNumbers.join(", ") : "N/A"}
+              className={`profile-input ${!isEditable ? "" : "non-editable"}`}
+              value={Array.isArray(userInfo.phoneNumbers) ? userInfo.phoneNumbers.join(", ") : "N/A"}
               readOnly={!isEditable}
               onChange={(e) => handleInputChange("phoneNumbers", e.target.value)}
             />

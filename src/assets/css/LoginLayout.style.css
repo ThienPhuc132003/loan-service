@@ -139,6 +139,9 @@ button.submit:hover {
     gap: 20px;
     align-items: center;
   }
+  .other-login{
+    gap:10px
+  }
 }
 
 /* Media query for phones (up to 768px) */
