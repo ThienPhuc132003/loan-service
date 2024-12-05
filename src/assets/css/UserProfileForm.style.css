@@ -83,7 +83,7 @@
 }
 
 .profile-info-field label {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: bold;
   color: #333;
   margin-bottom: 7px;
@@ -94,7 +94,7 @@
   padding: 15px 10px;
   border: 1px solid #272e4f;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 12px;
   outline: none;
 }
 
@@ -105,21 +105,6 @@
 }
 
 /* Button Styling */
-.profile-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.profile-button:hover {
-  opacity: 0.8;
-}
-
-.profile-button:focus {
-  outline: none;
-}
 
 .update-profile-button {
   display: flex;
@@ -146,13 +131,10 @@
 }
 
 .crop-image-upload-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
   background-color: #272e4f;
   color: #fff;
@@ -164,7 +146,21 @@
   color: #272e4f;
   border: 2px solid #272e4f;
 }
-
+.cropper-buttons {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  gap: 20px;
+}
+.cancel-crop-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #272e4f;
+}
 /* Gender Text Styling */
 .gender-text {
   color: #272e4f;
@@ -180,4 +176,8 @@
 .radio-option {
   display: flex;
   gap: 10px;
+}
+.non-editable {
+  background-color: #f0f0f0; /* Light gray background */
+  pointer-events: none;
 }

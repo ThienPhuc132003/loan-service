@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -20,6 +20,7 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   transition: transform 0.3s ease;
+  z-index: 100;
 }
 
 .sidebar-hidden .sidebar {
@@ -28,6 +29,9 @@
 
 .sidebar-hidden .content-area {
   margin-left: 0;
+}
+.sidebar .overlay {
+  background-color: #969393;
 }
 
 .content-area {
@@ -39,6 +43,7 @@
 }
 
 .toggle-sidebar-btn {
+  display: none;
   position: fixed;
   top: 20px;
   left: 260px;
@@ -72,14 +77,15 @@ nav ul {
 }
 
 nav ul li {
-  padding:  15px 20px;
+  padding: 15px 20px;
+  font-size: 16px;
 }
 
 nav ul li.active {
-  background-color: #272e4f; 
+  background-color: #272e4f;
 }
 nav ul li:not(.active):hover {
-  background-color: #272e4fe6 ; 
+  background-color: #272e4fe6;
 }
 
 nav ul li a {
@@ -92,9 +98,9 @@ nav ul li a {
 }
 
 nav ul li.active a {
-  color: #ffffff; 
+  color: #ffffff;
 }
-nav ul li:hover a{
+nav ul li:hover a {
   color: #ffffff;
 }
 
@@ -129,13 +135,16 @@ nav ul li:hover a{
   padding: 20px;
   overflow-y: auto;
 }
-
+.middle-content {
+  font-size: 12px;
+}
 .right-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px;
 }
+
 .current-page {
   display: flex;
   margin-left: 50px;
@@ -180,7 +189,20 @@ nav ul li:hover a{
   flex: 1;
   margin: 10px;
 }
-.hight-light{
+.hight-light {
   color: rgba(255, 94, 58, 1);
   font-weight: 700;
+}
+
+@media (max-width: 1024px) {
+  .toggle-sidebar-btn {
+    display: block;
+  }
+  .chart-container {
+    margin-top: 20px;
+  }
+}
+
+/* Media query for phones (up to 768px) */
+@media (max-width: 767px) {
 }

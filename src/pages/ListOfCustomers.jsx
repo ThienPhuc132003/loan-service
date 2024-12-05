@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MainLayout from "../components/layout/MainLayout";
-import "../assets/css/ListOfAssets.style.css";
+import "../assets/css/ListOfCustomers.style.css";
 import Table from "../components/Table";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import TotalLoan from "../components/TotalLoan";
 
-const ListOfAssetsPage = () => {
+const ListOfCustomersPage = () => {
   const userInfo = useSelector((state) => state.user.userProfile);
   const [data, setData] = useState([]);
 
-  const currentPath = "/list-of-assets";
+  const currentPath = "/list-of-customers";
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await Api({
-          endpoint: "loan-service/asset",
+          endpoint: "loan-service/borrower",
           method: METHOD_TYPE.GET,
+          query: { page: 1, rpp: 10 },
         });
         if (response.success === true) {
-          setData(response.data);
-          console.log(response.data);
+          setData(response.data.items);
         } else {
           console.log("Failed to fetch data");
         }
@@ -34,33 +34,41 @@ const ListOfAssetsPage = () => {
   }, []);
 
   const columns = [
-    { title: "Mã tài sản", dataKey: "assetId" },
-    { title: "Tên tài sản", dataKey: "assetName" },
-    { title: "Tên loại tài sản", dataKey: "assetType.assetTypeName" },
+    { title: "Mã khách hàng", dataKey: "borrowerId" },
+    { title: "Tên khách hàng", dataKey: "name" },
+    { title: "Số điện thoại", dataKey: "phoneNumber" },
+    { title: "Email", dataKey: "email" },
+    { title: "Thu nhập", dataKey: "borrowerProfile.income" },
     {
       title: "Trạng thái",
-      dataKey: "status",
+      dataKey: "borrowerProfile.debtStatus",
       renderCell: (value) =>
-        value === "UNAVAILABLE" ? (
-          <span className="status deleted">Unavailable</span>
+        value === "GOOD" ? (
+          <span className="status good">Tốt</span>
+        ) : value === "BAD" ? (
+          <span className="status bad">Nợ xấu</span>
         ) : (
-          <span className="status active">Available</span>
+          <span className="status unknow">chưa xác định</span>
         ),
     },
+    { title: "Số hợp đồng", dataKey: "numberOfContracts" },
+    { title: "Ngày đăng ký", dataKey: "createAt" },
   ];
+
   const childrenMiddleContentLower = (
     <>
-      <div className="assets-content">
-        <h2>Danh sách tài sản</h2>
+      <div className="customers-content">
+        <h2>Danh sách khách hàng</h2>
         <Table columns={columns} data={data} />
-        <p>Manage your loans here.</p>
+        <p>Manage your customers here.</p>
       </div>
     </>
   );
+
   return (
     <MainLayout
       currentPath={currentPath}
-      currentPage="Loan Management"
+      currentPage="Customer Management"
       childrenMiddleContentLower={childrenMiddleContentLower}
     >
       <h2>Chào mừng quay lại, {userInfo.fullname}</h2>
@@ -68,25 +76,20 @@ const ListOfAssetsPage = () => {
         bạn có một khoản vay <span className="highlight">10.000.000 đồng</span>{" "}
         cần thanh toán vào ngày <span className="highlight">dd/mm/yy</span>
       </p>
-      <div className="assets-loan-box">
+      <div className="customers-loan-box">
         <TotalLoan
           cardName="total-amount-borrowed1"
-          title="Tổng tài sản"
-          amount="3 tài sản"
+          title="Tổng số khách hàng"
+          amount="100 khách hàng"
         />
         <TotalLoan
           cardName="total-amount-borrowed2"
-          title="Tổng  số tài sản đang dùng"
-          amount="2 tài sản"
-        />
-        <TotalLoan
-          cardName="total-amount-borrowed2"
-          title="Tổng khoản vay"
-          amount="15 khoản vay"
+          title="Tổng số hợp đồng"
+          amount="200 hợp đồng"
         />
       </div>
     </MainLayout>
   );
 };
 
-export default React.memo(ListOfAssetsPage);
+export default React.memo(ListOfCustomersPage);

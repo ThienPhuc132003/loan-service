@@ -17,6 +17,8 @@
     "hop_dong": "Contract",
     "thanh_toan_no": "Debt Payment",
     "tham_dinh": "Appraisal",
-    "bai_viet": "Article"
+    "bai_viet": "Article",
+    "employees": "Employee",
+    "customers": "Customer"
   }
 }

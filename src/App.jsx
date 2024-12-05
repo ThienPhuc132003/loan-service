@@ -17,7 +17,8 @@ const UserProfile = lazy(() => import("./pages/UserProfile"));
 const UpdateUserProfile = lazy(() => import("./pages/UpdateUserProfile"));
 const ListOfAssetTypes = lazy(() => import("./pages/ListOfAssetTypes"));
 const ListOfAssets = lazy(() => import("./pages/ListOfAssets"));
-
+const ListOfEmployeesPage = lazy(() => import("./pages/ListOfEmployees"));
+const ListOfCustomers = lazy(() => import("./pages/ListOfCustomers"));
 function App() {
   return (
     <Router>
@@ -37,6 +38,8 @@ function App() {
             <Route path="update-user-profile" element={<UpdateUserProfile />} />
             <Route path="list-of-asset-types" element={<ListOfAssetTypes />} />
             <Route path="list-of-assets" element={<ListOfAssets />} />
+            <Route path="list-of-employees" element={<ListOfEmployeesPage />} />
+            <Route path="list-of-customers" element={<ListOfCustomers />} />
           </Route>
         </Routes>
       </Suspense>

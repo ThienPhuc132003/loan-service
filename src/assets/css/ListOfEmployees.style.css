@@ -1,4 +1,4 @@
-.assets-loan-box {
+.employees-loan-box {
   display: flex;
   width: 1031px;
   flex-direction: row;
@@ -6,8 +6,7 @@
   align-items: center;
   flex-wrap: wrap;
 }
-
-.assets-content {
+.employees-content {
   margin-top: 20px;
   background-color: #f9f9f9;
   padding: 20px;
@@ -15,7 +14,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 @media (max-width: 1024px) {
-  .assets-loan-box{
+  .employees-loan-box {
     width: 100%;
   }
 }

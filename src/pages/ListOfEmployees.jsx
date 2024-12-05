@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import MainLayout from "../components/layout/MainLayout";
-import "../assets/css/ListOfAssets.style.css";
+import "../assets/css/ListOfEmployees.style.css";
 import Table from "../components/Table";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import TotalLoan from "../components/TotalLoan";
+import { useSelector } from "react-redux";
 
-const ListOfAssetsPage = () => {
+const ListOfEmployeesPage = () => {
   const userInfo = useSelector((state) => state.user.userProfile);
   const [data, setData] = useState([]);
+  const roleId = "ADMIN";
 
-  const currentPath = "/list-of-assets";
+  const currentPath = "/list-of-employees";
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await Api({
-          endpoint: "loan-service/asset",
+          endpoint: `loan-service/employee/by-role/:roleId?filter=[{"key":"email","operator":"equal","value":"22521405@gm.uit.edu.vn"}]&sort=[{"key":"createAt","type":"DESC"}]&rpp=10&page=1`,
           method: METHOD_TYPE.GET,
         });
         if (response.success === true) {
-          setData(response.data);
-          console.log(response.data);
+          setData(response.data.items);
         } else {
           console.log("Failed to fetch data");
         }
@@ -31,36 +32,39 @@ const ListOfAssetsPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [roleId]);
 
   const columns = [
-    { title: "Mã tài sản", dataKey: "assetId" },
-    { title: "Tên tài sản", dataKey: "assetName" },
-    { title: "Tên loại tài sản", dataKey: "assetType.assetTypeName" },
+    { title: "Mã nhân viên", dataKey: "employeeId" },
+    { title: "Tên nhân viên", dataKey: "employeeProfile.fullname" },
+    { title: "Số điện thoại", dataKey: "phoneNumber" },
+    { title: "Email", dataKey: "email" },
+    { title: "CCCD", dataKey: "employeeProfile.identifyCardNumber" },
     {
       title: "Trạng thái",
       dataKey: "status",
       renderCell: (value) =>
-        value === "UNAVAILABLE" ? (
-          <span className="status deleted">Unavailable</span>
+        value === "ACTIVE" ? (
+          <span className="status active">Đang hoạt động</span>
         ) : (
-          <span className="status active">Available</span>
+          <span className="status unactive">Available</span>
         ),
     },
+    { title: "Ngày lập", dataKey: "createAt" },
+    { title: "Người lập", dataKey: "createBy" },
   ];
   const childrenMiddleContentLower = (
     <>
-      <div className="assets-content">
-        <h2>Danh sách tài sản</h2>
+      <div className="employees-content">
+        <h2>Danh sách nhân viên</h2>
         <Table columns={columns} data={data} />
-        <p>Manage your loans here.</p>
       </div>
     </>
   );
   return (
     <MainLayout
       currentPath={currentPath}
-      currentPage="Loan Management"
+      currentPage="Employee Management"
       childrenMiddleContentLower={childrenMiddleContentLower}
     >
       <h2>Chào mừng quay lại, {userInfo.fullname}</h2>
@@ -68,25 +72,25 @@ const ListOfAssetsPage = () => {
         bạn có một khoản vay <span className="highlight">10.000.000 đồng</span>{" "}
         cần thanh toán vào ngày <span className="highlight">dd/mm/yy</span>
       </p>
-      <div className="assets-loan-box">
+      <div className="employees-loan-box">
         <TotalLoan
           cardName="total-amount-borrowed1"
-          title="Tổng tài sản"
-          amount="3 tài sản"
+          title="Tổng nhân viên"
+          amount="3 nhân viên"
         />
         <TotalLoan
           cardName="total-amount-borrowed2"
-          title="Tổng  số tài sản đang dùng"
-          amount="2 tài sản"
+          title="Tổng nhân viên bị khóa"
+          amount="1 nhân viên"
         />
         <TotalLoan
           cardName="total-amount-borrowed2"
-          title="Tổng khoản vay"
-          amount="15 khoản vay"
+          title="Tổng nhân viên mới"
+          amount="10 nhân viên"
         />
       </div>
     </MainLayout>
   );
 };
-
-export default React.memo(ListOfAssetsPage);
+const ListOfEmployees = React.memo(ListOfEmployeesPage);
+export default ListOfEmployees;

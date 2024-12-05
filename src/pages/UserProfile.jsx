@@ -102,6 +102,11 @@ const UserProfilePage = () => {
     [dispatch]
   );
 
+  const handleCancelCrop = () => {
+    setShowCropper(false);
+    setImageSrc(null);
+  };
+
   const handleUpdateProfile = useCallback(() => {
     navigate("/update-user-profile");
   }, [navigate]);
@@ -162,9 +167,14 @@ const UserProfilePage = () => {
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
             />
-            <button className="crop-image-upload-button" onClick={handleCrop}>
-              {t("userProfile.cropImage")}
-            </button>
+            <div className="cropper-buttons">
+              <Button className="crop-image-upload-button" onClick={handleCrop}>
+                {t("userProfile.cropImage")}
+              </Button>
+              <Button className="cancel-crop-button" onClick={handleCancelCrop}>
+                {t("common.cancel")}
+              </Button>
+            </div>
           </div>
         )}
 

@@ -6,6 +6,7 @@ import "../assets/css/DashBoard.style.css";
 import { useSelector } from "react-redux";
 import News from "../components/News";
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useMediaQuery } from "react-responsive";
 
 const DashBoardPage = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -27,19 +28,30 @@ const DashBoardPage = () => {
     "November",
     "December",
   ];
-
-  const rightContent = (
-    <div className="real-time-container">
-      <News />
-    </div>
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
+  const rightContent = isDesktopOrLaptop ? <News /> : null;
+  const childrenMiddleContentLower = (
+    <>
+      {" "}
+      <div className="chart-info">
+        <h2>{t("common.loanStatistics")}</h2>
+        <p>{t("common.amountBorrowed")}</p>
+        <p>15.000.000 đồng</p>
+        <p>{t("common.totalAmountBorrowedInMonth")}</p>
+        <StatisticalChart data1={data1} data2={data2} labels={labels} />
+      </div>
+    </>
   );
-
   return (
     <>
       <MainLayout
         currentPath={currentPath}
         currentPage={currentPath === "/main-page" ? "Dashboard" : "Page"}
         rightChildren={rightContent}
+        childrenMiddleContentLower={childrenMiddleContentLower}
+        className="dashboard-page"
       >
         <h2>{t("common.welcomeBack", { name: userInfo.fullname })}</h2>
         <p>
@@ -63,13 +75,6 @@ const DashBoardPage = () => {
             title={t("common.totalLoans")}
             amount="15 khoản vay"
           />
-        </div>
-        <div className="chart-info">
-          <h2>{t("common.loanStatistics")}</h2>
-          <p>{t("common.amountBorrowed")}</p>
-          <p>15.000.000 đồng</p>
-          <p>{t("common.totalAmountBorrowedInMonth")}</p>
-          <StatisticalChart data1={data1} data2={data2} labels={labels} />
         </div>
       </MainLayout>
     </>
