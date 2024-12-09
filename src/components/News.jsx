@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 const NewsComponent = () => {
   const { t } = useTranslation();
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
-  const [newsPerPage, setNewsPerPage] = useState(2); // Mặc định hiển thị 2 tin
+  const [newsPerPage, setNewsPerPage] = useState(2); 
 
   const newsList = [
     {
@@ -41,10 +41,10 @@ const NewsComponent = () => {
   useEffect(() => {
     // Cập nhật số lượng tin dựa trên kích thước màn hình
     const updateNewsPerPage = () => {
-      if (window.innerWidth <= 768) {
-        setNewsPerPage(1); // Khi màn hình nhỏ, hiển thị 1 tin
+      if (window.innerWidth <= 769) {
+        setNewsPerPage(1); 
       } else {
-        setNewsPerPage(2); // Khi màn hình lớn, hiển thị 2 tin
+        setNewsPerPage(2); 
       }
     };
 

@@ -1,0 +1,19 @@
+/* src/assets/css/SearchBar.style.css */
+.customer-search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  margin: 20px 0px;
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.customer-search-input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
