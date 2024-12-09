@@ -18,9 +18,10 @@ const ListOfEmployeesPage = () => {
     const fetchData = async () => {
       try {
         const response = await Api({
-          endpoint: `loan-service/employee/by-role/:roleId?filter=[{"key":"email","operator":"equal","value":"22521405@gm.uit.edu.vn"}]&sort=[{"key":"createAt","type":"DESC"}]&rpp=10&page=1`,
+          endpoint: `loan-service/employee/by-role/ADMIN?filter=[{"key":"email","operator":"equal","value":"22521405@gm.uit.edu.vn"}]&sort=[{"key":"createAt","type":"DESC"}]&rpp=10&page=1`,
           method: METHOD_TYPE.GET,
         });
+        console.log("data employ ne",response.data.items);
         if (response.success === true) {
           setData(response.data.items);
         } else {

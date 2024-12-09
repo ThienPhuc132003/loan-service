@@ -204,5 +204,5 @@ nav ul li:hover a {
 }
 
 /* Media query for phones (up to 768px) */
-@media (max-width: 767px) {
+@media (max-width: 768px)  {
 }

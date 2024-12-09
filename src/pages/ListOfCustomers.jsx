@@ -1,8 +1,10 @@
+// src/pages/ListOfCustomers.jsx
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MainLayout from "../components/layout/MainLayout";
 import "../assets/css/ListOfCustomers.style.css";
 import Table from "../components/Table";
+import SearchBar from "../components/SearchBar";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import TotalLoan from "../components/TotalLoan";
@@ -10,6 +12,7 @@ import TotalLoan from "../components/TotalLoan";
 const ListOfCustomersPage = () => {
   const userInfo = useSelector((state) => state.user.userProfile);
   const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const currentPath = "/list-of-customers";
   useEffect(() => {
@@ -29,9 +32,26 @@ const ListOfCustomersPage = () => {
         console.log("An error occurred while fetching data");
       }
     };
-
     fetchData();
   }, []);
+
+  const filteredData = data.filter((item) => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      (item.borrowerId &&
+        item.borrowerId.toLowerCase().includes(searchLower)) ||
+      (item.name && item.name.toLowerCase().includes(searchLower)) ||
+      (item.phoneNumber && item.phoneNumber.includes(searchLower)) ||
+      (item.email && item.email.toLowerCase().includes(searchLower)) ||
+      (item.numberOfContracts &&
+        item.numberOfContracts.toString().includes(searchLower)) ||
+      (item.borrowerProfile.income &&
+        item.borrowerProfile.income.toString().includes(searchLower)) ||
+      (item.borrowerProfile.debtStatus &&
+        item.borrowerProfile.debtStatus.toLowerCase().includes(searchLower)) ||
+      (item.createAt && item.createAt.toLowerCase().includes(searchLower))
+    );
+  });
 
   const columns = [
     { title: "Mã khách hàng", dataKey: "borrowerId" },
@@ -59,7 +79,14 @@ const ListOfCustomersPage = () => {
     <>
       <div className="customers-content">
         <h2>Danh sách khách hàng</h2>
-        <Table columns={columns} data={data} />
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          searchBarClassName="customer-search"
+          searchInputClassName="customer-search-input"
+          placeholder="Tìm kiếm khách hàng"
+        />
+        <Table columns={columns} data={searchQuery ? filteredData : data} />
         <p>Manage your customers here.</p>
       </div>
     </>
@@ -80,12 +107,17 @@ const ListOfCustomersPage = () => {
         <TotalLoan
           cardName="total-amount-borrowed1"
           title="Tổng số khách hàng"
-          amount="100 khách hàng"
+          amount="1 khách hàng"
         />
         <TotalLoan
           cardName="total-amount-borrowed2"
-          title="Tổng số hợp đồng"
-          amount="200 hợp đồng"
+          title="Tổng khách hàng nợ xấu"
+          amount="1 khách hàng"
+        />
+        <TotalLoan
+          cardName="total-amount-borrowed2"
+          title="Tổng khách hàng mới"
+          amount="0 khách hàng"
         />
       </div>
     </MainLayout>
