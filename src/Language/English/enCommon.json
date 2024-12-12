@@ -19,6 +19,8 @@
     "month": "Month",
     "year": "Year",
     "loading": "Loading...",
-    "submit": "Submit"
+    "submit": "Submit",
+    "borrower":"Borrower", 
+    "employee": "Employee"
   }
 }

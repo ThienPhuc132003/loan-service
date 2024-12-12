@@ -42,7 +42,7 @@
   font-size: 12px;
 }
 .row-odd {
-  background-color: #ffffff;
+  background-color: rgba(242, 242, 240, 1);
   text-align: center;
 }
 .row-odd td{

@@ -41,8 +41,8 @@
   padding: 10px 40px;
   border-radius: 20px;
   font-weight: bold;
-  border: 2px solid #272e4f;
   cursor: pointer;
+  border: 2px solid #272e4f;
 }
 
 .change-avatar-button:hover {
@@ -105,7 +105,6 @@
 }
 
 /* Button Styling */
-
 .update-profile-button {
   display: flex;
   background-color: #272e4f;
@@ -146,12 +145,15 @@
   color: #272e4f;
   border: 2px solid #272e4f;
 }
+
 .cropper-buttons {
   position: absolute;
   bottom: 10px;
   right: 10px;
+  display: flex;
   gap: 20px;
 }
+
 .cancel-crop-button {
   padding: 10px 20px;
   border: none;
@@ -161,6 +163,7 @@
   background-color: #ffffff;
   color: #272e4f;
 }
+
 /* Gender Text Styling */
 .gender-text {
   color: #272e4f;
@@ -177,7 +180,20 @@
   display: flex;
   gap: 10px;
 }
+.user-profile-btn-box{
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
 .non-editable {
   background-color: #f0f0f0; /* Light gray background */
   pointer-events: none;
+}@media (max-width: 1024px) {
+  .profile-info-section {
+    padding: 0px 40px; /* Adjust padding for tablet view */
+  }
+  .user-profile-btn-box {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

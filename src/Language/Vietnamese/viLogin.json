@@ -33,7 +33,7 @@
     "passwordNotMatch": "Mật khẩu không trùng khớp",
     "otpSent": "Mã OTP đã được gửi",
     "otpVerified": "Mã OTP đã được xác minh",
-    "passwordChanged": "Mật khẩu đã được thay đổi"
-
+    "passwordChanged": "Mật khẩu đã được thay đổi",
+    "userType": "Loại tài khoản"
   }
 }

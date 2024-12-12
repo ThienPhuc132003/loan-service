@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import {
@@ -28,37 +28,46 @@ ChartJS.register(
 const StatisticalChartComponent = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   const [filter, setFilter] = useState("week");
+  const [maxDataValue, setMaxDataValue] = useState(0);
+  const weeklyData = useMemo(
+    () => ({
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      data1: [12, 19, 3, 5, 2, 3, 7],
+      data2: [2, 3, 20, 5, 1, 4, 9],
+    }),
+    []
+  );
 
-  const weeklyData = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    data1: [12, 19, 3, 5, 2, 3, 7],
-    data2: [2, 3, 20, 5, 1, 4, 9],
-  };
+  const monthlyData = useMemo(
+    () => ({
+      labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+      data1: [65, 59, 80, 81],
+      data2: [28, 48, 40, 19],
+    }),
+    []
+  );
 
-  const monthlyData = {
-    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-    data1: [65, 59, 80, 81],
-    data2: [28, 48, 40, 19],
-  };
-
-  const yearlyData = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
-    data1: [65, 59, 80, 81, 56, 55, 40, 45, 60, 70, 75, 90],
-    data2: [28, 48, 40, 19, 86, 27, 90, 50, 60, 80, 85, 95],
-  };
+  const yearlyData = useMemo(
+    () => ({
+      labels: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+      data1: [65, 59, 80, 81, 56, 55, 40, 45, 60, 70, 75, 90],
+      data2: [28, 48, 40, 19, 86, 27, 90, 50, 60, 80, 85, 95],
+    }),
+    []
+  );
 
   const chartData = {
     labels:
@@ -96,13 +105,22 @@ const StatisticalChartComponent = () => {
       },
     ],
   };
-
+  useEffect(() => {
+    if (filter === "week") {
+      setMaxDataValue(Math.max(...weeklyData.data1, ...weeklyData.data2));
+    } else if (filter === "month") {
+      setMaxDataValue(Math.max(...monthlyData.data1, ...monthlyData.data2));
+    } else {
+      setMaxDataValue(Math.max(...yearlyData.data1, ...yearlyData.data2));
+    }
+  }, [filter, weeklyData, monthlyData, yearlyData, setMaxDataValue]);
+  const suggestedMax = maxDataValue * 1.2;
   const options = {
-
     maintainAspectRatio: false,
     scales: {
       y: {
         beginAtZero: true,
+        suggestedMax: suggestedMax,
       },
     },
     plugins: {

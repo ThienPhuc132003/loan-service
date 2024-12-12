@@ -19,6 +19,8 @@
     "month": "Tháng",
     "year": "Năm",
     "loading": "Đang tải...",
-    "submit": "Gửi"
+    "submit": "Gửi",
+    "borrower": "khách hàng",
+    "employee": "Nhân viên"
   }
 }

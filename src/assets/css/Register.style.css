@@ -37,6 +37,7 @@
   label {
     font-weight: bold;
     margin-bottom: 5px;
+    font-size: 14px;
   }
   .name-birth {
     display: flex;

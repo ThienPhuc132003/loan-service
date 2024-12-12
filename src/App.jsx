@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import PrivateRoutes from "./route/PrivateRoutes";
 import OtpProtectedRoute from "./route/OtpProtectedRoute";
+import RoleRoute from "./route/RoleRoute";
 const Login = lazy(() => import("./pages/Login"));
 const DashBoard = lazy(() => import("./pages/DashBoard"));
 const Register = lazy(() => import("./pages/Register"));
@@ -36,10 +37,12 @@ function App() {
             <Route path="main-page" element={<DashBoard />} />
             <Route path="user-profile" element={<UserProfile />} />
             <Route path="update-user-profile" element={<UpdateUserProfile />} />
-            <Route path="list-of-asset-types" element={<ListOfAssetTypes />} />
-            <Route path="list-of-assets" element={<ListOfAssets />} />
-            <Route path="list-of-employees" element={<ListOfEmployeesPage />} />
-            <Route path="list-of-customers" element={<ListOfCustomers />} />
+            <Route element={<RoleRoute />}> 
+            <Route path="quan-ly-loai-tai-san" element={<ListOfAssetTypes />} />
+            <Route path="quan-ly-tai-san" element={<ListOfAssets />} />
+            <Route path="quan-ly-nhan-vien" element={<ListOfEmployeesPage />} />
+            <Route path="quan-ly-khach-hang-vay" element={<ListOfCustomers />} />
+            </Route>
           </Route>
         </Routes>
       </Suspense>

@@ -133,29 +133,30 @@ const UserProfilePage = () => {
           <div className="profile-avatar-section">
             <Avatar src={avatar} alt="User Avatar" className="profile-avatar" />
           </div>
-          <div className="profile-avatar-buttons">
+          <div className="user-profile-btn-box">
+            <div className="profile-avatar-buttons">
+              <Button
+                className="avatar-button change-avatar-button"
+                onClick={() => document.getElementById("fileInput").click()}
+              >
+                {t("userProfile.changeAvatar")}
+              </Button>
+              <input
+                type="file"
+                accept="image/*"
+                id="fileInput"
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+            </div>
             <Button
-              className="avatar-button change-avatar-button"
-              onClick={() => document.getElementById("fileInput").click()}
+              className="update-profile-button"
+              onClick={handleUpdateProfile}
             >
-              {t("userProfile.changeAvatar")}
+              {t("userProfile.updateProfile")}
             </Button>
-            <input
-              type="file"
-              accept="image/*"
-              id="fileInput"
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-            />
           </div>
-          <Button
-            className="update-profile-button"
-            onClick={handleUpdateProfile}
-          >
-            {t("userProfile.updateProfile")}
-          </Button>
         </div>
-
         {showCropper && (
           <div className="cropper-container">
             <Cropper

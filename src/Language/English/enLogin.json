@@ -33,6 +33,7 @@
     "passwordNotMatch": "Passwords do not match",
     "otpSent": "OTP has been sent",
     "otpVerified": "OTP has been verified",
-    "passwordChanged": "Password has been changed"
+    "passwordChanged": "Password has been changed",
+    "userType": "User Type"
   }
 }

@@ -47,7 +47,7 @@ const NotifiButtonComponent = () => {
     setNotifications(updatedNotifications);
   };
 
-  const filteredNotifications = notifications.filter((notification) => {
+  const filteredNotifications = (notifications || []).filter((notification) => {
     if (filter === "all") return true;
     if (filter === "unread") return !notification.seen;
     if (filter === "read") return notification.seen;
