@@ -20,6 +20,7 @@
     "phoneNumbers": "Phone Numbers",
     "addressInfo": "Address Information",
     "homeAddress": "Home Address",
-    "workAddress": "Work Address"
+    "city": "City",
+    "district": "District"
   }
 }

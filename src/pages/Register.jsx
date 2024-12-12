@@ -1,19 +1,21 @@
+// src/pages/Register.jsx
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "../assets/css/Register.style.css";
-import LoginLayout from "../components/layout/LoginLayout";
-import Button from "../components/Button";
-import InputField from "../components/InputField";
-import Api from "../network/Api";
-import { METHOD_TYPE } from "../network/methodType";
+import LoginLayout from "../components/layout/LoginLayout"; // [`LoginLayout`](src/components/layout/LoginLayout.jsx)
+import Button from "../components/Button"; // [`Button`](src/components/Button.jsx)
+import InputField from "../components/InputField"; // [`InputField`](src/components/InputField.jsx)
+import Api from "../network/Api"; // [`Api`](src/network/Api.js)
+import { METHOD_TYPE } from "../network/methodType"; // [`METHOD_TYPE`](src/network/methodType.js)
 import logoFb from "../assets/images/logoFb.png";
 import logoGoogle from "../assets/images/logoGoogle.png";
-import RadioGroup from "../components/Radio";
-import Cookies from "js-cookie";
-import LanguageSelector from "../components/LanguageSelector";
+import RadioGroup from "../components/Radio"; // [`RadioGroup`](src/components/Radio.jsx)
 import ReCAPTCHA from "react-google-recaptcha";
+import Cookies from "js-cookie";
 import { format } from "date-fns";
+import LanguageSelector from "../components/LanguageSelector"; // [`LanguageSelector`](src/components/LanguageSelector.jsx)
+
 function HandleRegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,60 +32,101 @@ function HandleRegisterPage() {
 
   const validateFields = useCallback(() => {
     const errors = {};
-    if (password === "") {
-      errors.password = t("signup.emptyPassword");
-    }
-    if (confirmPassword !== password) {
-      errors.confirmPassword = t("signup.passwordNotMatch");
-    }
-    if (phoneNumber === "") {
-      errors.phoneNumber = t("signup.emptyPhoneNumber");
-    }
-    if (email === "") {
-      errors.email = t("signup.emptyEmail");
-    }
-    if (birthday === "") {
-      errors.birthday = t("signup.emptyBirthday");
-    }
     if (fullName === "") {
       errors.fullName = t("signup.emptyFullName");
+    } else if (fullName.length > 30) {
+      errors.fullName = t("signup.fullNameTooLong");
+    } else if (/[^a-zA-Z\s]/.test(fullName)) {
+      errors.fullName = t("signup.invalidFullName");
+    } else if (/^\s|\s$/.test(fullName)) {
+      errors.fullName = t("signup.fullNameWhitespace");
     }
+
+    if (birthday === "") {
+      errors.birthday = t("signup.emptyBirthday");
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(birthday)) {
+      errors.birthday = t("signup.invalidBirthdayFormat");
+    }
+
+    if (email === "") {
+      errors.email = t("signup.emptyEmail");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = t("signup.invalidEmailFormat");
+    }
+
+    if (phoneNumber === "") {
+      errors.phoneNumber = t("signup.emptyPhoneNumber");
+    } else if (!/^\d{10,11}$/.test(phoneNumber)) {
+      errors.phoneNumber = t("signup.invalidPhoneNumber");
+    }
+
     if (address === "") {
       errors.homeAddress = t("signup.emptyAddress");
     }
-    if (!captchaValue) errors.captcha = t("signup.captchaNotVerified");
+
+    if (gender === "") {
+      errors.gender = t("signup.emptyGender");
+    } else if (!["MALE", "FEMALE"].includes(gender.toUpperCase())) {
+      errors.gender = t("signup.invalidGender");
+    }
+
+    if (password === "") {
+      errors.password = t("signup.emptyPassword");
+    } else if (password.length < 6) {
+      errors.password = t("signup.passwordTooShort");
+    } else if (password.length > 12) {
+      errors.password = t("signup.passwordTooLong");
+    } else if (
+      !/[A-Z]/.test(password) ||
+      !/[a-z]/.test(password) ||
+      !/\d/.test(password) ||
+      !/[!@#$%^&*]/.test(password)
+    ) {
+      errors.password = t("signup.weakPassword");
+    }
+
+    if (confirmPassword === "") {
+      errors.confirmPassword = t("signup.emptyConfirmPassword");
+    } else if (confirmPassword !== password) {
+      errors.confirmPassword = t("signup.passwordMismatch");
+    }
+
+    if (!captchaValue) {
+      errors.captcha = t("common.captchaNotVerified");
+    }
+
     return errors;
   }, [
+    fullName,
+    birthday,
+    email,
+    phoneNumber,
+    address,
+    gender,
     password,
     confirmPassword,
-    phoneNumber,
-    email,
-    birthday,
-    fullName,
-    address,
-    t,
     captchaValue,
+    t,
   ]);
 
   const handleRegister = useCallback(async () => {
     const errors = validateFields();
     setErrorMessages(errors);
     if (Object.keys(errors).length > 0) {
+      // Clear input fields
+      setFullName("");
+      setBirthday("");
+      setEmail("");
+      setPhoneNumber("");
+      setAddress("");
+      setGender("");
+      setPassword("");
+      setConfirmPassword("");
+      setCaptchaValue(null);
       return;
     }
     try {
       const formattedBirthday = format(new Date(birthday), "yyyy-MM-dd");
-      const requestData = {
-        fullname: fullName,
-        birthday: formattedBirthday,
-        email: email,
-        phoneNumber: phoneNumber,
-        homeAddress: address,
-        gender: gender.toUpperCase(),
-        password: password,
-        confirmPassword: confirmPassword,
-      };
-      console.log("Request Data:", requestData);
       const response = await Api({
         endpoint: "loan-service/borrower/register",
         method: METHOD_TYPE.POST,
@@ -96,85 +139,40 @@ function HandleRegisterPage() {
           gender: gender.toUpperCase(),
           password: password,
           confirmPassword: confirmPassword,
-        }, 
+        },
       });
-      const token = response;
-      console.log(response.username);
-      if (token) {
-        Cookies.set("token", token);
+
+      if (response.success) {
+        Cookies.set("token", response.token);
         navigate("/");
+      } else {
+        const serverErrors = response.data || {};
+        const newErrorMessages = {};
+        for (const [field, errorType] of Object.entries(serverErrors)) {
+          if (errorType === "INVALID") {
+            newErrorMessages[field] = t("common.invalidValue");
+          }
+          // Add more error handling as needed
+        }
+        setErrorMessages(newErrorMessages);
       }
     } catch (error) {
-      setErrorMessages({ login: t("signup.error") });
+      setErrorMessages({ login: t("common.requestFailed") });
     }
   }, [
-    password,
-    confirmPassword,
-    phoneNumber,
-    email,
-    birthday,
     fullName,
+    birthday,
+    email,
+    phoneNumber,
     address,
     gender,
+    password,
+    confirmPassword,
     validateFields,
     navigate,
     t,
   ]);
 
-  const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPassword(value);
-    if (errorMessages.password || errorMessages.login) {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        password: "",
-        login: prevErrors.login ? "" : prevErrors.login,
-      }));
-    }
-  };
-
-  const handlePasswordBlur = () => {
-    const errors = validateFields();
-    setErrorMessages((prevErrors) => ({
-      ...prevErrors,
-      password: errors.password || "",
-    }));
-  };
-
-  const handlePasswordFocus = () => {
-    if (password === "") {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        password: t("signup.emptyPassword"),
-      }));
-    }
-  };
-
-  const handleOnkeydown = useCallback(
-    (event, passwordFieldId) => {
-      if (event.key === "Enter") {
-        const passwordField = document.getElementById(passwordFieldId);
-        if (passwordField) {
-          passwordField.focus();
-        } else {
-          handleRegister();
-        }
-      }
-    },
-    [handleRegister]
-  );
-
-  const handleGenderChange = (selectedGender) => {
-    setGender(selectedGender);
-  };
-
-  const handleLogin = () => {
-    navigate("/login");
-  };
-
-  const handleBackPage = () => {
-    navigate("/login");
-  };
   const handleCaptchaChange = (value) => {
     setCaptchaValue(value);
   };
@@ -185,18 +183,18 @@ function HandleRegisterPage() {
         <LoginLayout showLogin={false} showBreadCrumbs={false}>
           <div className="loginFormBox">
             <div id="loginForm" className="loginForm">
-            <div className="language-box">
-              <LanguageSelector />
-            </div>
+              <div className="language-box">
+                <LanguageSelector />
+              </div>
               <h1 className="FormName">{t("signup.title")}</h1>
               <p className="description">{t("signup.subtitle")}</p>
               <div className="other-login">
                 <div className="login-option">
-                  <img src={logoGoogle} alt="User" className="login-img" />
+                  <img src={logoGoogle} alt="Google" className="login-img" />
                   Google
                 </div>
                 <div className="login-option">
-                  <img src={logoFb} alt="User" className="login-img" />
+                  <img src={logoFb} alt="Facebook" className="login-img" />
                   Facebook
                 </div>
               </div>
@@ -206,8 +204,7 @@ function HandleRegisterPage() {
               <div className="name-birth">
                 <div className="field">
                   <label htmlFor="fullName">
-                    {t("signup.fullName")}{" "}
-                    <span style={{ color: "red" }}> *</span>
+                    {t("signup.fullName")} <span style={{ color: "red" }}> *</span>
                   </label>
                   <InputField
                     type="text"
@@ -216,17 +213,14 @@ function HandleRegisterPage() {
                     placeholder={t("signup.fullNamePlaceholder")}
                     errorMessage={errorMessages.fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className={`size-border + ${
-                      errorMessages.fullName || errorMessages.login
-                        ? "error-border"
-                        : "correct-border"
+                    className={`size-border ${
+                      errorMessages.fullName ? "error-border" : "correct-border"
                     }`}
                   />
                 </div>
                 <div className="field">
                   <label htmlFor="birthday">
-                    {t("signup.birthday")}{" "}
-                    <span style={{ color: "red" }}> *</span>
+                    {t("signup.birthday")} <span style={{ color: "red" }}> *</span>
                   </label>
                   <InputField
                     type="date"
@@ -235,10 +229,8 @@ function HandleRegisterPage() {
                     placeholder={t("signup.birthdayPlaceholder")}
                     errorMessage={errorMessages.birthday}
                     onChange={(e) => setBirthday(e.target.value)}
-                    className={`size-border+ ${
-                      errorMessages.birthday || errorMessages.login
-                        ? "error-border"
-                        : "correct-border"
+                    className={`size-border ${
+                      errorMessages.birthday ? "error-border" : "correct-border"
                     }`}
                   />
                 </div>
@@ -255,17 +247,14 @@ function HandleRegisterPage() {
                     placeholder={t("signup.emailPlaceholder")}
                     errorMessage={errorMessages.email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`size-border + ${
-                      errorMessages.email || errorMessages.login
-                        ? "error-border"
-                        : "correct-border"
+                    className={`size-border ${
+                      errorMessages.email ? "error-border" : "correct-border"
                     }`}
                   />
                 </div>
                 <div className="field">
                   <label htmlFor="phoneNumber">
-                    {t("signup.phoneNumber")}{" "}
-                    <span style={{ color: "red" }}> *</span>
+                    {t("signup.phoneNumber")} <span style={{ color: "red" }}> *</span>
                   </label>
                   <InputField
                     type="tel"
@@ -274,10 +263,8 @@ function HandleRegisterPage() {
                     placeholder={t("signup.phoneNumberPlaceholder")}
                     errorMessage={errorMessages.phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
-                    className={`size-border + ${
-                      errorMessages.phoneNumber || errorMessages.login
-                        ? "error-border"
-                        : "correct-border"
+                    className={`size-border ${
+                      errorMessages.phoneNumber ? "error-border" : "correct-border"
                     }`}
                   />
                 </div>
@@ -290,14 +277,11 @@ function HandleRegisterPage() {
                     id="address"
                     value={address}
                     placeholder={t("signup.addressPlaceholder")}
-                    errorMessage={errorMessages.address}
+                    errorMessage={errorMessages.homeAddress}
                     onChange={(e) => setAddress(e.target.value)}
-                    className={`size-border + ${
-                      errorMessages.address || errorMessages.login
-                        ? "error-border"
-                        : "correct-border"
+                    className={`size-border ${
+                      errorMessages.homeAddress ? "error-border" : "correct-border"
                     }`}
-                    onKeyPress={(e) => handleOnkeydown(e, "password")}
                   />
                 </div>
                 <div className="field">
@@ -305,7 +289,8 @@ function HandleRegisterPage() {
                   <RadioGroup
                     options={[t("signup.male"), t("signup.female")]}
                     name="gender"
-                    onChange={handleGenderChange}
+                    onChange={(value) => setGender(value)}
+                    errorMessage={errorMessages.gender}
                   />
                 </div>
               </div>
@@ -318,51 +303,53 @@ function HandleRegisterPage() {
                   id="password"
                   value={password}
                   placeholder={t("signup.passwordPlaceholder")}
-                  errorMessage={errorMessages.password || errorMessages.login}
-                  onBlur={handlePasswordBlur}
-                  onFocus={handlePasswordFocus}
-                  onChange={handlePasswordChange}
-                  className={`size-border + ${
-                    errorMessages.password || errorMessages.login
-                      ? "error-border"
-                      : "correct-border"
+                  errorMessage={errorMessages.password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`size-border ${
+                    errorMessages.password ? "error-border" : "correct-border"
                   }`}
-                  onKeyPress={(e) => handleOnkeydown(e, "captcha")}
                 />
               </div>
-              <InputField
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-                placeholder={t("signup.confirmPasswordPlaceholder")}
-                errorMessage={errorMessages.confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`size-border + ${
-                  errorMessages.confirmPassword || errorMessages.login
-                    ? "error-border"
-                    : "correct-border"
-                }`}
-              />
+              <div className="field">
+                <label htmlFor="confirmPassword">
+                  {t("signup.confirmPassword")} <span style={{ color: "red" }}> *</span>
+                </label>
+                <InputField
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  placeholder={t("signup.confirmPasswordPlaceholder")}
+                  errorMessage={errorMessages.confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className={`size-border ${
+                    errorMessages.confirmPassword ? "error-border" : "correct-border"
+                  }`}
+                />
+              </div>
               <div className="captcha-box">
                 <label htmlFor="captcha" className="captcha-title">
-                  Captcha <span style={{ color: "red" }}> *</span>
+                  {t("signup.captcha")} <span style={{ color: "red" }}> *</span>
                 </label>
                 <ReCAPTCHA
-                  sitekey="6Ldws3QqAAAAAMX5jNVnZPksWQRvMrp06k7uSbqz"
+                  sitekey="your-site-key"
                   onChange={handleCaptchaChange}
                 />
+                <p className="error">{errorMessages.captcha}</p>
               </div>
               <div className="submit-cancel">
                 <Button className="submit" onClick={handleRegister}>
                   {t("signup.button")}
                 </Button>
-                <Button className="cancel" onClick={handleBackPage}>
+                <Button className="cancel" onClick={() => navigate("/login")}>
                   {t("common.cancel")}
                 </Button>
               </div>
               <p className="register">
-                {t("signup.alreadyHaveAccount")}&nbsp;
-                <span className="register-link" onClick={handleLogin}>
+                {t("signup.alreadyHaveAccount")}{" "}
+                <span
+                  className="register-link"
+                  onClick={() => navigate("/login")}
+                >
                   {t("signup.login")}
                 </span>
               </p>

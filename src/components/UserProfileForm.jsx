@@ -15,7 +15,9 @@ const UserProfileFormComponent = ({
   return (
     <div className={`profile-info ${isEditable ? "editable" : "read-only"}`}>
       <div className="profile-info-section">
-        <h2 className="profile-section-title">{t("userProfile.personalInfo")}</h2>
+        <h2 className="profile-section-title">
+          {t("userProfile.personalInfo")}
+        </h2>
         <div className="profile-info-row">
           <div className="profile-info-field">
             <label>{t("userProfile.fullName")}</label>
@@ -46,7 +48,9 @@ const UserProfileFormComponent = ({
               className="profile-input"
               value={userInfo.identifyCardNumber || "N/A"}
               readOnly={!isEditable}
-              onChange={(e) => handleInputChange("identifyCardNumber", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("identifyCardNumber", e.target.value)
+              }
             />
           </div>
           <div className="profile-info-field">
@@ -56,7 +60,9 @@ const UserProfileFormComponent = ({
               className="profile-input"
               value={userInfo.identifyCardIssuedDate || "N/A"}
               readOnly={!isEditable}
-              onChange={(e) => handleInputChange("identifyCardIssuedDate", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("identifyCardIssuedDate", e.target.value)
+              }
             />
           </div>
         </div>
@@ -68,7 +74,9 @@ const UserProfileFormComponent = ({
               className="profile-input"
               value={userInfo.identifyCardIssuedPlace || "N/A"}
               readOnly={!isEditable}
-              onChange={(e) => handleInputChange("identifyCardIssuedPlace", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("identifyCardIssuedPlace", e.target.value)
+              }
             />
           </div>
           <div className="profile-info-field">
@@ -82,7 +90,9 @@ const UserProfileFormComponent = ({
                     value="MALE"
                     checked={userInfo.gender === "MALE"}
                     disabled={!isEditable}
-                    onChange={(e) => handleInputChange("gender", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("gender", e.target.value)
+                    }
                   />
                   {t("userProfile.male")}
                 </label>
@@ -93,20 +103,28 @@ const UserProfileFormComponent = ({
                     value="FEMALE"
                     checked={userInfo.gender === "FEMALE"}
                     disabled={!isEditable}
-                    onChange={(e) => handleInputChange("gender", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("gender", e.target.value)
+                    }
                   />
                   {t("userProfile.female")}
                 </label>
               </div>
             ) : (
-              <span className="gender-text profile-input">{userInfo.gender === "MALE" ? t("userProfile.male") : t("userProfile.female")}</span>
+              <span className="gender-text profile-input">
+                {userInfo.gender === "MALE"
+                  ? t("userProfile.male")
+                  : t("userProfile.female")}
+              </span>
             )}
           </div>
         </div>
       </div>
 
       <div className="profile-info-section">
-        <h2 className="profile-section-title">{t("userProfile.contactInfo")}</h2>
+        <h2 className="profile-section-title">
+          {t("userProfile.contactInfo")}
+        </h2>
         <div className="profile-info-row">
           <div className="profile-info-field">
             <label>{t("userProfile.personalEmail")}</label>
@@ -115,7 +133,9 @@ const UserProfileFormComponent = ({
               className="profile-input"
               value={userInfo.personalEmail || "N/A"}
               readOnly={!isEditable}
-              onChange={(e) => handleInputChange("personalEmail", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("personalEmail", e.target.value)
+              }
             />
           </div>
           <div className="profile-info-field">
@@ -135,37 +155,55 @@ const UserProfileFormComponent = ({
             <InputField
               type="text"
               className={`profile-input ${!isEditable ? "" : "non-editable"}`}
-              value={Array.isArray(userInfo.phoneNumbers) ? userInfo.phoneNumbers.join(", ") : "N/A"}
+              value={
+                Array.isArray(userInfo.phoneNumbers)
+                  ? userInfo.phoneNumbers.join(", ")
+                  : "N/A"
+              }
               readOnly={!isEditable}
-              onChange={(e) => handleInputChange("phoneNumbers", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("phoneNumbers", e.target.value)
+              }
             />
           </div>
         </div>
       </div>
 
       <div className="profile-info-section">
-        <h2 className="profile-section-title">{t("userProfile.addressInfo")}</h2>
+        <h2 className="profile-section-title">
+          {t("userProfile.addressInfo")}
+        </h2>
         <div className="profile-info-row">
           <div className="profile-info-field profile-info-field-full">
             <label>{t("userProfile.homeAddress")}</label>
             <InputField
               type="text"
               className="profile-input"
-              value={userInfo.homeAddress || "N/A"}
+              value={userInfo.homeAddress?.houseNumberWithStreetWithWard || "N/A"}
               readOnly={!isEditable}
-              onChange={(e) => handleInputChange("homeAddress", e.target.value)}
+              onChange={(e) => handleInputChange("homeAddress.houseNumberWithStreetWithWard", e.target.value)}
             />
           </div>
         </div>
         <div className="profile-info-row">
-          <div className="profile-info-field profile-info-field-full">
-            <label>{t("userProfile.workAddress")}</label>
+          <div className="profile-info-field">
+            <label>{t("userProfile.district")}</label>
             <InputField
               type="text"
               className="profile-input"
-              value={userInfo.workAddress || "N/A"}
+              value={userInfo.homeAddress?.district || "N/A"}
               readOnly={!isEditable}
-              onChange={(e) => handleInputChange("workAddress", e.target.value)}
+              onChange={(e) => handleInputChange("homeAddress.district", e.target.value)}
+            />
+          </div>
+          <div className="profile-info-field">
+            <label>{t("userProfile.city")}</label>
+            <InputField
+              type="text"
+              className="profile-input"
+              value={userInfo.homeAddress?.city || "N/A"}
+              readOnly={!isEditable}
+              onChange={(e) => handleInputChange("homeAddress.city", e.target.value)}
             />
           </div>
         </div>

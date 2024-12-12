@@ -22,13 +22,20 @@
   transition: transform 0.3s ease;
   z-index: 100;
 }
-
-.sidebar-hidden .sidebar {
-  transform: translateX(-100%);
+.menu-name {
+  transition: margin-left 0.3s ease;
 }
-
+.sidebar-hidden .sidebar {
+  width: 60px;
+}
+.sidebar-hidden .menu-name {
+  display: none;
+}
+.sidebar-hidden .main-logo {
+  display: none;
+}
 .sidebar-hidden .content-area {
-  margin-left: 0;
+  margin-left: 50px;
 }
 .sidebar .overlay {
   background-color: #969393;
@@ -58,7 +65,7 @@
 }
 
 .sidebar-hidden .toggle-sidebar-btn {
-  left: 10px;
+  left: 70px;
 }
 
 .main-logo {
@@ -77,8 +84,12 @@ nav ul {
 }
 
 nav ul li {
-  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
   font-size: 16px;
+  height: 50px;
+  width: auto;
 }
 
 nav ul li.active {
@@ -187,7 +198,8 @@ nav ul li:hover a {
 .total-amount-borrowed1,
 .total-amount-borrowed2 {
   flex: 1;
-  margin: 10px;
+  margin: 10px 0;
+
 }
 .hight-light {
   color: rgba(255, 94, 58, 1);
@@ -204,5 +216,5 @@ nav ul li:hover a {
 }
 
 /* Media query for phones (up to 768px) */
-@media (max-width: 768px)  {
+@media (max-width: 768px) {
 }

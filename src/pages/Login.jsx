@@ -24,7 +24,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
+  const [userType, setUserType] = useState("borrower");
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
     const savedPassword = localStorage.getItem("password");
@@ -45,7 +45,7 @@ const LoginPage = () => {
     if (password === "") {
       errors.password = t("login.emptyPassword");
     }
-    if (!captchaValue) errors.captcha = t("common.captchaNotVerified");
+    if (captchaValue) errors.captcha = t("common.captchaNotVerified");
     return errors;
   }, [username, password, captchaValue, t]);
 
@@ -57,7 +57,7 @@ const LoginPage = () => {
     }
     try {
       const response = await Api({
-        endpoint: "loan-service/borrower/login",
+        endpoint: `loan-service/${userType}/login`,
         method: METHOD_TYPE.POST,
         data: {
           emailOrPhoneNumber: username,
@@ -65,8 +65,10 @@ const LoginPage = () => {
         },
       });
       const token = response.data.token;
+      const role = userType
       if (token) {
         Cookies.set("token", token);
+        Cookies.set("role", role);
         if (rememberMe) {
           localStorage.setItem("username", username);
           localStorage.setItem("password", password);
@@ -78,17 +80,26 @@ const LoginPage = () => {
         }
 
         const userProfileResponse = await Api({
-          endpoint: "loan-service/borrower/get-profile",
+          endpoint: `loan-service/${userType}/get-profile`,
           method: METHOD_TYPE.GET,
         });
-
+        console.log("tét",userProfileResponse.data);
         dispatch(setUserProfile(userProfileResponse.data));
         navigate("/main-page");
       }
     } catch (error) {
       setErrorMessages({ login: t("login.error") });
     }
-  }, [navigate, username, password, rememberMe, validateFields, t, dispatch]);
+  }, [
+    navigate,
+    username,
+    password,
+    rememberMe,
+    validateFields,
+    t,
+    dispatch,
+    userType,
+  ]);
 
   const handleForgotPassword = useCallback(() => {
     navigate("/forgot-password");
@@ -112,7 +123,7 @@ const LoginPage = () => {
     },
     [errorMessages.username, errorMessages.login]
   );
-
+  const handleUserTypeChange = (e) => setUserType(e.target.value);
   const handlePasswordChange = useCallback(
     (e) => {
       const value = e.target.value;
@@ -197,6 +208,31 @@ const LoginPage = () => {
                 }
               />
             </div>
+            <div className="field">
+              <label>{t("login.userType")}</label>
+              <div className="login-radio-group">
+                <label className="login-radio-option">
+                  <input
+                    type="radio"
+                    name="userType"
+                    value="borrower"
+                    checked={userType === "borrower"}
+                    onChange={handleUserTypeChange}
+                  />
+                  {t("common.borrower")}
+                </label>
+                <label className="login-radio-option">
+                  <input
+                    type="radio"
+                    name="userType"
+                    value="employee"
+                    checked={userType === "employee"}
+                    onChange={handleUserTypeChange}
+                  />
+                  {t("common.employee")}
+                </label>
+              </div>
+            </div>
             <div className="captcha-box">
               <label htmlFor="captcha" className="captcha-title">
                 Captcha<span style={{ color: "red" }}> *</span>
@@ -238,5 +274,5 @@ const LoginPage = () => {
     </div>
   );
 };
-const Login = React.memo(LoginPage)
+const Login = React.memo(LoginPage);
 export default Login;

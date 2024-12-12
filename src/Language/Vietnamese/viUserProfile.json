@@ -20,6 +20,8 @@
     "phoneNumbers": "Số điện thoại",
     "addressInfo": "Địa chỉ",
     "homeAddress": "Địa chỉ nhà",
-    "workAddress": "Địa chỉ nơi làm việc"
+    "workAddress": "Địa chỉ nơi làm việc",
+    "city": "Tỉnh/Thành phố",
+    "district": "Quận/Huyện"
   }
 }

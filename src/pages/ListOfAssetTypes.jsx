@@ -1,8 +1,10 @@
+// src/pages/ListOfAssetTypes.jsx
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import MainLayout from "../components/layout/MainLayout";
 import "../assets/css/ListOfAssetTypes.style.css";
 import Table from "../components/Table";
+import SearchBar from "../components/SearchBar";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import TotalLoan from "../components/TotalLoan";
@@ -10,6 +12,7 @@ import TotalLoan from "../components/TotalLoan";
 const ListOfAssetTypesPage = () => {
   const userInfo = useSelector((state) => state.user.userProfile);
   const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const currentPath = "/list-of-asset-types";
   useEffect(() => {
@@ -32,6 +35,17 @@ const ListOfAssetTypesPage = () => {
     fetchData();
   }, []);
 
+  const filteredData = data.filter((item) => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      (item.assetTypeId &&
+        item.assetTypeId.toLowerCase().includes(searchLower)) ||
+      (item.assetTypeName &&
+        item.assetTypeName.toLowerCase().includes(searchLower)) ||
+      (item.status && item.status.toLowerCase().includes(searchLower))
+    );
+  });
+
   const columns = [
     { title: "Mã loại tài sản", dataKey: "assetTypeId" },
     { title: "Tên loại tài sản", dataKey: "assetTypeName" },
@@ -46,15 +60,24 @@ const ListOfAssetTypesPage = () => {
         ),
     },
   ];
+
   const childrenMiddleContentLower = (
     <>
       <div className="asset-types-content">
         <h2>Danh sách loại tài sản</h2>
-        <Table columns={columns} data={data} />
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          searchBarClassName="asset-type-search"
+          searchInputClassName="asset-type-search-input"
+          placeholder="Tìm kiếm loại tài sản"
+        />
+        <Table columns={columns} data={searchQuery ? filteredData : data} />
         <p>Manage your loans here.</p>
       </div>
     </>
   );
+
   return (
     <MainLayout
       currentPath={currentPath}
@@ -86,5 +109,5 @@ const ListOfAssetTypesPage = () => {
     </MainLayout>
   );
 };
-
-export default React.memo(ListOfAssetTypesPage);
+const ListOfAssetTypes = React.memo(ListOfAssetTypesPage);
+export default ListOfAssetTypes;

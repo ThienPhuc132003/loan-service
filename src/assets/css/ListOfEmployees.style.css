@@ -1,6 +1,7 @@
 .employees-loan-box {
   display: flex;
   width: 1031px;
+  gap: 15px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
