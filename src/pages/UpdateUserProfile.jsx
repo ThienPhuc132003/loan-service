@@ -16,11 +16,10 @@ import "../assets/css/UpdateUserProfile.style.css";
 
 const UpdateUserProfilePage = () => {
   const { t } = useTranslation();
+  const [croppedFile, setCroppedFile] = useState(null);
   const userInfo = useSelector((state) => state.user.userProfile);
   const [updatedData, setUpdatedData] = useState({});
-  const [avatar, setAvatar] = useState(
-    userInfo?.avatar || "default-avatar.png"
-  );
+  const [avatar, setAvatar] = useState(userInfo?.avatar || "default-avatar.png");
   const [imageSrc, setImageSrc] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -48,66 +47,22 @@ const UpdateUserProfilePage = () => {
     }
   };
 
-  const onCropComplete = useCallback((_, croppedAreaPixels) => {
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
   const handleCrop = async () => {
     try {
-      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
+      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels, zoom);
       if (croppedImage) {
-        await handleUploadSuccess(croppedImage);
+        setAvatar(URL.createObjectURL(croppedImage));
+        setCroppedFile(croppedImage); 
+        setShowCropper(false);
       }
     } catch (error) {
       console.error("Failed to crop image:", error);
     }
   };
-
-  const handleUploadSuccess = useCallback(
-    async (croppedFile) => {
-      try {
-        if (!(croppedFile instanceof Blob)) {
-          throw new Error("Invalid file format. Must be an image file.");
-        }
-
-        const avatarResponse = await Api({
-          endpoint:
-            "media-service/media/media-url?mediaCategory=borrower_avatar",
-          method: METHOD_TYPE.GET,
-        });
-
-        if (avatarResponse.code === 200) {
-          const fileName = avatarResponse.data.fileName;
-          const formData = new FormData();
-          formData.append("file", croppedFile);
-
-          const upLoadResponse = await Api({
-            endpoint: `media-service/media/upload-media?mediaCategory=borrower_avatar&fileName=${fileName}`,
-            method: METHOD_TYPE.POST,
-            data: formData,
-            isFormData: true,
-          });
-
-          if (upLoadResponse.success === true) {
-            const pushAvatarToServer = await Api({
-              endpoint: `loan-service/borrower/update-profile`,
-              method: METHOD_TYPE.PUT,
-              data: { avatar: upLoadResponse.data.mediaUrl },
-            });
-            dispatch(setUserProfile(pushAvatarToServer.data));
-            setAvatar(pushAvatarToServer.data.avatar);
-          } else {
-            console.error("Upload failed:", upLoadResponse);
-          }
-        }
-      } catch (error) {
-        console.error("Error uploading image:", error.message);
-      } finally {
-        setShowCropper(false);
-      }
-    },
-    [dispatch]
-  );
 
   const handleCancelCrop = () => {
     setShowCropper(false);
@@ -116,23 +71,44 @@ const UpdateUserProfilePage = () => {
 
   const handleSubmit = useCallback(async () => {
     try {
-      const dataToUpdate = {
-        ...updatedData,
-        avatar,
-      };
-
+      if (croppedFile) {
+        const avatarResponse = await Api({
+          endpoint: "media-service/media/media-url?mediaCategory=borrower_avatar",
+          method: METHOD_TYPE.GET,
+        });
+  
+        if (avatarResponse.code === 200) {
+          const fileName = avatarResponse.data.fileName;
+          const formData = new FormData();
+          formData.append("file", croppedFile);
+  
+          const upLoadResponse = await Api({
+            endpoint: `media-service/media/upload-media?mediaCategory=borrower_avatar&fileName=${fileName}`,
+            method: METHOD_TYPE.POST,
+            data: formData,
+            isFormData: true,
+          });
+  
+          if (upLoadResponse.success === true) {
+            updatedData.avatar = upLoadResponse.data.mediaUrl;
+          } else {
+            console.error("Upload failed:", upLoadResponse);
+          }
+        }
+      }
+  
       const response = await Api({
         endpoint: "loan-service/borrower/update-profile",
         method: METHOD_TYPE.PUT,
-        data: dataToUpdate,
+        data: updatedData,
       });
-      console.log("Update successful:", response);
+  
       dispatch(setUserProfile(response.data));
       navigate("/user-profile");
     } catch (error) {
       console.error("Update failed:", error);
     }
-  }, [updatedData, avatar, navigate, dispatch]);
+  }, [updatedData, croppedFile, navigate, dispatch]);
 
   if (!userInfo) {
     return <div>{t("common.loading")}</div>;

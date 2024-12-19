@@ -7,18 +7,18 @@ import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import TotalLoan from "../components/TotalLoan";
 import EmployeeModal from "../components/EmployeeForm";
-import { useSelector } from "react-redux";
-
+import { formatInTimeZone } from "date-fns-tz";
+import { useTranslation } from "react-i18next";
 const ListOfEmployeesPage = () => {
-  const userInfo = useSelector((state) => state.user.userProfile);
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [modalData, setModalData] = useState(null); 
-  const [modalMode, setModalMode] = useState(null); 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [modalData, setModalData] = useState(null);
+  const [modalMode, setModalMode] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const roleId = "ADMIN";
 
-  const currentPath = "/list-of-employees";
+  const { i18n } = useTranslation();
+  const currentPath = "/employee-management";
 
   // Fetch data
   useEffect(() => {
@@ -57,7 +57,6 @@ const ListOfEmployeesPage = () => {
       (item.createAt && item.createAt.toLowerCase().includes(searchLower))
     );
   });
-
   // Table columns
   const columns = [
     { title: "Mã nhân viên", dataKey: "employeeId" },
@@ -75,7 +74,19 @@ const ListOfEmployeesPage = () => {
           <span className="status unactive">Available</span>
         ),
     },
-    { title: "Ngày lập", dataKey: "createAt" },
+    {
+      title: "Ngày lập",
+      dataKey: "createAt",
+      renderCell: (value) => {
+        const timeZone =
+          i18n.language === "vi" ? "Asia/Ho_Chi_Minh" : "America/New_York";
+        return formatInTimeZone(
+          new Date(value),
+          timeZone,
+          "yyyy-MM-dd HH:mm:ssXXX"
+        );
+      },
+    },
     { title: "Người lập", dataKey: "createBy" },
   ];
 
@@ -139,11 +150,6 @@ const ListOfEmployeesPage = () => {
       currentPage="Employee Management"
       childrenMiddleContentLower={childrenMiddleContentLower}
     >
-      <h2>Chào mừng quay lại, {userInfo.fullname}</h2>
-      <p>
-        bạn có một khoản vay <span className="highlight">10.000.000 đồng</span>{" "}
-        cần thanh toán vào ngày <span className="highlight">dd/mm/yy</span>
-      </p>
       <div className="employees-loan-box">
         <TotalLoan
           cardName="total-amount-borrowed1"
@@ -166,7 +172,11 @@ const ListOfEmployeesPage = () => {
       {isModalOpen && (
         <EmployeeModal
           mode={modalMode}
-          employeeId={modalMode === "view" || modalMode === "edit" ? modalData.employeeId : null}
+          employeeId={
+            modalMode === "view" || modalMode === "edit"
+              ? modalData.employeeId
+              : null
+          }
           onClose={handleCloseModal}
           onSave={handleSave}
         />

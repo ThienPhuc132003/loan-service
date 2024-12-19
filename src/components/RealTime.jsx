@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import PropTypes from "prop-types";
-import "../assets/css/RealTime.style.css";
 
 const RealTimeComponent = ({
   dateFormat = "EEEE, dd/MM/yyyy",
@@ -25,7 +24,7 @@ const RealTimeComponent = ({
   return (
     <div className="realtime-container">
       <i className="fa-solid fa-calendar-day fa-2xl"></i>
-      <div>
+      <div className="realtime-content">
         <span className="realtime-day">{format(currentTime, dateFormat)}</span>
         <span className="realtime-time">{format(currentTime, timeFormat)}</span>
       </div>
