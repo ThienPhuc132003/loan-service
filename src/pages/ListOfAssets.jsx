@@ -1,6 +1,5 @@
 // src/pages/ListOfAssets.jsx
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import MainLayout from "../components/layout/MainLayout";
 import "../assets/css/ListOfAssets.style.css";
 import Table from "../components/Table";
@@ -10,11 +9,10 @@ import { METHOD_TYPE } from "../network/methodType";
 import TotalLoan from "../components/TotalLoan";
 
 const ListOfAssetsPage = () => {
-  const userInfo = useSelector((state) => state.user.userProfile);
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const currentPath = "/list-of-assets";
+  const currentPath = "/asset-management";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,11 +83,6 @@ const ListOfAssetsPage = () => {
       currentPage="Loan Management"
       childrenMiddleContentLower={childrenMiddleContentLower}
     >
-      <h2>Chào mừng quay lại, {userInfo.fullname}</h2>
-      <p>
-        bạn có một khoản vay <span className="highlight">10.000.000 đồng</span>{" "}
-        cần thanh toán vào ngày <span className="highlight">dd/mm/yy</span>
-      </p>
       <div className="assets-loan-box">
         <TotalLoan
           cardName="total-amount-borrowed1"

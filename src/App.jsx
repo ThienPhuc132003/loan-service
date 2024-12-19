@@ -38,10 +38,10 @@ function App() {
             <Route path="user-profile" element={<UserProfile />} />
             <Route path="update-user-profile" element={<UpdateUserProfile />} />
             <Route element={<RoleRoute />}> 
-            <Route path="quan-ly-loai-tai-san" element={<ListOfAssetTypes />} />
-            <Route path="quan-ly-tai-san" element={<ListOfAssets />} />
-            <Route path="quan-ly-nhan-vien" element={<ListOfEmployeesPage />} />
-            <Route path="quan-ly-khach-hang-vay" element={<ListOfCustomers />} />
+            <Route path="asset-type-management" element={<ListOfAssetTypes />} />
+            <Route path="asset-management" element={<ListOfAssets />} />
+            <Route path="employee-management" element={<ListOfEmployeesPage />} />
+            <Route path="borrower-management" element={<ListOfCustomers />} />
             </Route>
           </Route>
         </Routes>

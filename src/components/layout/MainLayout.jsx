@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +6,6 @@ import "../../assets/css/MainLayout.style.css";
 import UserAccountToolbar from "./UserAccountToolbar";
 import RealTime from "../RealTime";
 import { fetchMenuData } from "../../redux/menuSlice";
-import { fullMenuData } from "../../assets/data/FullMenuData";
 import { useTranslation } from "react-i18next";
 import { setSidebarVisibility, toggleSidebar } from "../../redux/uiSlice";
 import Cookies from "js-cookie";
@@ -21,13 +20,15 @@ const MainLayoutComponent = (props) => {
     currentPage,
   } = props;
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const menuData = useSelector((state) => state.menu.data);
   const menuStatus = useSelector((state) => state.menu.status);
   const isSidebarVisible = useSelector((state) => state.ui.isSidebarVisible);
   const location = useLocation();
   const role = Cookies.get("role");
+
+  const [openMenus, setOpenMenus] = useState({});
 
   useEffect(() => {
     const handleResize = () => {
@@ -56,8 +57,52 @@ const MainLayoutComponent = (props) => {
     }
   }, [menuStatus, dispatch]);
 
-  const menuItems = fullMenuData.filter((item) => menuData.includes(item.key));
+  const handleMenuClick = (menuName) => {
+    setOpenMenus((prevOpenMenus) => ({
+      ...prevOpenMenus,
+      [menuName]: !prevOpenMenus[menuName],
+    }));
+  };
 
+  const renderMenuItems = (items) => {
+    return items.map((item) => {
+      const itemName = i18n.language === "en" ? item.name_en : item.name_vn;
+      const itemPath = item.name_en.toLowerCase().replace(/ /g, "-");
+      const isActive = location.pathname.includes(itemPath);
+
+      if (item.children && item.isCollapsed) {
+        return (
+          <React.Fragment key={item.name_en}>
+            <li
+              key={item.name_en}
+              className={`menu-item ${isActive ? "active" : ""}`}
+              onClick={() => handleMenuClick(item.name_en)}
+            >
+              <a className="menu-item">
+                <img src={item.icon} alt={itemName} className="menu-icon" />
+                <p className="menu-name">{itemName}</p>
+              </a>
+            </li>
+            {openMenus[item.name_en] && (
+              <ul className="submenu">{renderMenuItems(item.children)}</ul>
+            )}
+          </React.Fragment>
+        );
+      }
+
+      return (
+        <li
+          key={item.name_en}
+          className={`menu-item ${isActive ? "active" : ""}`}
+        >
+          <Link to={`/${itemPath}`}>
+            <img src={item.icon} alt={itemName} className="menu-icon" />
+            <p className="menu-name">{itemName}</p>
+          </Link>
+        </li>
+      );
+    });
+  };
   return (
     <div className={`main-layout ${isSidebarVisible ? "" : "sidebar-hidden"}`}>
       {/* Sidebar */}
@@ -71,93 +116,11 @@ const MainLayoutComponent = (props) => {
                 <p className="menu-name">{t("menu.dashboard")}</p>
               </Link>
             </li>
-            <li className={currentPath === "/about" ? "active" : ""}>
-              <Link to="/about">
-                <i className="fa-solid fa-chart-simple"></i>{" "}
-                <p className="menu-name">{t("menu.statistics")}</p>
-              </Link>
-            </li>
-            <li className={currentPath === "/services" ? "active" : ""}>
-              <Link to="/services">
-                <i className="fa-regular fa-calendar"></i>{" "}
-                <p className="menu-name">{t("menu.schedule")}</p>
-              </Link>
-            </li>
-            <li className={currentPath === "/contact" ? "active" : ""}>
-              <Link to="/contact">
-                <i className="fa-regular fa-message"></i>{" "}
-                <p className="menu-name">{t("menu.messages")}</p>
-              </Link>
-            </li>
-            {/* {role === "borrower" && (
-              <>
-                <li
-                  className={
-                    currentPath === "/list-of-asset-types" ? "active" : ""
-                  }
-                >
-                  <Link to="/list-of-asset-types">
-                    <i className="fa-solid fa-coins"></i>{" "}
-                    <p className="menu-name">
-                      {t("menu.assetTypes") + "(test)"}
-                    </p>
-                  </Link>
-                </li>
-                <li
-                  className={currentPath === "/list-of-assets" ? "active" : ""}
-                >
-                  <Link to="/list-of-assets">
-                    <i className="fa-solid fa-coins"></i>{" "}
-                    <p className="menu-name">{t("menu.assets") + "(test)"}</p>
-                  </Link>
-                </li>
-                <li
-                  className={
-                    currentPath === "/list-of-employees" ? "active" : ""
-                  }
-                >
-                  <Link to="/list-of-employees">
-                    <i className="fa-solid fa-users"></i>{" "}
-                    <p className="menu-name">
-                      {t("menu.employees") + "(test)"}
-                    </p>
-                  </Link>
-                </li>
-                <li
-                  className={
-                    currentPath === "/list-of-customers" ? "active" : ""
-                  }
-                >
-                  <Link to="/list-of-customers">
-                    <i className="fa-solid fa-users"></i>{" "}
-                    <p className="menu-name">
-                      {t("menu.customers") + "(test)"}
-                    </p>
-                  </Link>
-                </li>
-              </>
-            )} */}
           </ul>
         </nav>
         <hr className="main-layout-divider" />
         <nav className="secondary-navigation">
-          <ul>
-            {role === "employee" && (
-              <>
-                {menuItems.map((item) => (
-                  <li key={item.key} className="menu-item">
-                    <Link to={`/${item.key.toLowerCase().replace(/_/g, '-')}`}>
-                      <i className={`fa ${item.icon}`}></i>{" "}
-                      <p className="menu-name">
-                        {" "}
-                        {t(`menu.${item.key.toLowerCase()}`)}
-                      </p>
-                    </Link>
-                  </li>
-                ))}
-              </>
-            )}
-          </ul>
+          <ul>{role === "employee" && renderMenuItems(menuData)}</ul>
         </nav>
         <RealTime />
       </div>

@@ -23,7 +23,15 @@
   width: 320px;
   overflow: hidden;
   margin-top: 10px;
-  z-index: 1;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.notifi-dropdown-menu.open {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Header with mark as read/unread buttons */
@@ -117,7 +125,6 @@
 
 .notifi-dropdown-item.unread {
   background-color: #e9f0fc;
-
 }
 
 /* Notification icon styling */
@@ -165,4 +172,15 @@
   background-color: red;
   border-radius: 50%;
   margin-left: 10px;
+}
+.notifi-dropdown-content {
+  max-height: 400px; /* Adjust the height as needed */
+  overflow-y: auto;
+}
+
+.loading {
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #888;
 }
