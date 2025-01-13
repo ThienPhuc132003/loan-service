@@ -20,7 +20,12 @@
     "year": "Year",
     "loading": "Loading...",
     "submit": "Submit",
-    "borrower":"Borrower", 
-    "employee": "Employee"
+    "borrower": "Borrower",
+    "employee": "Employee",
+    "createdAt": "Created at",
+    "createdBy": "Created by",
+    "save": "Save",
+    "close": "Close",
+    "actions": "Actions"
   }
 }

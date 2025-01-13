@@ -17,12 +17,15 @@ import { useTranslation } from "react-i18next";
 const UserProfilePage = () => {
   const { t } = useTranslation();
   const userInfo = useSelector((state) => state.user.userProfile);
-  const [avatar, setAvatar] = useState(userInfo?.avatar || "default-avatar.png");
+  const [avatar, setAvatar] = useState(
+    userInfo?.avatar || "default-avatar.png"
+  );
   const [showCropper, setShowCropper] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [originalFile, setOriginalFile] = useState(null);
   const currentPath = "/user-profile";
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,6 +37,7 @@ const UserProfilePage = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setOriginalFile(file);
       const reader = new FileReader();
       reader.onload = () => {
         setImageSrc(reader.result);
@@ -45,7 +49,11 @@ const UserProfilePage = () => {
 
   const handleCrop = async () => {
     try {
-      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels, zoom);
+      const croppedImage = await getCroppedImg(
+        imageSrc,
+        croppedAreaPixels,
+        originalFile
+      );
       if (croppedImage) {
         await handleUploadSuccess(croppedImage);
       }
@@ -54,47 +62,51 @@ const UserProfilePage = () => {
     }
   };
 
-  const handleUploadSuccess = useCallback(async (croppedFile) => {
-    try {
-      if (!(croppedFile instanceof Blob)) {
-        throw new Error("Invalid file format. Must be an image file.");
-      }
+  const handleUploadSuccess = useCallback(
+    async (croppedFile) => {
+      try {
+        if (!(croppedFile instanceof Blob)) {
+          throw new Error("Invalid file format. Must be an image file.");
+        }
 
-      const avatarResponse = await Api({
-        endpoint: "media-service/media/media-url?mediaCategory=borrower_avatar",
-        method: METHOD_TYPE.GET,
-      });
-
-      if (avatarResponse.code === 200) {
-        const fileName = avatarResponse.data.fileName;
-        const formData = new FormData();
-        formData.append("file", croppedFile);
-
-        const upLoadResponse = await Api({
-          endpoint: `media-service/media/upload-media?mediaCategory=borrower_avatar&fileName=${fileName}`,
-          method: METHOD_TYPE.POST,
-          data: formData,
-          isFormData: true,
+        const avatarResponse = await Api({
+          endpoint:
+            "media-service/media/media-url?mediaCategory=borrower_avatar",
+          method: METHOD_TYPE.GET,
         });
 
-        if (upLoadResponse.success === true) {
-          const pushAvatarToServer = await Api({
-            endpoint: `loan-service/borrower/update-profile`,
-            method: METHOD_TYPE.PUT,
-            data: { avatar: upLoadResponse.data.mediaUrl },
+        if (avatarResponse.code === 200) {
+          const fileName = avatarResponse.data.fileName;
+          const formData = new FormData();
+          formData.append("file", croppedFile);
+
+          const upLoadResponse = await Api({
+            endpoint: `media-service/media/upload-media?mediaCategory=borrower_avatar&fileName=${fileName}`,
+            method: METHOD_TYPE.POST,
+            data: formData,
+            isFormData: true,
           });
-          dispatch(setUserProfile(pushAvatarToServer.data));
-          setAvatar(pushAvatarToServer.data.avatar);
-        } else {
-          console.error("Upload failed:", upLoadResponse);
+
+          if (upLoadResponse.success === true) {
+            const pushAvatarToServer = await Api({
+              endpoint: `loan-service/borrower/update-profile`,
+              method: METHOD_TYPE.PUT,
+              data: { avatar: upLoadResponse.data.mediaUrl },
+            });
+            dispatch(setUserProfile(pushAvatarToServer.data));
+            setAvatar(pushAvatarToServer.data.avatar);
+          } else {
+            console.error("Upload failed:", upLoadResponse);
+          }
         }
+      } catch (error) {
+        console.error("Error uploading image:", error.message);
+      } finally {
+        setShowCropper(false);
       }
-    } catch (error) {
-      console.error("Error uploading image:", error.message);
-    } finally {
-      setShowCropper(false);
-    }
-  }, [dispatch]);
+    },
+    [dispatch]
+  );
 
   const handleCancelCrop = () => {
     setShowCropper(false);

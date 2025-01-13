@@ -1,96 +1,119 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import MainLayout from "../components/layout/MainLayout";
 import "../assets/css/ListOfEmployees.style.css";
 import Table from "../components/Table";
 import SearchBar from "../components/SearchBar";
+import FilterButton from "../components/FilterButton";
 import Api from "../network/Api";
 import { METHOD_TYPE } from "../network/methodType";
 import TotalLoan from "../components/TotalLoan";
-import EmployeeModal from "../components/EmployeeForm";
+import EmployeeForm from "../components/EmployeeForm";
 import { formatInTimeZone } from "date-fns-tz";
 import { useTranslation } from "react-i18next";
+import Modal from "../components/Modal";
+
 const ListOfEmployeesPage = () => {
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterValues, setFilterValues] = useState({});
   const [modalData, setModalData] = useState(null);
   const [modalMode, setModalMode] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [currentStatus, setCurrentStatus] = useState("ACTIVE");
+  const itemsPerPage = 5;
   const roleId = "ADMIN";
-
-  const { i18n } = useTranslation();
   const currentPath = "/employee-management";
 
-  // Fetch data
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = useCallback(
+    async (filter = []) => {
       try {
-        const response = await Api({
-          endpoint: `loan-service/employee/by-role/ADMIN?filter=[{"key":"email","operator":"equal","value":"22521405@gm.uit.edu.vn"}]&sort=[{"key":"createAt","type":"DESC"}]&rpp=10&page=1`,
-          method: METHOD_TYPE.GET,
+        const query = {
+          rpp: itemsPerPage,
+          page: currentPage + 1,
+        };
+
+        if (searchQuery) {
+          filter.push({
+            key: "employeeId",
+            operator: "like",
+            value: searchQuery,
+          });
+        }
+
+        Object.keys(filterValues).forEach((key) => {
+          if (filterValues[key]) {
+            filter.push({
+              key,
+              operator: "like",
+              value: filterValues[key],
+            });
+          }
         });
+        if (filter.length) {
+          query.filter = JSON.stringify(filter);
+        }
+        console.log("Query:", query.filter);
+
+        const response = await Api({
+          endpoint: "loan-service/employee/search",
+          method: METHOD_TYPE.GET,
+          query,
+        });
+
         if (response.success === true) {
           setData(response.data.items);
+          setTotalItems(response.data.total);
         } else {
           console.log("Failed to fetch data");
         }
       } catch (error) {
         console.log("An error occurred while fetching data");
       }
-    };
+    },
+    [currentPage, itemsPerPage, searchQuery, filterValues]
+  );
 
+  useEffect(() => {
     fetchData();
-  }, [roleId]);
+  }, [roleId, currentPage, fetchData]);
 
-  // Search filter
-  const filteredData = data.filter((item) => {
-    const searchLower = searchQuery.toLowerCase();
-    return (
-      (item.employeeId &&
-        item.employeeId.toLowerCase().includes(searchLower)) ||
-      (item.employeeProfile.fullname &&
-        item.employeeProfile.fullname.toLowerCase().includes(searchLower)) ||
-      (item.phoneNumber && item.phoneNumber.includes(searchLower)) ||
-      (item.email && item.email.toLowerCase().includes(searchLower)) ||
-      (item.employeeProfile.identifyCardNumber &&
-        item.employeeProfile.identifyCardNumber.includes(searchLower)) ||
-      (item.status && item.status.toLowerCase().includes(searchLower)) ||
-      (item.createAt && item.createAt.toLowerCase().includes(searchLower))
-    );
-  });
-  // Table columns
-  const columns = [
-    { title: "Mã nhân viên", dataKey: "employeeId" },
-    { title: "Tên nhân viên", dataKey: "employeeProfile.fullname" },
-    { title: "Số điện thoại", dataKey: "phoneNumber" },
-    { title: "Email", dataKey: "email" },
-    { title: "CCCD", dataKey: "employeeProfile.identifyCardNumber" },
-    {
-      title: "Trạng thái",
-      dataKey: "status",
-      renderCell: (value) =>
-        value === "ACTIVE" ? (
-          <span className="status active">Đang hoạt động</span>
-        ) : (
-          <span className="status unactive">Available</span>
-        ),
-    },
-    {
-      title: "Ngày lập",
-      dataKey: "createAt",
-      renderCell: (value) => {
-        const timeZone =
-          i18n.language === "vi" ? "Asia/Ho_Chi_Minh" : "America/New_York";
-        return formatInTimeZone(
-          new Date(value),
-          timeZone,
-          "yyyy-MM-dd HH:mm:ssXXX"
-        );
-      },
-    },
-    { title: "Người lập", dataKey: "createBy" },
-  ];
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected);
+  };
 
-  // Handlers for table actions
+  const handleApplyFilter = (values) => {
+    setFilterValues(values);
+    fetchData();
+  };
+
+  const handleDelete = async (employeeId) => {
+    if (window.confirm(t("employee.confirmDelete"))) {
+      try {
+        const response = await Api({
+          endpoint: `loan-service/employee/${employeeId}`,
+          method: METHOD_TYPE.DELETE,
+        });
+
+        if (response.success) {
+          fetchData(); // Refresh the data after deletion
+        } else {
+          console.log("Failed to delete employee");
+        }
+      } catch (error) {
+        console.log("An error occurred while deleting employee");
+      }
+    }
+  };
+
+  const handleAddEmployee = () => {
+    setModalMode("add");
+    setModalData(null);
+    setIsModalOpen(true);
+  };
+
   const handleView = (employee) => {
     setModalData(employee);
     setModalMode("view");
@@ -103,12 +126,6 @@ const ListOfEmployeesPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (employee) => {
-    if (window.confirm("Bạn có chắc muốn xóa nhân viên này?")) {
-      console.log("Deleting employee:", employee);
-    }
-  };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setModalData(null);
@@ -116,30 +133,120 @@ const ListOfEmployeesPage = () => {
   };
 
   const handleSave = () => {
-    console.log("Saved successfully!");
+    fetchData(); // Refresh the data after saving
     setIsModalOpen(false);
     setModalData(null);
     setModalMode(null);
   };
 
+  const pageCount = Math.ceil(totalItems / itemsPerPage);
+
+  const activeEmployees = data.filter(
+    (employee) => employee.status === "ACTIVE"
+  );
+  const inactiveEmployees = data.filter(
+    (employee) => employee.status === "INACTIVE"
+  );
+
+  const fields = [
+    { key: "employeeId", label: t("employee.id") },
+    { key: "employeeProfile.fullname", label: t("employee.name") },
+    { key: "phoneNumber", label: t("employee.phone") },
+    { key: "email", label: t("employee.email") },
+    { key: "employeeProfile.identifyCardNumber", label: t("employee.idCard") },
+    { key: "createAt", label: t("common.createdAt") },
+    { key: "createBy", label: t("common.createdBy") },
+  ];
+
+  const columns = [
+    { title: t("employee.id"), dataKey: "employeeId" },
+    { title: t("employee.name"), dataKey: "employeeProfile.fullname" },
+    { title: t("employee.phone"), dataKey: "phoneNumber" },
+    { title: t("employee.email"), dataKey: "email" },
+    {
+      title: t("employee.idCard"),
+      dataKey: "employeeProfile.identifyCardNumber",
+    },
+    {
+      title: t("common.createdAt"),
+      dataKey: "createAt",
+      renderCell: (value) => {
+        const timeZone =
+          i18n.language === "vi" ? "Asia/Ho_Chi_Minh" : "America/New_York";
+        return formatInTimeZone(
+          new Date(value),
+          timeZone,
+          "yyyy-MM-dd HH:mm:ssXXX"
+        );
+      },
+    },
+    { title: t("common.createdBy"), dataKey: "createBy" },
+  ];
+
   const childrenMiddleContentLower = (
     <>
       <div className="employees-content">
-        <h2>Danh sách nhân viên</h2>
-        <SearchBar
-          value={searchQuery}
-          onChange={setSearchQuery}
-          searchBarClassName="employee-search"
-          searchInputClassName="employee-search-input"
-          placeholder="Tìm kiếm nhân viên"
-        />
-        <Table
-          columns={columns}
-          data={searchQuery ? filteredData : data}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        <h2>{t("employee.listTitle")}</h2>
+        <div className="employees-search-filter">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            searchBarClassName="employee-search"
+            searchInputClassName="employee-search-input"
+            placeholder={t("employee.searchPlaceholder")}
+          />
+          <div className="filter-add-employee">
+            <button className="add-employee-button" onClick={handleAddEmployee}>
+              {t("employee.addButton")}
+            </button>
+            <FilterButton fields={fields} onApply={handleApplyFilter} />
+          </div>
+        </div>
+        <div className="status-buttons">
+          <button
+            className={`status-button ${
+              currentStatus === "ACTIVE" ? "active" : ""
+            }`}
+            onClick={() => setCurrentStatus("ACTIVE")}
+          >
+            {t("employee.active")}
+          </button>
+          <button
+            className={`status-button ${
+              currentStatus === "INACTIVE" ? "active" : ""
+            }`}
+            onClick={() => setCurrentStatus("INACTIVE")}
+          >
+            {t("employee.inactive")}
+          </button>
+        </div>
+        {currentStatus === "ACTIVE" ? (
+          <>
+            <Table
+              columns={columns}
+              data={activeEmployees}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={(employee) => handleDelete(employee.employeeId)}
+              pageCount={pageCount}
+              onPageChange={handlePageClick}
+            />
+          </>
+        ) : inactiveEmployees.length > 0 ? (
+          <>
+            <Table
+              columns={columns}
+              data={inactiveEmployees}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={(employee) => handleDelete(employee.employeeId)}
+              pageCount={pageCount}
+              onPageChange={handlePageClick}
+            />
+          </>
+        ) : (
+          <p>{t("employee.noInactiveData")}</p>
+        )}
       </div>
     </>
   );
@@ -147,30 +254,30 @@ const ListOfEmployeesPage = () => {
   return (
     <MainLayout
       currentPath={currentPath}
-      currentPage="Employee Management"
+      currentPage={t("employee.management")}
       childrenMiddleContentLower={childrenMiddleContentLower}
     >
       <div className="employees-loan-box">
         <TotalLoan
           cardName="total-amount-borrowed1"
-          title="Tổng nhân viên"
-          amount="3 nhân viên"
+          title={t("employee.total")}
+          amount={`${data.length} ${t("employee.employees")}`}
         />
         <TotalLoan
           cardName="total-amount-borrowed2"
-          title="Tổng nhân viên bị khóa"
-          amount="1 nhân viên"
+          title={t("employee.totalInactive")}
+          amount={`${inactiveEmployees.length} ${t("employee.employees")}`}
         />
         <TotalLoan
           cardName="total-amount-borrowed2"
-          title="Tổng nhân viên mới"
+          title={t("employee.totalNew")}
           amount="10 nhân viên"
         />
       </div>
 
       {/* Employee Modal */}
-      {isModalOpen && (
-        <EmployeeModal
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <EmployeeForm
           mode={modalMode}
           employeeId={
             modalMode === "view" || modalMode === "edit"
@@ -180,7 +287,7 @@ const ListOfEmployeesPage = () => {
           onClose={handleCloseModal}
           onSave={handleSave}
         />
-      )}
+      </Modal>
     </MainLayout>
   );
 };
