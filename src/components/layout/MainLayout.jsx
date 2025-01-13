@@ -58,11 +58,30 @@ const MainLayoutComponent = (props) => {
   }, [menuStatus, dispatch]);
 
   const handleMenuClick = (menuName) => {
-    setOpenMenus((prevOpenMenus) => ({
-      ...prevOpenMenus,
-      [menuName]: !prevOpenMenus[menuName],
-    }));
+    setOpenMenus((prevOpenMenus) => {
+      const newOpenMenus = { ...prevOpenMenus };
+      if (newOpenMenus[menuName]) {
+        delete newOpenMenus[menuName];
+      } else {
+        newOpenMenus[menuName] = true;
+      }
+      localStorage.setItem("openMenus", JSON.stringify(newOpenMenus));
+      return newOpenMenus;
+    });
   };
+
+  useEffect(() => {
+    const savedOpenMenus = JSON.parse(localStorage.getItem("openMenus"));
+    if (savedOpenMenus) {
+      setOpenMenus(savedOpenMenus);
+    } else {
+      const initialOpenMenus = {};
+      menuData.forEach((menu) => {
+        initialOpenMenus[menu.name_en] = false;
+      });
+      setOpenMenus(initialOpenMenus);
+    }
+  }, [menuData]);
 
   const renderMenuItems = (items) => {
     return items.map((item) => {
@@ -70,12 +89,22 @@ const MainLayoutComponent = (props) => {
       const itemPath = item.name_en.toLowerCase().replace(/ /g, "-");
       const isActive = location.pathname.includes(itemPath);
 
+      const hasActiveChild =
+        item.children &&
+        item.children.some((child) =>
+          location.pathname.includes(
+            child.name_en.toLowerCase().replace(/ /g, "-")
+          )
+        );
+
       if (item.children && item.isCollapsed) {
         return (
           <React.Fragment key={item.name_en}>
             <li
               key={item.name_en}
-              className={`menu-item ${isActive ? "active" : ""}`}
+              className={`menu-item ${
+                isActive || hasActiveChild ? "active" : ""
+              }`}
               onClick={() => handleMenuClick(item.name_en)}
             >
               <a className="menu-item">
@@ -103,6 +132,7 @@ const MainLayoutComponent = (props) => {
       );
     });
   };
+
   return (
     <div className={`main-layout ${isSidebarVisible ? "" : "sidebar-hidden"}`}>
       {/* Sidebar */}
@@ -137,15 +167,13 @@ const MainLayoutComponent = (props) => {
           <h1 className="current-page">{currentPage}</h1>
           <UserAccountToolbar currentPath={currentPath} onLogout={onLogout} />
         </div>
-        <div className="main-content">
-          <div className="middle-content">
-            <div className="middle-content-upper">{children}</div>
-            <div className="middle-content-lower">
-              {childrenMiddleContentLower}
-            </div>
+        <div className="main-layout-content">
+          <div className="main-layout-left">
+            {children}
+            {childrenMiddleContentLower}
           </div>
           {rightChildren && (
-            <div className="right-content">{rightChildren}</div>
+            <div className="main-layout-right">{rightChildren}</div>
           )}
         </div>
       </div>
@@ -158,8 +186,8 @@ MainLayoutComponent.propTypes = {
   childrenMiddleContentLower: PropTypes.node,
   rightChildren: PropTypes.node,
   currentPath: PropTypes.string.isRequired,
-  onLogout: PropTypes.func,
-  currentPage: PropTypes.string,
+  onLogout: PropTypes.func.isRequired,
+  currentPage: PropTypes.string.isRequired,
 };
 
 const MainLayout = React.memo(MainLayoutComponent);

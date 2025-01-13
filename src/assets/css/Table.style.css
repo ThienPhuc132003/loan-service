@@ -1,11 +1,5 @@
 /* File: components/StyledTable.css */
 
-/* Table container styling */
-.table-container {
-  overflow-x: auto;
-  margin: 1rem 0;
-}
-
 /* Base styles for the table */
 .custom-table {
   width: 100%;
@@ -132,4 +126,33 @@
 
 .action-button.delete:hover {
   color: #ff4500;
+}
+/* Arrow button styling */
+.arrow-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 5px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.arrow-button:hover {
+  transform: scale(1.2);
+  color: #ff4500; /* Change color on hover */
+}
+
+.arrow-button.asc::after {
+  content: '▲';
+  color: #007bff; /* Blue color for ascending arrow */
+}
+
+.arrow-button.desc::after {
+  content: '▼';
+  color: #007bff; /* Blue color for descending arrow */
+}
+
+.arrow-button.default::after {
+  content: '↕';
+  color: #007bff; /* Blue color for default arrow */
 }

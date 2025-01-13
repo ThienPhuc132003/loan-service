@@ -9,11 +9,31 @@ import { METHOD_TYPE } from "../network/methodType";
 import TotalLoan from "../components/TotalLoan";
 import { formatInTimeZone } from "date-fns-tz";
 import { useTranslation } from "react-i18next";
+import numeral from "numeral";
+import axios from "axios";
 
 const ListOfCustomersPage = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { i18n } = useTranslation();
+  const [exchangeRate, setExchangeRate] = useState(1);
+
+  useEffect(() => {
+    const fetchExchangeRate = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.exchangerate-api.com/v4/latest/VND"
+        );
+        setExchangeRate(response.data.rates.USD);
+      } catch (error) {
+        console.error("Failed to fetch exchange rate:", error);
+      }
+    };
+
+    if (i18n.language === "en") {
+      fetchExchangeRate();
+    }
+  }, [i18n.language]);
   const currentPath = "/borrower-management";
   useEffect(() => {
     const fetchData = async () => {
@@ -58,7 +78,16 @@ const ListOfCustomersPage = () => {
     { title: "Tên khách hàng", dataKey: "name" },
     { title: "Số điện thoại", dataKey: "phoneNumber" },
     { title: "Email", dataKey: "email" },
-    { title: "Thu nhập", dataKey: "borrowerProfile.income" },
+    {
+      title: "Thu nhập",
+      dataKey: "borrowerProfile.income",
+      renderCell: (value) => {
+        const incomeInUSD = value * exchangeRate;
+        return i18n.language === "vi"
+          ? numeral(value).format("0,0") + " VND"
+          : numeral(incomeInUSD).format("$0,0");
+      },
+    },
     {
       title: "Trạng thái",
       dataKey: "borrowerProfile.debtStatus",

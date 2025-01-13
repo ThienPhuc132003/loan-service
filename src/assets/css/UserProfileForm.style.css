@@ -180,7 +180,7 @@
   display: flex;
   gap: 10px;
 }
-.user-profile-btn-box{
+.user-profile-btn-box {
   display: flex;
   align-items: center;
   width: 100%;
@@ -188,7 +188,9 @@
 .non-editable {
   background-color: #f0f0f0; /* Light gray background */
   pointer-events: none;
-}@media (max-width: 1024px) {
+}
+
+@media (max-width: 1024px) {
   .profile-info-section {
     padding: 0px 40px; /* Adjust padding for tablet view */
   }

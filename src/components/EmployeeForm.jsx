@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "../assets/css/EmployeeForm.style.css";
 import PropTypes from "prop-types";
+import Api from "../network/Api";
+import { METHOD_TYPE } from "../network/methodType";
+import { useTranslation } from "react-i18next";
+
 const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -10,10 +14,10 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
     phone: "",
     fullName: "",
     dob: "",
-    gender: "Nam",
+    gender: "",
     idCard: "",
     address: "",
-    role: "Nhân viên",
+    roleId: "ACCOUNTANT",
     createdDate: "",
   });
 
@@ -24,28 +28,33 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
   useEffect(() => {
     if ((mode === "view" || mode === "edit") && employeeId) {
       setLoading(true);
-      axios
-        .get(`http://152.42.232.101:9005/api/v1/loan-service/employee/${employeeId}`)
+      Api({
+        endpoint: `loan-service/employee/${employeeId}`,
+        method: METHOD_TYPE.GET,
+      })
         .then((response) => {
-          const data = response.data.data;
+          const data = response.data; // Updated to match the provided data structure
           setFormData({
             username: data.employeeId || "",
-            password: "", // Password is hidden in view/edit mode
+            password: "",
             email: data.email || "",
             phone: data.phoneNumber || "",
             fullName: data.employeeProfile?.fullname || "",
             dob: data.employeeProfile?.birthday || "",
-            gender: data.employeeProfile?.gender === "MALE" ? "Nam" : "Nữ",
+            gender: data.employeeProfile?.gender === "MALE" ? t("employee.male") : t("employee.female"),
             idCard: data.employeeProfile?.identifyCardNumber || "",
             address: data.employeeProfile?.homeAddress || "",
-            role: data.roleId || "Nhân viên",
+            roleId: data.roleId || "",
             createdDate: new Date(data.createAt).toLocaleDateString(),
           });
         })
-        .catch(() => setError("Không thể tải thông tin nhân viên."))
+        .catch((error) => {
+          console.error("Error fetching employee data:", error);
+          setError(t("employee.fetchError"));
+        })
         .finally(() => setLoading(false));
     }
-  }, [mode, employeeId]);
+  }, [mode, employeeId, t]);
 
   // Handle input change
   const handleChange = (e) => {
@@ -59,63 +68,65 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
 
     if (mode === "add") {
       // Call API to create a new employee
-      axios
-        .post("http://152.42.232.101:9005/api/v1/loan-service/employee", formData)
+      Api({
+        endpoint: "loan-service/employee",
+        method: METHOD_TYPE.POST,
+        data: formData,
+      })
         .then(() => {
           onSave();
           onClose();
         })
-        .catch(() => setError("Không thể thêm nhân viên."))
+        .catch(() => setError(t("employee.addError")))
         .finally(() => setLoading(false));
     } else if (mode === "edit") {
       // Call API to update employee
-      axios
-        .put(`http://152.42.232.101:9005/api/v1/loan-service/employee/${employeeId}`, formData)
+      Api({
+        endpoint: `loan-service/employee/${employeeId}`,
+        method: METHOD_TYPE.PUT,
+        data: formData,
+      })
         .then(() => {
           onSave();
           onClose();
         })
-        .catch(() => setError("Không thể cập nhật thông tin nhân viên."))
+        .catch(() => setError(t("employee.updateError")))
         .finally(() => setLoading(false));
     }
   };
 
   if (loading) {
-    return <div className="modal-overlay"><div className="modal-content">Đang tải...</div></div>;
+    return <div className="loading">{t("employee.loading")}</div>;
   }
 
   if (error) {
-    return <div className="modal-overlay"><div className="modal-content">{error}</div></div>;
+    return <div className="error">{error}</div>;
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>
-          {mode === "add"
-            ? "Thêm nhân viên"
-            : mode === "edit"
-            ? "Chỉnh sửa thông tin nhân viên"
-            : "Thông tin nhân viên"}
-        </h2>
-        <div className="form-group">
-          <label>Mã tài khoản</label>
-          <input type="text" value={formData.username} readOnly />
-        </div>
+    <div className="employee-form-container">
+      <h2>
+        {mode === "add"
+          ? t("employee.addTitle")
+          : mode === "edit"
+          ? t("employee.editTitle")
+          : t("employee.viewTitle")}
+      </h2>
+      <div className="form-grid">
         {mode === "add" && (
           <div className="form-group">
-            <label>Mật khẩu</label>
+            <label>{t("employee.password")}</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Nhập mật khẩu"
+              placeholder={t("employee.passwordPlaceholder")}
             />
           </div>
         )}
         <div className="form-group">
-          <label>Email</label>
+          <label>{t("employee.email")}</label>
           <input
             type="email"
             name="email"
@@ -125,7 +136,7 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           />
         </div>
         <div className="form-group">
-          <label>Số điện thoại</label>
+          <label>{t("employee.phone")}</label>
           <input
             type="text"
             name="phone"
@@ -135,7 +146,7 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           />
         </div>
         <div className="form-group">
-          <label>Họ tên</label>
+          <label>{t("employee.fullName")}</label>
           <input
             type="text"
             name="fullName"
@@ -145,7 +156,7 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           />
         </div>
         <div className="form-group">
-          <label>Ngày sinh</label>
+          <label>{t("employee.dob")}</label>
           <input
             type="date"
             name="dob"
@@ -155,7 +166,7 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           />
         </div>
         <div className="form-group">
-          <label>CCCD/CMND</label>
+          <label>{t("employee.idCard")}</label>
           <input
             type="text"
             name="idCard"
@@ -165,7 +176,7 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           />
         </div>
         <div className="form-group">
-          <label>Địa chỉ</label>
+          <label>{t("employee.address")}</label>
           <input
             type="text"
             name="address"
@@ -175,44 +186,51 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           />
         </div>
         <div className="form-group">
-          <label>Giới tính</label>
+          <label>{t("employee.gender")}</label>
           <select
             name="gender"
             value={formData.gender}
             onChange={handleChange}
             disabled={mode === "view"}
           >
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
+            <option value="MALE">{t("employee.male")}</option>
+            <option value="FEMALE">{t("employee.female")}</option>
           </select>
         </div>
         <div className="form-group">
-          <label>Quyền</label>
+          <label>{t("employee.role")}</label>
           <select
-            name="role"
-            value={formData.role}
+            name="roleId"
+            value={formData.roleId}
             onChange={handleChange}
             disabled={mode === "view"}
           >
-            <option value="Nhân viên">Nhân viên</option>
-            <option value="Kế toán">Kế toán</option>
-            <option value="Quản trị viên">Quản trị viên</option>
+            <option value="CREDIT_BOARD">{t("employee.creditBoard")}</option>
+            <option value="ACCOUNTANT">{t("employee.accountant")}</option>
+            <option value="APPRAISAL_STAFF">{t("employee.appraisalStaff")}</option>
           </select>
         </div>
         {mode === "view" && (
           <div className="form-group">
-            <label>Ngày tạo</label>
+            <label>{t("employee.createdDate")}</label>
             <input type="text" value={formData.createdDate} readOnly />
           </div>
         )}
-        <div className="form-actions">
-          {mode !== "view" && <button onClick={handleSubmit}>Lưu</button>}
-          <button onClick={onClose}>Đóng</button>
-        </div>
+      </div>
+      <div className="form-actions">
+        {mode !== "view" && (
+          <button className="save-button" onClick={handleSubmit}>
+            {t("common.save")}
+          </button>
+        )}
+        <button className="close-button" onClick={onClose}>
+          {t("common.close")}
+        </button>
       </div>
     </div>
   );
 };
+
 EmployeeFormComponent.propTypes = {
   mode: PropTypes.oneOf(["add", "view", "edit"]).isRequired,
   employeeId: PropTypes.string,

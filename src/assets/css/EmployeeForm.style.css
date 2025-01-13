@@ -1,51 +1,44 @@
-/* Modal overlay styling */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+/* Container for the form */
+.employee-form-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  /* Modal container styling */
-  .modal-content {
-    background: #fff;
-    width: 500px;
-    max-width: 90%;
-    border-radius: 8px;
+    flex-direction: column;
+    gap: 20px;
     padding: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
-    animation: fadeIn 0.3s ease-out;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
   }
   
   /* Form group styling */
   .form-group {
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
   
   .form-group label {
-    display: block;
     font-weight: bold;
-    margin-bottom: 5px;
     color: #333;
   }
   
   .form-group input,
   .form-group select {
-    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
   }
   
-  /* Form actions */
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #272e4f;
+  }
+  
+  /* Form actions (buttons) */
   .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -53,40 +46,46 @@
   }
   
   .form-actions button {
-    padding: 10px 15px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
   }
   
-  .form-actions button:first-child {
-    background-color: #007bff;
+  .form-actions .save-button {
+    background-color: #4caf50;
     color: white;
   }
   
-  .form-actions button:first-child:hover {
-    background-color: #0056b3;
+  .form-actions .close-button {
+    background-color: #f44336;
+    color: white;
   }
   
-  .form-actions button:last-child {
-    background-color: #e0e0e0;
-    color: black;
+  /* Grid layout for form fields */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
   
-  .form-actions button:last-child:hover {
-    background-color: #c7c7c7;
+  .form-grid .form-group {
+    margin: 0;
   }
   
-  /* Modal fade-in animation */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+  /* Loading and error messages */
+  .loading,
+  .error {
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
   }
   
+  .loading {
+    color: #888;
+  }
+  
+  .error {
+    color: red;
+  }

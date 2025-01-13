@@ -1,60 +1,76 @@
-// File: components/Table.jsx
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import ReactPaginate from "react-paginate";
+import { useTranslation } from "react-i18next";
 import "../assets/css/Table.style.css";
+import "../assets/css/Pagination.style.css";
+
 const getNestedValue = (obj, path) => {
   return path.split('.').reduce((acc, part) => acc && acc[part], obj);
 };
-const TableComponent = ({ columns, data, onView, onEdit, onDelete }) => {
+
+const TableComponent = ({ columns, data, onView, onEdit, onDelete, pageCount, onPageChange }) => {
+  const { t } = useTranslation();
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  const sortedData = React.useMemo(() => {
+    let sortableData = [...data];
+    if (sortConfig.key) {
+      sortableData.sort((a, b) => {
+        const aValue = getNestedValue(a, sortConfig.key);
+        const bValue = getNestedValue(b, sortConfig.key);
+        if (aValue < bValue) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableData;
+  }, [data, sortConfig]);
+
+  const requestSort = key => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
   return (
     <div className="table-container">
       <table className="custom-table">
-        {/* Table Header */}
         <thead>
           <tr className="table-header">
             {columns.map((col, index) => (
-              <th key={index}>{col.title}</th>
+              <th key={index}>
+                <div className="header-content">
+                  {t(col.title)}
+                  <button
+                    className={`arrow-button ${sortConfig.key === col.dataKey ? sortConfig.direction : 'default'}`}
+                    onClick={() => requestSort(col.dataKey)}
+                  />
+                </div>
+              </th>
             ))}
-            <th>Hành động</th>
+            <th>{t("common.actions")}</th>
           </tr>
         </thead>
-
-        {/* Table Body */}
         <tbody>
-          {data.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              className={rowIndex % 2 === 0 ? "row-even" : "row-odd"}
-            >
+          {sortedData.map((row, rowIndex) => (
+            <tr key={rowIndex} className={rowIndex % 2 === 0 ? "row-even" : "row-odd"} onDoubleClick={() => onView(row)}>
               {columns.map((col, colIndex) => (
                 <td key={colIndex}>
-                   {col.renderCell
-                    ? col.renderCell(getNestedValue(row, col.dataKey), row)
-                    : getNestedValue(row, col.dataKey)}
+                  {col.renderCell ? col.renderCell(getNestedValue(row, col.dataKey), row) : getNestedValue(row, col.dataKey)}
                 </td>
               ))}
-
-              {/* Action Buttons */}
               <td className="action-buttons">
-                <button
-                  onClick={() => onView(row)}
-                  title="Xem"
-                  className="action-button view"
-                >
-                  <i className="fas fa-eye"></i>
-                </button>
-                <button
-                  onClick={() => onDelete(row)}
-                  title="Xóa"
-                  className="action-button delete"
-                >
+                <button onClick={() => onDelete(row)} title={t("common.delete")} className="action-button delete">
                   <i className="fa-regular fa-trash-can"></i>
                 </button>
-                <button
-                  onClick={() => onEdit(row)}
-                  title="Chỉnh sửa"
-                  className="action-button edit"
-                >
+                <button onClick={() => onEdit(row)} title={t("common.edit")} className="action-button edit">
                   <i className="fa-solid fa-pen"></i>
                 </button>
               </td>
@@ -62,6 +78,20 @@ const TableComponent = ({ columns, data, onView, onEdit, onDelete }) => {
           ))}
         </tbody>
       </table>
+      <div className="pagination-container">
+        <ReactPaginate
+          previousLabel={"<"}
+          nextLabel={">"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={1}
+          pageRangeDisplayed={2}
+          onPageChange={onPageChange}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          disabledClassName={"disabled"}
+        />
+      </div>
     </div>
   );
 };
@@ -69,17 +99,18 @@ const TableComponent = ({ columns, data, onView, onEdit, onDelete }) => {
 TableComponent.propTypes = {
   columns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired, 
-      dataKey: PropTypes.string.isRequired, 
-      renderCell: PropTypes.func, 
+      title: PropTypes.string.isRequired,
+      dataKey: PropTypes.string.isRequired,
+      renderCell: PropTypes.func,
     })
   ).isRequired,
   data: PropTypes.array.isRequired,
-  onView: PropTypes.func,
-  onEdit: PropTypes.func,
-  onDelete: PropTypes.func,
+  onView: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  pageCount: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
 };
-
 
 const Table = React.memo(TableComponent);
 export default Table;

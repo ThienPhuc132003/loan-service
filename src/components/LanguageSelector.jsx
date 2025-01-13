@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Select from "react-select";
 import { US, VN } from 'country-flag-icons/react/3x2';
@@ -19,7 +19,15 @@ const LanguageSelectorComponent = () => {
 
   const handleLanguageChange = (selectedOption) => {
     i18n.changeLanguage(selectedOption.value);
+    localStorage.setItem("language", selectedOption.value);
   };
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language");
+    if (savedLanguage) {
+      i18n.changeLanguage(savedLanguage);
+    }
+  }, [i18n]);
 
   return (
     <Select
@@ -32,5 +40,4 @@ const LanguageSelectorComponent = () => {
   );
 };
 
-const LanguageSelector = React.memo(LanguageSelectorComponent);
-export default LanguageSelector;
+export default React.memo(LanguageSelectorComponent);

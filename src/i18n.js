@@ -10,12 +10,15 @@ import enUserProfile from "./Language/English/enUserProfile.json";
 import viUserProfile from "./Language/Vietnamese/viUserProfile.json";
 import enMenu from "./Language/English/enMenu.json";
 import viMenu from "./Language/Vietnamese/viMenu.json";
+import enEmployee from "./Language/English/enEmployee.json";
+import viEmployee from "./Language/Vietnamese/viEmployee.json";
 const enTranslate = {
   ...enLogin,
   ...enSignup,
   ...enCommon,
   ...enUserProfile,
   ...enMenu,
+  ...enEmployee,
 };
 
 const viTranslate = {
@@ -24,6 +27,7 @@ const viTranslate = {
   ...viCommon,
   ...viUserProfile,
   ...viMenu,
+  ...viEmployee,
 };
 
 i18n.use(initReactI18next).init({
