@@ -1,0 +1,25 @@
+{
+  "asset": {
+    "assetId": "Asset ID",
+    "assetName": "Asset Name",
+    "assetTypeName": "Asset Type Name",
+    "status": "Status",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "searchPlaceholder": "Search for assets",
+    "addButton": "Add Asset",
+    "total": "Total Assets",
+    "totalAvailable": "Total Available Assets",
+    "totalUnavailable": "Total Unavailable Assets",
+    "management": "Asset Management",
+    "noInactiveData": "No inactive asset data",
+    "fetchError": "Unable to fetch asset data.",
+    "addError": "Unable to add asset.",
+    "updateError": "Unable to update asset.",
+    "loading": "Loading...",
+    "addTitle": "Add Asset",
+    "editTitle": "Edit Asset",
+    "viewTitle": "View Asset",
+    "assetTypeId": "Asset Type ID"
+  }
+}

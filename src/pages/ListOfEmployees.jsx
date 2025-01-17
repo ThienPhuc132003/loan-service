@@ -1,3 +1,4 @@
+// src/pages/ListOfEmployees.jsx
 import React, { useCallback, useEffect, useState } from "react";
 import MainLayout from "../components/layout/MainLayout";
 import "../assets/css/ListOfEmployees.style.css";
@@ -17,13 +18,12 @@ const ListOfEmployeesPage = () => {
   const [data, setData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterValues, setFilterValues] = useState({});
   const [modalData, setModalData] = useState(null);
   const [modalMode, setModalMode] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentStatus, setCurrentStatus] = useState("ACTIVE");
-  const itemsPerPage = 5;
+  const itemsPerPage = 6;
   const roleId = "ADMIN";
   const currentPath = "/employee-management";
 
@@ -43,20 +43,6 @@ const ListOfEmployeesPage = () => {
           });
         }
 
-        Object.keys(filterValues).forEach((key) => {
-          if (filterValues[key]) {
-            filter.push({
-              key,
-              operator: "like",
-              value: filterValues[key],
-            });
-          }
-        });
-        if (filter.length) {
-          query.filter = JSON.stringify(filter);
-        }
-        console.log("Query:", query.filter);
-
         const response = await Api({
           endpoint: "loan-service/employee/search",
           method: METHOD_TYPE.GET,
@@ -73,7 +59,7 @@ const ListOfEmployeesPage = () => {
         console.log("An error occurred while fetching data");
       }
     },
-    [currentPage, itemsPerPage, searchQuery, filterValues]
+    [currentPage, itemsPerPage, searchQuery]
   );
 
   useEffect(() => {
@@ -82,11 +68,6 @@ const ListOfEmployeesPage = () => {
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
-  };
-
-  const handleApplyFilter = (values) => {
-    setFilterValues(values);
-    fetchData();
   };
 
   const handleDelete = async (employeeId) => {
@@ -137,6 +118,11 @@ const ListOfEmployeesPage = () => {
     setIsModalOpen(false);
     setModalData(null);
     setModalMode(null);
+  };
+
+  const handleApplyFilter = (filterValues) => {
+    // Apply filter logic here
+    console.log("Filter applied with values:", filterValues);
   };
 
   const pageCount = Math.ceil(totalItems / itemsPerPage);
@@ -278,7 +264,7 @@ const ListOfEmployeesPage = () => {
       {/* Employee Modal */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <EmployeeForm
-          mode={modalMode}
+          mode={modalMode || "view"} // Ensure mode is never null
           employeeId={
             modalMode === "view" || modalMode === "edit"
               ? modalData.employeeId

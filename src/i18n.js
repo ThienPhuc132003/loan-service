@@ -12,6 +12,11 @@ import enMenu from "./Language/English/enMenu.json";
 import viMenu from "./Language/Vietnamese/viMenu.json";
 import enEmployee from "./Language/English/enEmployee.json";
 import viEmployee from "./Language/Vietnamese/viEmployee.json";
+import enAsset from "./Language/English/enAsset.json";
+import viAsset from "./Language/Vietnamese/viAsset.json";
+import enAssetType from "./Language/English/enAssetType.json";
+import viAssetType from "./Language/Vietnamese/viAssetType.json";
+
 const enTranslate = {
   ...enLogin,
   ...enSignup,
@@ -19,6 +24,8 @@ const enTranslate = {
   ...enUserProfile,
   ...enMenu,
   ...enEmployee,
+  ...enAsset,
+  ...enAssetType,
 };
 
 const viTranslate = {
@@ -28,6 +35,8 @@ const viTranslate = {
   ...viUserProfile,
   ...viMenu,
   ...viEmployee,
+  ...viAsset,
+  ...viAssetType,
 };
 
 i18n.use(initReactI18next).init({

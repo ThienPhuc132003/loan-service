@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MainLayout from "../components/layout/MainLayout";
 import Button from "../components/Button";
@@ -13,10 +13,13 @@ import BankAccountInfo from "../components/BankAccountInfo";
 import UserOtherInfo from "../components/UserOtherInfo";
 import Avatar from "../components/Avatar";
 import { useTranslation } from "react-i18next";
-
+import Cookies from "js-cookie";
 const UserProfilePage = () => {
   const { t } = useTranslation();
+  const role = Cookies.get("role");
+  const [updateProfile, setUpdateProfile] = useState();
   const userInfo = useSelector((state) => state.user.userProfile);
+  const employeeId = userInfo.employeeId;
   const [avatar, setAvatar] = useState(
     userInfo?.avatar || "default-avatar.png"
   );
@@ -29,11 +32,16 @@ const UserProfilePage = () => {
   const currentPath = "/user-profile";
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
-
+  useEffect(() => {
+    if (role === "employee") {
+      setUpdateProfile(employeeId);
+    }else{
+      setUpdateProfile("borrower");
+    }
+  }, [employeeId, role]);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -89,7 +97,7 @@ const UserProfilePage = () => {
 
           if (upLoadResponse.success === true) {
             const pushAvatarToServer = await Api({
-              endpoint: `loan-service/borrower/update-profile`,
+              endpoint: `loan-service/${role}/${updateProfile}`,
               method: METHOD_TYPE.PUT,
               data: { avatar: upLoadResponse.data.mediaUrl },
             });
@@ -105,7 +113,7 @@ const UserProfilePage = () => {
         setShowCropper(false);
       }
     },
-    [dispatch]
+    [dispatch,updateProfile,role]
   );
 
   const handleCancelCrop = () => {

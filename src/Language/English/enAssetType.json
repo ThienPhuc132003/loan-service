@@ -1,0 +1,21 @@
+{
+  "assetType": {
+    "assetTypeId": "Asset Type ID",
+    "assetTypeName": "Asset Type Name",
+    "status": "Status",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "searchPlaceholder": "Search for asset types",
+    "addButton": "Add Asset Type",
+    "total": "Total Asset Types",
+    "management": "Asset Type Management",
+    "fetchError": "Unable to fetch asset type data.",
+    "addError": "Unable to add asset type.",
+    "updateError": "Unable to update asset type.",
+    "loading": "Loading...",
+    "addTitle": "Add Asset Type",
+    "editTitle": "Edit Asset Type",
+    "viewTitle": "View Asset Type",
+    "assetTypes": "Asset Types"
+  }
+}

@@ -31,7 +31,7 @@ const TableComponent = ({ columns, data, onView, onEdit, onDelete, pageCount, on
     return sortableData;
   }, [data, sortConfig]);
 
-  const requestSort = key => {
+  const requestSort = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
@@ -43,16 +43,10 @@ const TableComponent = ({ columns, data, onView, onEdit, onDelete, pageCount, on
     <div className="table-container">
       <table className="custom-table">
         <thead>
-          <tr className="table-header">
-            {columns.map((col, index) => (
-              <th key={index}>
-                <div className="header-content">
-                  {t(col.title)}
-                  <button
-                    className={`arrow-button ${sortConfig.key === col.dataKey ? sortConfig.direction : 'default'}`}
-                    onClick={() => requestSort(col.dataKey)}
-                  />
-                </div>
+          <tr>
+            {columns.map((col) => (
+              <th key={col.dataKey} onClick={() => requestSort(col.dataKey)}>
+                {col.title}
               </th>
             ))}
             <th>{t("common.actions")}</th>
@@ -78,20 +72,22 @@ const TableComponent = ({ columns, data, onView, onEdit, onDelete, pageCount, on
           ))}
         </tbody>
       </table>
-      <div className="pagination-container">
-        <ReactPaginate
-          previousLabel={"<"}
-          nextLabel={">"}
-          breakLabel={"..."}
-          pageCount={pageCount}
-          marginPagesDisplayed={1}
-          pageRangeDisplayed={2}
-          onPageChange={onPageChange}
-          containerClassName={"pagination"}
-          activeClassName={"active"}
-          disabledClassName={"disabled"}
-        />
-      </div>
+      {pageCount > 1 && (
+        <div className="pagination-container">
+          <ReactPaginate
+            previousLabel={"<"}
+            nextLabel={">"}
+            breakLabel={"..."}
+            pageCount={pageCount}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={onPageChange}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+            disabledClassName={"disabled"}
+          />
+        </div>
+      )}
     </div>
   );
 };

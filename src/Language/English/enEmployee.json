@@ -4,9 +4,9 @@
     "employeeId": "Employee ID",
     "username": "Username",
     "email": "Email",
-    "phone": "Phone",
+    "phoneNumber": "Phone Number",
     "fullName": "Full Name",
-    "dob": "Date of Birth",
+    "birthday": "Date of Birth",
     "gender": "Gender",
     "idCard": "ID Card",
     "address": "Address",
@@ -35,6 +35,11 @@
     "totalEmployee": "Total Employees",
     "employees": "Employees",
     "totalInactive": "Total Inactive Employees",
-    "totalNew": "Total New Employees"
+    "totalNew": "Total New Employees",
+    "management": "Employee Management",
+    "updateError": "Unable to update employee information.",
+    "loading": "Loading...",
+    "editTitle": "Edit Employee",
+    "viewTitle": "View Employee"
   }
 }

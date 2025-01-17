@@ -47,7 +47,7 @@ const LoginPage = () => {
     }
     if (captchaValue) errors.captcha = t("common.captchaNotVerified");
     return errors;
-  }, [username, password, captchaValue, t]);
+  }, [username, captchaValue, t,password]);
 
   const handleLogin = useCallback(async () => {
     const errors = validateFields();
@@ -64,6 +64,9 @@ const LoginPage = () => {
           password: password,
         },
       });
+
+
+
       const token = response.data.token;
       const role = userType
       if (token) {
@@ -100,6 +103,18 @@ const LoginPage = () => {
     dispatch,
     userType,
   ]);
+
+  // async function callLoginAPI1000Times() {
+  //   const requests = Array.from({ length: 1000 }, () => handleLogin()); // Tạo 1.000 promise
+  //   try {
+  //     const results = await Promise.all(requests); 
+  //     console.log('All logins completed:', results);
+  //   } catch (error) {
+  //     console.error('Error during login:', error);
+  //   }
+  // }
+  // callLoginAPI1000Times();
+
 
   const handleForgotPassword = useCallback(() => {
     navigate("/forgot-password");

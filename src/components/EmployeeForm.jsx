@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../assets/css/EmployeeForm.style.css";
 import PropTypes from "prop-types";
 import Api from "../network/Api";
@@ -8,17 +8,18 @@ import { useTranslation } from "react-i18next";
 const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     fullName: "",
-    dob: "",
+    birthday: "",
     gender: "",
-    idCard: "",
-    address: "",
+    identifyCardNumber: "",
+    homeAddress: {
+      houseNumberWithStreetWithWard: "",
+      district: "",
+      city: "",
+    },
     roleId: "ACCOUNTANT",
-    createdDate: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -33,21 +34,25 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
         method: METHOD_TYPE.GET,
       })
         .then((response) => {
-          const data = response.data; // Updated to match the provided data structure
+          const data = response.data;
           setFormData({
-            username: data.employeeId || "",
-            password: "",
             email: data.email || "",
-            phone: data.phoneNumber || "",
+            phoneNumber: data.phoneNumber || "",
             fullName: data.employeeProfile?.fullname || "",
-            dob: data.employeeProfile?.birthday || "",
-            gender: data.employeeProfile?.gender === "MALE" ? t("employee.male") : t("employee.female"),
-            idCard: data.employeeProfile?.identifyCardNumber || "",
-            address: data.employeeProfile?.homeAddress || "",
+            birthday: data.employeeProfile?.birthday || "",
+            gender: data.employeeProfile?.gender,
+            identifyCardNumber: data.employeeProfile?.identifyCardNumber || "",
+            homeAddress: {
+              houseNumberWithStreetWithWard:
+                data.employeeProfile?.homeAddress
+                  ?.houseNumberWithStreetWithWard || "",
+              district: data.employeeProfile?.homeAddress?.district || "",
+              city: data.employeeProfile?.homeAddress?.city || "",
+            },
             roleId: data.roleId || "",
-            createdDate: new Date(data.createAt).toLocaleDateString(),
           });
         })
+
         .catch((error) => {
           console.error("Error fetching employee data:", error);
           setError(t("employee.fetchError"));
@@ -59,38 +64,65 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
   // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name.startsWith("homeAddress.")) {
+      const addressField = name.split(".")[1];
+      setFormData({
+        ...formData,
+        homeAddress: {
+          ...formData.homeAddress,
+          [addressField]: value,
+        },
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   // Handle form submission
   const handleSubmit = () => {
     setLoading(true);
-
+    console.log("Data to be sent:", formData); // Log the data before sending
+  
+    const updatedData = {
+      roleId: formData.roleId,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      fullname: formData.fullName,
+      avatar: formData.avatar,
+      identifyCardNumber: formData.identifyCardNumber,
+      homeAddress: formData.homeAddress,
+      birthday: formData.birthday,
+      gender: formData.gender,
+    };
+  
     if (mode === "add") {
       // Call API to create a new employee
       Api({
         endpoint: "loan-service/employee",
         method: METHOD_TYPE.POST,
-        data: formData,
+        data: updatedData,
       })
         .then(() => {
           onSave();
           onClose();
         })
-        .catch(() => setError(t("employee.addError")))
+        .catch(() => {
+          setError(t("employee.addError"));
+        })
         .finally(() => setLoading(false));
     } else if (mode === "edit") {
-      // Call API to update employee
       Api({
         endpoint: `loan-service/employee/${employeeId}`,
         method: METHOD_TYPE.PUT,
-        data: formData,
+        data: updatedData,
       })
         .then(() => {
           onSave();
           onClose();
         })
-        .catch(() => setError(t("employee.updateError")))
+        .catch(() => {
+          setError(t("employee.updateError"));
+        })
         .finally(() => setLoading(false));
     }
   };
@@ -113,18 +145,6 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           : t("employee.viewTitle")}
       </h2>
       <div className="form-grid">
-        {mode === "add" && (
-          <div className="form-group">
-            <label>{t("employee.password")}</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder={t("employee.passwordPlaceholder")}
-            />
-          </div>
-        )}
         <div className="form-group">
           <label>{t("employee.email")}</label>
           <input
@@ -136,11 +156,11 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           />
         </div>
         <div className="form-group">
-          <label>{t("employee.phone")}</label>
+          <label>{t("employee.phoneNumber")}</label>
           <input
             type="text"
-            name="phone"
-            value={formData.phone}
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleChange}
             disabled={mode === "view"}
           />
@@ -156,11 +176,11 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           />
         </div>
         <div className="form-group">
-          <label>{t("employee.dob")}</label>
+          <label>{t("employee.birthday")}</label>
           <input
             type="date"
-            name="dob"
-            value={formData.dob}
+            name="birthday"
+            value={formData.birthday}
             onChange={handleChange}
             disabled={mode === "view"}
           />
@@ -169,8 +189,8 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           <label>{t("employee.idCard")}</label>
           <input
             type="text"
-            name="idCard"
-            value={formData.idCard}
+            name="identifyCardNumber"
+            value={formData.identifyCardNumber}
             onChange={handleChange}
             disabled={mode === "view"}
           />
@@ -179,10 +199,27 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           <label>{t("employee.address")}</label>
           <input
             type="text"
-            name="address"
-            value={formData.address}
+            name="homeAddress.houseNumberWithStreetWithWard"
+            value={formData.homeAddress.houseNumberWithStreetWithWard}
             onChange={handleChange}
             disabled={mode === "view"}
+            placeholder={t("employee.houseNumberWithStreetWithWard")}
+          />
+          <input
+            type="text"
+            name="homeAddress.district"
+            value={formData.homeAddress.district}
+            onChange={handleChange}
+            disabled={mode === "view"}
+            placeholder={t("employee.district")}
+          />
+          <input
+            type="text"
+            name="homeAddress.city"
+            value={formData.homeAddress.city}
+            onChange={handleChange}
+            disabled={mode === "view"}
+            placeholder={t("employee.city")}
           />
         </div>
         <div className="form-group">
@@ -207,7 +244,9 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
           >
             <option value="CREDIT_BOARD">{t("employee.creditBoard")}</option>
             <option value="ACCOUNTANT">{t("employee.accountant")}</option>
-            <option value="APPRAISAL_STAFF">{t("employee.appraisalStaff")}</option>
+            <option value="APPRAISAL_STAFF">
+              {t("employee.appraisalStaff")}
+            </option>
           </select>
         </div>
         {mode === "view" && (
@@ -232,11 +271,10 @@ const EmployeeFormComponent = ({ mode, employeeId, onClose, onSave }) => {
 };
 
 EmployeeFormComponent.propTypes = {
-  mode: PropTypes.oneOf(["add", "view", "edit"]).isRequired,
+  mode: PropTypes.oneOf(["add", "edit", "view"]).isRequired,
   employeeId: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
 };
 
-const EmployeeForm = React.memo(EmployeeFormComponent);
-export default EmployeeForm;
+export default EmployeeFormComponent;
