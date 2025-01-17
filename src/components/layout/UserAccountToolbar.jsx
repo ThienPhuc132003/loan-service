@@ -5,13 +5,13 @@ import LanguageSelector from "../LanguageSelector";
 import SettingButton from "../SettingButton";
 import NotifiButton from "../NotifiButton";
 import HelpButton from "../HelpButton";
-const UserAccountToolbarComponent = ({ onEditProfile, onLogout }) => {
+const UserAccountToolbarComponent = ({ onEditProfile }) => {
   return (
     <>
       <div className="user-account-toolbar">
         <NotifiButton />
         <HelpButton />
-        <User onEditProfile={onEditProfile} onLogout={onLogout} />
+        <User onEditProfile={onEditProfile} />
         <SettingButton />
         <div className="language-box-main">
           <LanguageSelector />
@@ -21,13 +21,8 @@ const UserAccountToolbarComponent = ({ onEditProfile, onLogout }) => {
   );
 };
 
-// UserAccountToolbarComponent.propTypes = {
-//   onEditProfile: PropTypes.func.isRequired,
-//   onLogout: PropTypes.func.isRequired,
-// };
 UserAccountToolbarComponent.propTypes = {
   onEditProfile: PropTypes.func,
-  onLogout: PropTypes.func,
 };
 
 const UserAccountToolbar = React.memo(UserAccountToolbarComponent);

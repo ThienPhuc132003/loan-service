@@ -1,0 +1,25 @@
+{
+  "asset": {
+    "assetId": "Mã tài sản",
+    "assetName": "Tên tài sản",
+    "assetTypeName": "Tên loại tài sản",
+    "status": "Trạng thái",
+    "available": "Có sẵn",
+    "unavailable": "Không có sẵn",
+    "searchPlaceholder": "Tìm kiếm tài sản",
+    "addButton": "Thêm tài sản",
+    "total": "Tổng tài sản",
+    "totalAvailable": "Tổng số tài sản có sẵn",
+    "totalUnavailable": "Tổng số tài sản không có sẵn",
+    "management": "Quản lý tài sản",
+    "noInactiveData": "Không có dữ liệu tài sản không có sẵn",
+    "fetchError": "Không thể tải thông tin tài sản.",
+    "addError": "Không thể thêm tài sản.",
+    "updateError": "Không thể cập nhật tài sản.",
+    "loading": "Đang tải...",
+    "addTitle": "Thêm tài sản",
+    "editTitle": "Chỉnh sửa tài sản",
+    "viewTitle": "Xem tài sản",
+    "assetTypeId": "Mã loại tài sản"
+  }
+}

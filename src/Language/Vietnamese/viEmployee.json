@@ -6,7 +6,7 @@
     "email": "Email",
     "phone": "Số điện thoại",
     "fullName": "Họ và tên",
-    "dob": "Ngày sinh",
+    "birthday": "Ngày sinh",
     "gender": "Giới tính",
     "idCard": "CMND/CCCD",
     "address": "Địa chỉ",
@@ -35,6 +35,11 @@
     "totalEmployee": "Tổng số nhân viên",
     "employees": "Nhân viên",
     "totalInactive": "Tổng số nhân viên không hoạt động",
-    "totalNew": "Tổng số nhân viên mới"
+    "totalNew": "Tổng số nhân viên mới",
+    "management": "Quản lý nhân viên",
+    "updateError": "Không thể cập nhật thông tin nhân viên.",
+    "loading": "Đang tải...",
+    "editTitle": "Chỉnh sửa nhân viên",
+    "viewTitle": "Xem nhân viên"
   }
 }

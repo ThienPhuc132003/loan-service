@@ -16,7 +16,6 @@ const MainLayoutComponent = (props) => {
     childrenMiddleContentLower = null,
     rightChildren = null,
     currentPath,
-    onLogout,
     currentPage,
   } = props;
 
@@ -165,7 +164,7 @@ const MainLayoutComponent = (props) => {
         </button>
         <div className="main-layout-header">
           <h1 className="current-page">{currentPage}</h1>
-          <UserAccountToolbar currentPath={currentPath} onLogout={onLogout} />
+          <UserAccountToolbar currentPath={currentPath} />
         </div>
         <div className="main-layout-content">
           <div className="main-layout-left">
@@ -186,7 +185,6 @@ MainLayoutComponent.propTypes = {
   childrenMiddleContentLower: PropTypes.node,
   rightChildren: PropTypes.node,
   currentPath: PropTypes.string.isRequired,
-  onLogout: PropTypes.func.isRequired,
   currentPage: PropTypes.string.isRequired,
 };
 
